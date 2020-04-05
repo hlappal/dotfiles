@@ -75,9 +75,8 @@ URxvt*depth: 32
 !! Colorscheme
 
 ! special
-URxvt*foreground: #93a1a1
-!*.background: #141c21
-URxvt*background: #303030
+URxvt*foreground:  #cec8c1
+URxvt*background:  #303030
 URxvt*cursorColor: #afbfbf
 
 ! black
