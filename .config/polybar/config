@@ -150,7 +150,7 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = pad_bg backlight pad_bg pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_lightgray networkspeedup networkspeeddown pad_lightgray pad_green arch-aur-updates pad_green pad_orange date pad_orange pad_bg battery pad_bg
+modules-right = xkeyboard pad_bg backlight pad_bg pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_lightgray networkspeedup networkspeeddown pad_lightgray pad_green arch-aur-updates pad_green pad_orange date pad_orange pad_bg battery
 
 separator =
 
