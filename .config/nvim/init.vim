@@ -22,6 +22,8 @@ if !exists('g:vscode')
     Plug 'vim-airline/vim-airline-themes'
     Plug 'vifm/vifm.vim'
     Plug 'ap/vim-css-color'
+    Plug 'vimwiki/vimwiki'
+    Plug 'itchyny/calendar.vim'
 
     call plug#end()
 
