@@ -36,7 +36,9 @@ if !exists('g:vscode')
     set tabstop=4
     set shiftwidth=4
     set expandtab
-    syntax enable
+    set nocompatible
+    filetype plugin on
+    syntax on
 
     set background=dark
     colorscheme gruvbox-material
