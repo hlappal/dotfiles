@@ -42,7 +42,6 @@ if !exists('g:vscode')
 
     set background=dark
     colorscheme gruvbox-material
-    "colorscheme dracula
 
     " Airline theme
     let g:airline_theme='powerlineish'
