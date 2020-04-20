@@ -151,7 +151,7 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = backlight wireless-network pad_bg battery pad_bg xkeyboard pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_green arch-aur-updates pad_green pad_orange date pad_orange
+modules-right = wireless-network pad_bg backlight pad_bg battery pad_bg xkeyboard pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_green arch-aur-updates pad_green pad_orange date pad_orange
 
 separator =
 
@@ -356,17 +356,17 @@ fuzzy-match = false
 
 ;extra icons to choose from
 ;http://fontawesome.io/cheatsheet/
-;       v     
+;        v      
 
-ws-icon-0 = 1;Dev 
-ws-icon-1 = 2;Surf 
-ws-icon-2 = 3;Sys 
+ws-icon-0 = 1;Sys 
+ws-icon-1 = 2;Hack 
+ws-icon-2 = 3;Dev 
 ws-icon-3 = 4;Doc 
-ws-icon-4 = 5;Chat 
-ws-icon-5 = 6;Torn 
-ws-icon-6 = 7;Mus 
-ws-icon-7 = 8;Vid 
-ws-icon-8 = 9;Hack 
+ws-icon-4 = 5;Surf 
+ws-icon-5 = 6;Mail 
+ws-icon-6 = 7;Chat 
+ws-icon-7 = 8;Torn 
+ws-icon-8 = 9;Mus 
 ;ws-icon-9 = 10;Rand 
 ws-icon-default = " "
 
