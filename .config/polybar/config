@@ -73,7 +73,7 @@ darkgray_fg = #ffffff
 darkgray_bg = #121212
 white_fg = #005f5f
 white_bg = #ffffff
-lightblue_fg = #5fafd7
+lightblue_fg = #87d7ff
 lightblue_bg = #0087af
 darkblue_fg = #87d7ff
 darkblue_bg = #005f87
@@ -151,7 +151,7 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = wireless-network pad_bg backlight pad_bg battery pad_bg xkeyboard pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_green arch-aur-updates pad_green pad_orange date pad_orange
+modules-right = battery pad_bg backlight xkeyboard pad_white pavolume pad_white pad_darkblue memory2 pad_darkblue pad_lightblue cpu2 pad_lightblue pad_green arch-aur-updates pad_green pad_orange date pad_orange
 
 separator =
 
@@ -1311,7 +1311,8 @@ format-prefix-background = ${colors.background}
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
-label-layout = %layout%
+;label-layout = %layout%
+label-layout =
 ;label-layout-underline = #3ecfb2
 label-indicator-padding = 2
 label-indicator-margin = 0
