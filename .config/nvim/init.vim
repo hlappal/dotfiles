@@ -13,17 +13,24 @@ if !exists('g:vscode')
     Plug 'sheerun/vim-polyglot'
     "Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'ctrlpvim/ctrlp.vim'
-    Plug 'jdkanani/vim-material-theme'
-    Plug 'sickill/vim-monokai'
-    Plug 'sainnhe/gruvbox-material'
-    Plug 'morhetz/gruvbox'
-    Plug 'dracula/vim', { 'as': 'dracula' }
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'vifm/vifm.vim'
     Plug 'ap/vim-css-color'
     Plug 'vimwiki/vimwiki'
     Plug 'itchyny/calendar.vim'
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+    Plug 'lervag/vimtex'
+
+    " Colorschemes
+    Plug 'jdkanani/vim-material-theme'
+    Plug 'sickill/vim-monokai'
+    Plug 'sainnhe/gruvbox-material'
+    Plug 'morhetz/gruvbox'
+    Plug 'dracula/vim', { 'as': 'dracula' }
+    Plug 'arcticicestudio/nord-vim'
+    Plug 'dikiaap/minimalist'
 
     call plug#end()
 
@@ -39,9 +46,10 @@ if !exists('g:vscode')
     set nocompatible
     filetype plugin on
     syntax on
+    set t_Co=256
 
-    set background=dark
-    colorscheme gruvbox-material
+    "set background=dark
+    colorscheme minimalist
 
     " Airline theme
     let g:airline_theme='powerlineish'
@@ -56,6 +64,17 @@ if !exists('g:vscode')
 
     " Neomake settings
     let g:neomake_python_enabled_makers=['pylint']
+
+    " Trigger UltiSnips configuration
+    let g:UltiSnipsExpandTrigger="<tab>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+    let g:UltiSnipsEditSplit="vertical"
+
+    " Vimtex call deoplete
+    call deoplete#custom#var('omni', 'input_patterns', {
+                \ 'tex': g:vimtex#re#deoplete
+                \})
 
     " Vifm keybindings
     map <Leader>vv :Vifm<CR>
