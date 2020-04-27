@@ -359,7 +359,7 @@ fuzzy-match = false
 ;        v      
 
 ws-icon-0 = 1;Sys 
-ws-icon-1 = 2;Hack 
+ws-icon-1 = 2;Work 
 ws-icon-2 = 3;Dev 
 ws-icon-3 = 4;Doc 
 ws-icon-4 = 5;Surf 
