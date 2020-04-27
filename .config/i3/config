@@ -10,7 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # Set wallpaper with nitrogen
-exec --no-startup-id nitrogen --set-centered --random /home/hlappal/Pictures/Wallpapers/
+exec --no-startup-id nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/
 #exec --no-startup-id feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*
 
 # Start Polybar
