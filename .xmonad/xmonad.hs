@@ -50,6 +50,7 @@ import XMonad.Layout.Renamed (renamed, Rename(CutWordsLeft, Replace))
 import XMonad.Layout.WorkspaceDir
 import XMonad.Layout.Spacing (spacing) 
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Gaps
 import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
 import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
 import XMonad.Layout.Reflect (reflectVert, reflectHoriz, REFLECTX(..), REFLECTY(..))
@@ -82,8 +83,10 @@ windowCount     = gets $ Just . show . length . W.integrate' . W.stack . W.works
 
 main = do
     xmproc <- spawnPipe "xmobar /home/hlappal/.xmonad/xmobarrc"
-    xmonad $ ewmh desktopConfig
-        { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageHook desktopConfig <+> manageDocks
+    --xmonad $ ewmh desktopConfig
+    xmonad $ desktopConfig
+        { manageHook = myManageHook <+> manageHook desktopConfig <+> manageDocks
+        -- TODO: learn what all the logHook commands mean
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
@@ -111,7 +114,7 @@ main = do
 
 myStartupHook = do
           --spawnOnce "emacs --daemon &" 
-          spawnOnce "nitrogen --restore &" 
+          spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
           spawnOnce "picom &" 
           setWMName "LG3D"
 
@@ -147,25 +150,26 @@ myKeys =
     -- Grid Select
     [ (("M-S-t"), spawnSelected'
         [ ("Firefox", "firefox")
+        , ("Chrome", "google-chrome-stable")
         , ("Emacs", "emacs")
-        , ("Google-Chrome", "google-chrome")
+        , ("Code", "code")
         , ("Slack", "slack")
         , ("Discord", "discord")
         , ("PCManFM", "pcmanfm")
         , ("Mailspring", "mailspring")
         , ("Electron-mail", "electron-mail")
-        , ("Simple Terminal", "st")
-        , ("Surf Browser", "surf suckless.org")
+        , ("Spotify", "spotify")
         , ("Gimp", "gimp")
         ])
 
     -- Workspaces
+    -- TODO: next/prev Screen not working
         --, ("M-.", nextScreen)   -- Switch focus to next monitor
         --, ("M-,", prevScreen)   -- Switch focus to prev monitor
 
     -- Scratchpads
+    -- TODO: learn to use scratchpads
         , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
-        --, ("M-C-c", namedScratchpadAction myScratchPads "cmus")
         
     -- Open My Preferred Terminal
         , ("M-<Return>", spawn (myTerminal))
@@ -191,42 +195,49 @@ myKeys =
 
 -- WORKSPACES ----------------------------------------------------------------
 
-myWorkspaces :: [String]
+--myWorkspaces :: [String]
 myWorkspaces = ["1:Term", "2:Web", "3:Code", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Hack"]
 
-myManageHook :: Query (Data.Monoid.Endo WindowSet)
+--myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-    [ className =? "Firefox"        --> doShift "<action=xdotool key super+2>2:Web</action>"
-    , className =? "Code"           --> doShift "<action=xdotool key super+3>3:Code</action>"
-    , className =? "Mailspring"     --> doShift "<action=xdotool key super+5>5:Mail</action>"
-    , className =? "Electron-mail"  --> doShift "<action=xdotool key super+5>5:Mail</action>"
-    , className =? "Slack"          --> doShift "<action=xdotool key super+6>6:Chat</action>"
-    , className =? "Discord"        --> doShift "<action=xdotool key super+6>6:Chat</action>"
-    , className =? "Chrome"         --> doShift "<action=xdotool key super+7>7:Torn</action>"
-    , className =? "VLC"            --> doShift "<action=xdotool key super+8>8:Media</action>"
-    , className =? "Spotify"        --> doShift "<action=xdotool key super+8>8:Media</action>"
-    , className =? "Virtualbox"     --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , className =? "Gimp"           --> doShift "<action=xdotool key super+9>Hack</action>"
+    [ className =? "firefox"        --> doShift "2:Web"
+    , className =? "code-oss"       --> doShift "3:Code"
+    , className =? "Mailspring"     --> doShift "5:Mail"
+    , className =? "electron-mail"  --> doShift "5:Mail"
+    , className =? "Slack"          --> doShift "6:Chat"
+    , className =? "discord"        --> doShift "6:Chat"
+    , className =? "Google-chrome"  --> doShift "7:Torn"
+    , className =? "vlc"            --> doShift "8:Media"
+    , className =? "Spotify"        --> doShift "8:Media"
+    , className =? "Gimp"           --> doShift "9:Hack"
     ] <+> namedScratchpadManageHook myScratchPads
 
 
 -- LAYOUTS -------------------------------------------------------------------
 
-myLayoutHook = avoidStruts $ mouseResize $ windowArrange $
-               mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ myDefaultLayout
-             where 
-                 myDefaultLayout = tall ||| threeCol ||| oneBig ||| noBorders monocle
+myLayoutHook = avoidStruts
+                $ mouseResize
+                $ windowArrange
+                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT)
+                $ myDefaultLayout
+                    where
+                        myDefaultLayout = tall ||| oneBig ||| noBorders monocle
 
-
-tall       = renamed [Replace "tall"]     $ limitWindows 12 $ spacing 6 $ ResizableTall 1 (3/100) (1/2) []
---grid       = renamed [Replace "grid"]     $ limitWindows 12 $ spacing 6 $ mkToggle (single MIRROR) $ Grid (16/10)
-threeCol   = renamed [Replace "threeCol"] $ limitWindows 3  $ ThreeCol 1 (3/100) (1/2) 
---threeRow   = renamed [Replace "threeRow"] $ limitWindows 3  $ Mirror $ mkToggle (single MIRROR) zoomRow
-oneBig     = renamed [Replace "oneBig"]   $ limitWindows 6  $ Mirror $ mkToggle (single MIRROR) $ mkToggle (single REFLECTX) $ mkToggle (single REFLECTY) $ OneBig (5/9) (8/12)
-monocle    = renamed [Replace "monocle"]  $ limitWindows 20 $ Full
---space      = renamed [Replace "space"]    $ limitWindows 4  $ spacing 12 $ Mirror $ mkToggle (single MIRROR) $ mkToggle (single REFLECTX) $ mkToggle (single REFLECTY) $ OneBig (2/3) (2/3)
---floats     = renamed [Replace "floats"]   $ limitWindows 20 $ simplestFloat
+tall        = renamed [Replace "tall"]
+                $ gaps [(U, 3), (R, 3), (L, 3), (D, 3)]
+                $ spacing 3
+                $ limitWindows 12
+                $ ResizableTall 1 (3/100) (1/2) []
+oneBig      = renamed [Replace "oneBig"]
+                $ limitWindows 6
+                $ Mirror
+                $ mkToggle (single MIRROR)
+                $ mkToggle (single REFLECTX)
+                $ mkToggle (single REFLECTY)
+                $ OneBig (5/9) (8/12)
+monocle     = renamed [Replace "monocle"]
+                $ limitWindows 20
+                $ Full
 
 
 -- SCRATCHPADS ---------------------------------------------------------------
@@ -244,11 +255,3 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  w = 0.9
                  t = 0.95 -h
                  l = 0.95 -w
-    --spawnCmus  = myTerminal ++  " -n cmus 'cmus'"
-    --findCmus   = resource =? "cmus"
-    --manageCmus = customFloating $ W.RationalRect l t w h
-                 --where
-                 --h = 0.9
-                 --w = 0.9
-                 --t = 0.95 -h
-                 --l = 0.95 -w
