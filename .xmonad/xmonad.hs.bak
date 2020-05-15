@@ -1,0 +1,245 @@
+import System.IO
+import System.Exit
+
+import XMonad
+import XMonad.Actions.Navigation2D
+import XMonad.Actions.UpdatePointer
+
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.EwmhDesktops (ewmh)
+
+import XMonad.Layout.Gaps
+import XMonad.Layout.Fullscreen
+import XMonad.Layout.BinarySpacePartition as BSP
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
+import XMonad.Layout.Spacing
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.NoFrillsDecoration
+import XMonad.Layout.Renamed
+import XMonad.Layout.Simplest
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.ZoomRow
+
+import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.Cursor
+
+import Graphics.X11.ExtraTypes.XF86
+import qualified XMonad.StackSet    as W
+import qualified Data.Map           as M
+
+
+myModMask           = mod4Mask
+myTerminal          = "urxvt"
+myScreensaver       = "/usr/bin/light-locker-command -l"
+mySelectScreenshot  = "scrot -s"
+myScreenshot        = "scrot"
+myLauncher          = "rofi -show"
+myXmobarrc          = "/home/hlappal/.xmobarrc"
+
+
+------------------------------------------------------------------------------
+-- Workspaces
+myWorkSpaces = ["1:Term","2:Surf","3:Code","4:Doc","5:Mail","6:Chat","7:Torn","8:Media","9:Hack"]
+
+
+------------------------------------------------------------------------------
+-- Window rules
+-- Execure arbitrary actions and WindowSet manipulations when managing
+-- a new window. You can use this to, for example, always float a
+-- particular program, or have a client always appear on a particular
+-- workspace.
+--
+-- To find the property name associated with a program, use
+-- > xprop | grep WM_CLASS
+-- and click on the client you're interested in.
+--
+-- To match on the WM_NAME you can use 'title' in the same way that
+-- 'className' and 'resource' are used below.
+myManageHook = composeAll
+    [ className =? "Firefox"        --> doShift "2:Surf"
+    , className =? "Mailspring"     --> doShift "5:Mail"
+    , className =? "Electronmail"   --> doShift "5:Mail"
+    , className =? "Google-chrome"  --> doShift "7:Torn"
+    , className =? "Spotify"        --> doShift "8:Media"
+    , className =? "stalonetray"    --> doIgnore
+    ]
+
+
+------------------------------------------------------------------------------
+-- Layouts
+
+outerGaps   = 3
+myGaps      = gaps [(U, outerGaps), (R, outerGaps), (L, outerGaps), (D, outerGaps)]
+addSpace    = renamed [CutWordsLeft 2] . spacing gap
+tab         = avoidStruts
+                $ renamed [Replace "Tabbed"]
+                $ addTopBar
+                $ myGaps
+                $ tabbed shrinkText myTabTheme
+
+layouts     = avoidStruts (
+                ( renamed [CutWordsLeft 1]
+                -- $ addTopBar
+                $ windowNavigation
+                $ renamed [Replace "BSP"]
+                $ addTabs shrinkText myTabTheme
+                $ subLayout [] Simplest
+                $ myGaps
+                $ addSpace (BSP.emptyBSP)
+                )
+                ||| tab
+              )
+
+myLayout    = smartBorders
+                $ mkToggle (NOBORDERS ?? FULL ?? EOT)
+                $ layouts
+
+--myLayout = avoidStruts (
+    --ThreeColMid 1 (3/100) (1/2) |||
+    --Tall 1 (3/100) (1/2) |||
+    --Mirror (Tall 1 (3/100) (1/2)) |||
+    ----tabbed shrinkText tabConfig |||
+    --Full |||
+    --spiral (6/7)) |||
+    --noBorders (fullscreenFull Full)
+
+
+------------------------------------------------------------------------------
+-- Colors and borders
+-- Based ir_black theme.
+
+xmobarTitleColor            = "#c678dd"
+--xmobartitlecolor            = "#ffb6b0"
+xmobarCurrentWorkspaceColor = "#51afef"
+--xmobarCurrentWorkspaceColor = "#ceffac"
+
+myNormalBorderColor         = "#000000"
+myFocusedBorderColor        = active
+myBorderWidth               = 2
+
+base03  = "#002b36"
+base02  = "#073642"
+base01  = "#586e75"
+base00  = "#657b83"
+base0   = "#839496"
+base1   = "#93a1a1"
+base2   = "#eee8d5"
+base3   = "#fdf6e3"
+yellow  = "#b58900"
+orange  = "#cb4b16"
+red     = "#dc322f"
+magenta = "#d33682"
+violet  = "#6c71c4"
+blue    = "#268bd2"
+cyan    = "#2aa198"
+green   = "#859900"
+
+-- sizes
+gap         = 3
+topbar      = 10
+border      = 2
+prompt      = 5
+status      = 5
+
+active      = blue
+activeWarn  = red
+inactive    = base02
+focusColor  = blue
+unfocusColor = base02
+
+myFont      = "xft:DejaVu Sans Mono:size=9:antialias=true"
+myBigFont   = "xft:DejaVu Sans Mono:size=9:antialias=true"
+
+topBarTheme = def { fontName            = myFont
+                  , inactiveBorderColor = base03
+                  , inactiveColor       = base03
+                  , inactiveTextColor   = base03
+                  , activeColor         = active
+                  , activeTextColor     = active
+                  , activeBorderColor   = active
+                  , urgentBorderColor   = red
+                  , urgentTextColor     = yellow
+                  , decoHeight          = topbar
+                  }
+
+addTopBar = noFrillsDeco shrinkText topBarTheme
+
+myTabTheme = def { fontName             = myFont
+                 , activeColor          = active
+                 , activeBorderColor    = active
+                 , activeTextColor      = base03
+                 , inactiveColor        = base02
+                 , inactiveBorderColor  = base02
+                 , inactiveTextColor    = base00
+                 }
+
+
+------------------------------------------------------------------------------
+-- startup hook
+-- perform an arbitrary action each time xmonad starts or is restarted
+-- with mod-q. Used by, e.g., XMonad.Layout.PerWorkspace to initialize
+-- per-workspace layout choices.
+
+-- By default, do nothing.
+myStartupHook = return ()
+
+
+------------------------------------------------------------------------------
+-- Run xmonad
+
+main = do
+    xmproc <- spawnPipe ("xmobar " ++ myXmobarrc)
+    xmonad $ defaults
+        { logHook = dynamicLogWithPP xmobarPP
+            { --ppOutput = hPutStrLn xmproc
+            ppTitle = xmobarColor xmobarTitleColor "" . shorten 50
+            , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
+            , ppSep = "   "
+            } >> updatePointer (0.75, 0.75) (0.75, 0.75)
+        , manageHook = manageDocks <+> myManageHook
+        --, startupHook = dockStartupHook <+> setWMName "LG3D"
+        --, startupHook = setWMName "LG3D"
+        , handleEventHook = docksEventHook
+        }
+
+
+------------------------------------------------------------------------------
+-- Define the default configurations.
+-- Any config that is not overridden, is taken from the default config
+-- in xmonad/XMonad/Config.hs
+
+defaults = defaultConfig
+    { terminal              = myTerminal
+    --, focusFollowMouse      = myFocusFollowMouse
+    , borderWidth           = myBorderWidth
+    , modMask               = myModMask
+    , workspaces            = myWorkSpaces
+    , normalBorderColor     = myNormalBorderColor
+    , focusedBorderColor    = myFocusedBorderColor
+
+    -- Key bindings
+    --, keys                  = myKeys
+    --, mouseBindings         = myMouseBindings
+
+    -- Hooks, layouts
+    , layoutHook            = myLayout
+    --, layoutHook            = avoidStruts $ layoutHook defaultConfig
+    , manageHook            = manageDocks <+> myManageHook
+    , startupHook           = myStartupHook
+    } `additionalKeys`
+    [ ((mod4Mask .|. shiftMask, xK_z), spawn myScreensaver)
+    , ((0, xK_Print), spawn "scrot")
+    , ((0, xF86XK_AudioMute), spawn "amixer -q set Master toggle")
+    , ((0, xF86XK_AudioLowerVolume), spawn "amixer -q set Master 5%-")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "amixer -q set Master 5%+")
+    --, ((modMask, xK_0), spawn myScreensaver)
+    -- TODO: add keys for screen backlight adjustment
+    ]
