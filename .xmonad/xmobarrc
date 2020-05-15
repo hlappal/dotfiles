@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% }{ %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
+   , template = "%StdinReader% }{ %vol% | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -42,7 +42,7 @@ Config {
                              ] 36000
 
         -- network activity monitor (dynamic interface resolution)
-        , Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
+        , Run DynNetwork     [ "--template" , "<tx>kB/s|<rx>kB/s"
                              , "--Low"      , "1000"       -- units: B/s
                              , "--High"     , "5000"       -- units: B/s
                              , "--low"      , "darkgreen"
@@ -67,6 +67,9 @@ Config {
                              , "--normal"   , "darkorange"
                              , "--high"     , "darkred"
                              ] 50
+
+        -- audio volume
+        , Run Com "/home/hlappal/.xmonad/get-volume.sh" [] "vol" 1
                           
         -- memory usage monitor
         , Run Memory         [ "--template" ,"Mem: <usedratio>%"
@@ -97,11 +100,11 @@ Config {
 
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
+        , Run Date           "<fc=#ABABAB>%d.%m.(%a) %T</fc>" "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("fi"         , "<fc=#00008B>FI</fc>")
-                             , ("us"         , "<fc=#8B0000>US</fc>")
+        , Run Kbd            [ ("fi"        , "FI")
+                             , ("us"        , "US")
                              ]
         ]
    }
