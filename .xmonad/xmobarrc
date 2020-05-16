@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% }{ %vol% | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
+   , template = "%StdinReader% <fc=#ff0000>%locks%</fc> }{ %vol% | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -97,6 +97,7 @@ Config {
                                        , "-i"	, "<fc=#006000>Charged</fc>"
                              ] 50
         , Run StdinReader
+        , Run Locks
 
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
