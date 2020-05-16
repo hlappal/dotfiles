@@ -115,8 +115,8 @@ main = do
 myStartupHook = do
           --spawnOnce "emacs --daemon &" 
           spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
-          spawnOnce "xcompmgr -c -l0 -t0 -r0 -o.00"  -- Prevent shaded/dim screen share in Zoom
-          --spawnOnce "picom &" 
+          --spawnOnce "xcompmgr -c -l0 -t0 -r0 -o.00"  -- Prevent shaded/dim screen share in Zoom
+          spawnOnce "picom &" 
           setWMName "LG3D"
 
 
@@ -152,15 +152,16 @@ myKeys =
     [ (("M-S-t"), spawnSelected'
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
-        , ("Emacs", "emacs")
+        --, ("Emacs", "emacs")
         , ("Code", "code")
         , ("Slack", "slack")
         , ("Discord", "discord")
+        , ("Zoom", "zoom")
         , ("PCManFM", "pcmanfm")
         , ("Mailspring", "mailspring")
         , ("Electron-mail", "electron-mail")
         , ("Spotify", "spotify")
-        , ("Gimp", "gimp")
+        --, ("Gimp", "gimp")
         ])
 
     -- Workspaces
@@ -171,6 +172,7 @@ myKeys =
     -- Scratchpads
     -- TODO: learn to use scratchpads
         , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
+        , ("M-n", spawn (myTerminal ++ " -e joplin"))
         
     -- Open My Preferred Terminal
         , ("M-<Return>", spawn (myTerminal))
