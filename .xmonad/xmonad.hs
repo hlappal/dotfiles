@@ -115,6 +115,7 @@ main = do
 myStartupHook = do
           --spawnOnce "emacs --daemon &" 
           spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
+          spawnOnce "xcompmgr -c -l0 -t0 -r0 -o.00"  -- Prevent shaded/dim screen share in Zoom
           --spawnOnce "picom &" 
           setWMName "LG3D"
 
@@ -206,6 +207,7 @@ myManageHook = composeAll
     , className =? "electron-mail"  --> doShift "5:Mail"
     , className =? "Slack"          --> doShift "6:Chat"
     , className =? "discord"        --> doShift "6:Chat"
+    , className =? "zoom"           --> doShift "6:Chat"
     , className =? "Google-chrome"  --> doShift "7:Torn"
     , className =? "vlc"            --> doShift "8:Media"
     , className =? "Spotify"        --> doShift "8:Media"
