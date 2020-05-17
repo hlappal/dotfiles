@@ -149,21 +149,20 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
 
 myKeys =
     -- Grid Select
-    [ (("M-S-t"), spawnSelected'
+    [ (("M-S-o"), spawnSelected'
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
-        --, ("Emacs", "emacs")
-        , ("Code", "code")
-        , ("Slack", "slack")
         , ("Discord", "discord")
-        , ("Zoom", "zoom")
-        , ("PCManFM", "pcmanfm")
+        , ("Joplin", "joplin")
         , ("Vifm", myTerminal ++ " -e vifm")
-        , ("Mailspring", "mailspring")
         , ("Electron-mail", "electron-mail")
-        , ("Joplin", myTerminal ++ " -e joplin")
+        , ("Slack", "slack")
+        , ("Emacs", "emacs")
+        , ("Zoom", "zoom")
+        , ("Mailspring", "mailspring")
+        , ("Code", "code")
         , ("Spotify", "spotify")
-        --, ("Gimp", "gimp")
+        , ("PCManFM", "pcmanfm")
         ])
 
     -- Workspaces
@@ -189,8 +188,8 @@ myKeys =
 
     -- Multimedia Keys
         , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
-        , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 5%- unmute")
-        , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 5%+ unmute")
+        , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 2%- unmute")
+        , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 2%+ unmute")
         , ("<Print>", spawn "scrot")
         , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
         , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
