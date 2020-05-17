@@ -38,7 +38,7 @@ import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
 import XMonad.Actions.CopyWindow (kill1, copyToAll, killAllOtherCopies, runOrCopy)
 import XMonad.Actions.WindowGo (runOrRaise, raiseMaybe)
 import XMonad.Actions.WithAll (sinkAll, killAll)
-import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen, shiftNextScreen, shiftPrevScreen)
+import XMonad.Actions.CycleWS -- (nextWs, prevWS, shiftToNext, shiftToPrev, toggleWS)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt, removeEmptyWorkspace)
 import XMonad.Actions.MouseResize
@@ -166,9 +166,10 @@ myKeys =
         ])
 
     -- Workspaces
-    -- TODO: next/prev Screen not working
-        --, ("M-.", nextScreen)   -- Switch focus to next monitor
-        --, ("M-,", prevScreen)   -- Switch focus to prev monitor
+        , ("M-<Left>", prevWS)
+        , ("M-<Right>", nextWS)
+        , ("S-M-<Left>", shiftToPrev)
+        , ("S-M-<Right>", shiftToNext)
 
     -- Scratchpads
     -- TODO: learn to use scratchpads
