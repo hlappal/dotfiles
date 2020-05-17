@@ -153,7 +153,7 @@ myKeys =
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
         , ("Discord", "discord")
-        , ("Joplin", "joplin")
+        , ("Joplin", "joplin-desktop")
         , ("Vifm", myTerminal ++ " -e vifm")
         , ("Electron-mail", "electron-mail")
         , ("Slack", "slack")
