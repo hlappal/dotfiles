@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% <fc=#ff0000>%locks%</fc> }{ %vol% | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
+   , template = "%StdinReader% <fc=#ff0000>%locks%</fc> }{ <fc=#ababab>%vol%</fc> | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -81,7 +81,7 @@ Config {
                              ] 10
 
         -- battery monitor
-        , Run Battery        [ "--template" , "Batt: <acstatus>"
+        , Run Battery        [ "--template" , "<fc=#ababab>Batt:</fc> <acstatus>"
                              , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
                              , "--low"      , "darkred"
