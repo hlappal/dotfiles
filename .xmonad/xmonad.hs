@@ -165,6 +165,10 @@ myKeys =
         , ("PCManFM", "pcmanfm")
         ])
 
+    -- Layouts
+        , ("S-M-h", sendMessage MirrorShrink)
+        , ("S-M-l", sendMessage MirrorExpand)
+
     -- Workspaces
         , ("M-<Left>", prevWS)
         , ("M-<Right>", nextWS)
