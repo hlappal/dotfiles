@@ -113,10 +113,10 @@ main = do
 -- AUTOSTART -----------------------------------------------------------------
 
 myStartupHook = do
-          --spawnOnce "emacs --daemon &" 
+          spawnOnce "emacs --daemon &" 
           spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
-          --spawnOnce "xcompmgr -c -l0 -t0 -r0 -o.00"  -- Prevent shaded/dim screen share in Zoom
-          spawnOnce "picom &" 
+          spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
+          --spawnOnce "picom &" 
           setWMName "LG3D"
 
 
@@ -170,10 +170,10 @@ myKeys =
         , ("S-M-l", sendMessage MirrorExpand)
 
     -- Workspaces
-        , ("M-<Left>", prevWS)
-        , ("M-<Right>", nextWS)
-        , ("S-M-<Left>", shiftToPrev)
-        , ("S-M-<Right>", shiftToNext)
+        , ("M-<Right>", moveTo Next NonEmptyWS)
+        , ("M-<Left>", moveTo Prev NonEmptyWS)
+        , ("S-M-<Right>", shiftTo Next NonEmptyWS)
+        , ("S-M-<Left>", shiftTo Prev NonEmptyWS)
 
     -- Scratchpads
     -- TODO: learn to use scratchpads
