@@ -46,6 +46,9 @@
 ;; Start window maximized
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;
 
+;; Open Org Agenda at startup
+(add-hook 'after-init-hook 'org-agenda-list)
+
 ;; Set Wakatime
 (custom-set-variables '(wakatime-api-key "0369f1e3-2893-4852-b5b0-bd61278d0496"))
 (global-wakatime-mode)
