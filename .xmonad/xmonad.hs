@@ -178,18 +178,18 @@ myKeys =
     -- Scratchpads
     -- TODO: learn to use scratchpads
         , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
-        , ("M--", spawn (myTerminal ++ " -e joplin"))
 
     -- Open My Preferred Terminal
         , ("M-<Return>", spawn (myTerminal))
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
         , ("M-S-<Return>", spawn "dmenu_run")
-        , ("M-p", spawn "passmenu")
+        , ("S-M-p", spawn "passmenu")
 
     -- My Applications (Super+Alt+Key)
         -- e.g.:
-        , ("M-S-f", spawn (myTerminal ++ " -e fish"))
+        , ("S-M-f", spawn (myTerminal ++ " -e fish"))
+        , ("S-M-j", spawn (myTerminal ++ " -e joplin"))
 
     -- Multimedia Keys
         , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
