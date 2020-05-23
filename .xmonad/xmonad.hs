@@ -1,7 +1,7 @@
 -- The xmonad configuration
+-- Heikki Lappalainen
 --
 -- Thanks to Derek Taylor (DistroTube)
--- http://www.youtube.com/c/DistroTube
 -- http://www.gitlab.com/dwt1/
 
 
@@ -86,7 +86,6 @@ main = do
     --xmonad $ ewmh desktopConfig
     xmonad $ desktopConfig
         { manageHook = myManageHook <+> manageHook desktopConfig <+> manageDocks
-        -- TODO: learn what all the logHook commands mean
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
@@ -122,7 +121,7 @@ myStartupHook = do
 
 -- GRID SELECT ---------------------------------------------------------------
 
---myColorizer :: Window -> Bool -> X (String, String)
+myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
                   (0x31,0x2e,0x39) -- lowest inactive bg
                   (0x31,0x2e,0x39) -- highest inactive bg
@@ -148,8 +147,12 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
 -- KEYBINDINGS ---------------------------------------------------------------
 
 myKeys =
+    -- Xmonad
+    [ ("M-C-r", spawn "xmonad --recompile")
+    , ("C-M1-r", spawn "xmonad --restart")
+
     -- Grid Select
-    [ (("M-S-o"), spawnSelected'
+    , (("M-S-o"), spawnSelected'
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
         , ("Discord", "discord")
@@ -165,49 +168,49 @@ myKeys =
         , ("PCManFM", "pcmanfm")
         ])
 
-    -- Layouts
-        , ("S-M-h", sendMessage MirrorShrink)
-        , ("S-M-l", sendMessage MirrorExpand)
+    -- Windows
+    , ("S-M-h", sendMessage MirrorShrink)
+    , ("S-M-l", sendMessage MirrorExpand)
+    , ("S-M--", withFocused $ windows . W.sink)
 
     -- Workspaces
-        , ("M-<Right>", moveTo Next NonEmptyWS)
-        , ("M-<Left>", moveTo Prev NonEmptyWS)
-        , ("S-M-<Right>", shiftTo Next NonEmptyWS)
-        , ("S-M-<Left>", shiftTo Prev NonEmptyWS)
+    , ("M-<Right>", moveTo Next NonEmptyWS)
+    , ("M-<Left>", moveTo Prev NonEmptyWS)
+    , ("S-M-<Right>", shiftTo Next NonEmptyWS)
+    , ("S-M-<Left>", shiftTo Prev NonEmptyWS)
 
     -- Scratchpads
-    -- TODO: learn to use scratchpads
-        , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
+    --, ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
 
     -- Open My Preferred Terminal
-        , ("M-<Return>", spawn (myTerminal))
+    , ("M-<Return>", spawn (myTerminal))
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
-        , ("M-S-<Return>", spawn "dmenu_run")
-        , ("S-M-p", spawn "passmenu")
+    , ("M-S-<Return>", spawn "dmenu_run")
+    , ("S-M-p", spawn "passmenu")
 
     -- My Applications (Super+Alt+Key)
-        -- e.g.:
-        , ("S-M-f", spawn (myTerminal ++ " -e fish"))
-        , ("S-M-j", spawn (myTerminal ++ " -e joplin"))
+    -- e.g.:
+    , ("S-M-f", spawn (myTerminal ++ " -e fish"))
+    , ("S-M-j", spawn (myTerminal ++ " -e joplin"))
 
     -- Multimedia Keys
-        , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
-        , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 2%- unmute")
-        , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 2%+ unmute")
-        , ("<Print>", spawn "scrot")
-        , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
-        , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
-        ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
-                nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
+    , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
+    , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 2%- unmute")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 2%+ unmute")
+    , ("<Print>", spawn "scrot")
+    , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
+    , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
+    ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
+            nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
 
 
 -- WORKSPACES ----------------------------------------------------------------
 
 --myWorkspaces :: [String]
-myWorkspaces = ["1:Term", "2:Web", "3:Code", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Hack"]
+myWorkspaces = ["1:Term", "2:Web", "3:Code", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
 
---myManageHook :: Query (Data.Monoid.Endo WindowSet)
+myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
     [ className =? "firefox"        --> doShift "2:Web"
     , className =? "code-oss"       --> doShift "3:Code"
@@ -219,8 +222,8 @@ myManageHook = composeAll
     , className =? "Google-chrome"  --> doShift "7:Torn"
     , className =? "vlc"            --> doShift "8:Media"
     , className =? "Spotify"        --> doShift "8:Media"
-    , className =? "Gimp"           --> doShift "9:Hack"
-    ] <+> namedScratchpadManageHook myScratchPads
+    , className =? "Gimp"           --> doShift "9:Other"
+    ] -- <+> namedScratchpadManageHook myScratchPads
 
 
 -- LAYOUTS -------------------------------------------------------------------
@@ -252,16 +255,16 @@ monocle     = renamed [Replace "monocle"]
 
 -- SCRATCHPADS ---------------------------------------------------------------
 
-myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
-                --, NS "cmus" spawnCmus findCmus manageCmus  
-                ]
-
-    where
-    spawnTerm  = myTerminal ++  " -n scratchpad"
-    findTerm   = resource =? "scratchpad"
-    manageTerm = customFloating $ W.RationalRect l t w h
-                 where
-                 h = 0.9
-                 w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
+--myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
+--                --, NS "cmus" spawnCmus findCmus manageCmus  
+--                ]
+--
+--    where
+--    spawnTerm  = myTerminal ++  " -n scratchpad"
+--    findTerm   = resource =? "scratchpad"
+--    manageTerm = customFloating $ W.RationalRect l t w h
+--                 where
+--                 h = 0.9
+--                 w = 0.9
+--                 t = 0.95 -h
+--                 l = 0.95 -w
