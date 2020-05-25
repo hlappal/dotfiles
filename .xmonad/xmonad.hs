@@ -37,7 +37,8 @@ import XMonad.Actions.Promote
 import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
 import XMonad.Actions.CopyWindow (kill1, copyToAll, killAllOtherCopies, runOrCopy)
 import XMonad.Actions.WindowGo (runOrRaise, raiseMaybe)
-import XMonad.Actions.WithAll (sinkAll, killAll)
+import XMonad.Actions.WithAll -- (sinkAll, killAll)
+import XMonad.Actions.FloatKeys
 import XMonad.Actions.CycleWS -- (nextWs, prevWS, shiftToNext, shiftToPrev, toggleWS)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt, removeEmptyWorkspace)
@@ -152,11 +153,11 @@ myKeys =
     , ("C-M1-r", spawn "xmonad --restart")
 
     -- Grid Select
-    , (("M-S-o"), spawnSelected'
+    , (("M-M1-o"), spawnSelected'
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
         , ("Discord", "discord")
-        , ("Joplin", "joplin-desktop")
+        , ("Joplin", "joplin")
         , ("Vifm", myTerminal ++ " -e vifm")
         , ("Electron-mail", "electron-mail")
         , ("Slack", "slack")
@@ -171,7 +172,10 @@ myKeys =
     -- Windows
     , ("S-M-h", sendMessage MirrorShrink)
     , ("S-M-l", sendMessage MirrorExpand)
-    , ("S-M--", withFocused $ windows . W.sink)
+    , ("S-M-f", withFocused $ windows . flip W.float center)
+    , ("S-M-s", withFocused $ windows . W.sink)
+    --TODO move & resize floating windows with keyboard
+    --TODO move & resize floating windows with mouse
 
     -- Workspaces
     , ("M-<Right>", moveTo Next NonEmptyWS)
@@ -187,12 +191,12 @@ myKeys =
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
     , ("M-S-<Return>", spawn "dmenu_run")
-    , ("S-M-p", spawn "passmenu")
+    , ("M-M1-p", spawn "passmenu")
 
     -- My Applications (Super+Alt+Key)
     -- e.g.:
-    , ("S-M-f", spawn (myTerminal ++ " -e fish"))
-    , ("S-M-j", spawn (myTerminal ++ " -e joplin"))
+    , ("M-M1-f", spawn (myTerminal ++ " -e fish"))
+    , ("M-M1-j", spawn (myTerminal ++ " -e joplin"))
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
@@ -223,7 +227,13 @@ myManageHook = composeAll
     , className =? "vlc"            --> doShift "8:Media"
     , className =? "Spotify"        --> doShift "8:Media"
     , className =? "Gimp"           --> doShift "9:Other"
+    , className =? "Tk"             --> doCenterFloat
     ] -- <+> namedScratchpadManageHook myScratchPads
+
+
+-- WINDOWS -------------------------------------------------------------------
+
+center = W.RationalRect (1/4) (1/4) (1/2) (1/2)
 
 
 -- LAYOUTS -------------------------------------------------------------------
