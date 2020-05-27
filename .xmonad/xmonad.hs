@@ -213,7 +213,7 @@ myKeys =
 -- WORKSPACES ----------------------------------------------------------------
 
 --myWorkspaces :: [String]
-myWorkspaces = ["1:Term", "2:Web", "3:Code", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
+myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
 
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
