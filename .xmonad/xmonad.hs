@@ -149,11 +149,11 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
 
 myKeys =
     -- Xmonad
-    [ ("M-C-r", spawn "xmonad --recompile")
-    , ("C-M1-r", spawn "xmonad --restart")
+    [ ("C-M1-r", spawn "xmonad --recompile")
+    , ("C-M-r", spawn "xmonad --restart")
 
     -- Grid Select
-    , (("M-M1-o"), spawnSelected'
+    , (("M-S-o"), spawnSelected'
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
         , ("Discord", "discord")
@@ -170,18 +170,18 @@ myKeys =
         ])
 
     -- Windows
-    , ("S-M-h", sendMessage MirrorShrink)
-    , ("S-M-l", sendMessage MirrorExpand)
-    , ("S-M-f", withFocused $ windows . flip W.float center)
-    , ("S-M-s", withFocused $ windows . W.sink)
+    , ("M-S-h", sendMessage MirrorShrink)
+    , ("M-S-l", sendMessage MirrorExpand)
+    , ("M-S-f", withFocused $ windows . flip W.float center)
+    , ("M-S-s", withFocused $ windows . W.sink)
     --TODO move & resize floating windows with keyboard
     --TODO move & resize floating windows with mouse
 
     -- Workspaces
     , ("M-<Right>", moveTo Next NonEmptyWS)
     , ("M-<Left>", moveTo Prev NonEmptyWS)
-    , ("S-M-<Right>", shiftTo Next NonEmptyWS)
-    , ("S-M-<Left>", shiftTo Prev NonEmptyWS)
+    , ("M-S-<Right>", shiftTo Next NonEmptyWS)
+    , ("M-S-<Left>", shiftTo Prev NonEmptyWS)
 
     -- Scratchpads
     --, ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
@@ -191,12 +191,13 @@ myKeys =
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
     , ("M-S-<Return>", spawn "dmenu_run")
-    , ("M-M1-p", spawn "passmenu")
+    , ("M-S-p", spawn "passmenu")
 
     -- My Applications (Super+Alt+Key)
     -- e.g.:
-    , ("M-M1-f", spawn (myTerminal ++ " -e fish"))
-    , ("M-M1-j", spawn (myTerminal ++ " -e joplin"))
+    --, ("M-S-f", spawn (myTerminal ++ " -e fish"))
+    --, ("M-S-j", spawn (myTerminal ++ " -e joplin"))
+    , ("M-S-e", spawn ("emacs"))
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
@@ -228,6 +229,7 @@ myManageHook = composeAll
     , className =? "Spotify"        --> doShift "8:Media"
     , className =? "Gimp"           --> doShift "9:Other"
     , className =? "Tk"             --> doCenterFloat
+    , className =? "Emacs"          --> doCenterFloat
     ] -- <+> namedScratchpadManageHook myScratchPads
 
 
