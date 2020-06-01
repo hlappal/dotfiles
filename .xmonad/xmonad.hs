@@ -113,9 +113,9 @@ main = do
 -- AUTOSTART -----------------------------------------------------------------
 
 myStartupHook = do
-          spawnOnce "emacs --daemon &" 
           spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
           spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
+          spawnOnce "emacs &" 
           --spawnOnce "picom &" 
           setWMName "LG3D"
 
@@ -157,16 +157,16 @@ myKeys =
         [ ("Firefox", "firefox")
         , ("Chrome", "google-chrome-stable")
         , ("Discord", "discord")
-        , ("Joplin", "joplin")
-        , ("Vifm", myTerminal ++ " -e vifm")
+        --, ("Joplin", "joplin")
         , ("Electron-mail", "electron-mail")
-        , ("Slack", "slack")
-        , ("Emacs", "emacs")
-        , ("Zoom", "zoom")
-        , ("Mailspring", "mailspring")
-        , ("Code", "code")
-        , ("Spotify", "spotify")
         , ("PCManFM", "pcmanfm")
+        , ("Spotify", "spotify")
+        , ("Zoom", "zoom")
+        , ("Emacs", "emacs")
+        --, ("Code", "code")
+        , ("Slack", "slack")
+        , ("Mailspring", "mailspring")
+        , ("Vifm", myTerminal ++ " -e vifm")
         ])
 
     -- Windows
@@ -197,7 +197,7 @@ myKeys =
     -- e.g.:
     --, ("M-S-f", spawn (myTerminal ++ " -e fish"))
     --, ("M-S-j", spawn (myTerminal ++ " -e joplin"))
-    , ("M-S-e", spawn ("emacs"))
+    --, ("M-S-e", spawn ("emacs"))
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
@@ -213,12 +213,13 @@ myKeys =
 -- WORKSPACES ----------------------------------------------------------------
 
 --myWorkspaces :: [String]
-myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Doc", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
+myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Emacs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
 
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-    [ className =? "firefox"        --> doShift "2:Web"
-    , className =? "code-oss"       --> doShift "3:Code"
+    [ className =? "firefox"        --> doShift "1:Web"
+    , className =? "code-oss"       --> doShift "3:Dev"
+    , className =? "Emacs"          --> doShift "4:Emacs"
     , className =? "Mailspring"     --> doShift "5:Mail"
     , className =? "electron-mail"  --> doShift "5:Mail"
     , className =? "Slack"          --> doShift "6:Chat"
@@ -228,8 +229,7 @@ myManageHook = composeAll
     , className =? "vlc"            --> doShift "8:Media"
     , className =? "Spotify"        --> doShift "8:Media"
     , className =? "Gimp"           --> doShift "9:Other"
-    , className =? "Tk"             --> doCenterFloat
-    , className =? "Emacs"          --> doCenterFloat
+    --, className =? "Tk"             --> doCenterFloat
     ] -- <+> namedScratchpadManageHook myScratchPads
 
 
