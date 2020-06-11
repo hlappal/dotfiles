@@ -190,8 +190,8 @@ myKeys =
     , ("M-<Return>", spawn (myTerminal))
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
-    , ("M-S-<Return>", spawn "dmenu_run")
-    , ("M-S-p", spawn "passmenu")
+    , ("M-S-<Return>", spawn "dmenu-recent-aliases")
+    , ("M-S-p", spawn "dmenu-lpass-nu")
 
     -- My Applications (Super+Alt+Key)
     -- e.g.:
