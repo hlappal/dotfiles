@@ -98,6 +98,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias vi="nvim"
-alias emacs="emacs -nw"
-alias config='/usr/bin/git --git-dir=/home/hlappal/.cfg/ --work-tree=/home/hlappal'
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
