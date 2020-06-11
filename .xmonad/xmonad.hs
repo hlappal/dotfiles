@@ -167,6 +167,7 @@ myKeys =
         , ("Slack", "slack")
         , ("Mailspring", "mailspring")
         , ("Vifm", myTerminal ++ " -e vifm")
+        , ("Jupyterlab", "jupyter-lab --LabApp.webbrowser_open_new=1")
         ])
 
     -- Windows
@@ -190,7 +191,7 @@ myKeys =
     , ("M-<Return>", spawn (myTerminal))
 		
     -- Dmenu Scripts (Alt+Ctr+Key)
-    , ("M-S-<Return>", spawn "dmenu-recent-aliases")
+    , ("M-S-<Return>", spawn "dmenu_run")
     , ("M-S-p", spawn "dmenu-lpass-nu")
 
     -- My Applications (Super+Alt+Key)
