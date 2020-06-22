@@ -1,3 +1,5 @@
 ;;; ~/.doom.d/bindings.el -*- lexical-binding: t; -*-
 
-(map! :leader "C" #'comment-line)
+;; Comment line
+;; (map! :leader "c l" #'comment-line)
+(map! "C-/" #'comment-line)
