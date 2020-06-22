@@ -292,8 +292,7 @@ searchList = [ ("a", archwiki)
 ------------------------------------------------------------------------------
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
-  [ Node (TS.TSNode "hello" "displays hello" (spawn "xmessage hello!")) []
-  , Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
+  [ Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
     [ Node (TS.TSNode "shutdown" "poweroff system" (spawn "shutdown now")) []
     , Node (TS.TSNode "reboot" "reboot system" (spawn "reboot")) []
     , Node (TS.TSNode "suspend" "suspend system" (spawn "systemctl suspend")) []
@@ -435,8 +434,13 @@ myKeys =
     , ("<Print>", spawn "scrot")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 2")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
-    ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
-            nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
+    ]
+    ++ [("M-s " ++ k, S.promptSearch myXPConfig' f) | (k,f) <- searchList ]
+    ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
+    ++ [("M-p " ++ k, f myXPConfig') | (k,f) <- promptList ]
+    ++ [("M-p " ++ k, f myXPConfig' g) | (k,f,g) <- promptList' ]
+        where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
+              nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
 
 ------------------------------------------------------------------------------
 -- WORKSPACES
