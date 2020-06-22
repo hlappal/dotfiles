@@ -293,7 +293,11 @@ searchList = [ ("a", archwiki)
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
   [ Node (TS.TSNode "hello" "displays hello" (spawn "xmessage hello!")) []
-  , Node (TS.TSNode "shutdown" "poweroff the system" (spawn "shutdown")) []
+  , Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
+    [ Node (TS.TSNode "shutdown" "poweroff system" (spawn "shutdown now")) []
+    , Node (TS.TSNode "reboot" "reboot system" (spawn "reboot")) []
+    , Node (TS.TSNode "suspend" "suspend system" (spawn "systemctl suspend")) []
+    ]
   , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
     [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn (myTerminal ++ " -e vi ~/.xmonad/xmonad.hs"))) []
     , Node (TS.TSNode "recompile xmonad" "recompile xmonad" (spawn "xmonad --recompile")) []
@@ -353,7 +357,7 @@ myKeys =
     , ("M-S-q", io exitSuccess)
 
     -- Open My Preferred Terminal
-    , ("M-<Return>", spawn (myTerminal))
+    , ("M-<Return>", spawn (myTerminal ++ " -e fish"))
 
     -- Run Prompt
     , ("M-S-<Return>", shellPrompt myXPConfig)
