@@ -82,7 +82,7 @@ if !exists('g:vscode')
   colorscheme nord
 
   " Airline theme
-  let g:airline_theme='powerlineish'
+  let g:airline_theme='nord'
 
   " Deoplete settings
   "let g:deoplete#enable_at_startup=1
