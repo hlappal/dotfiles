@@ -168,11 +168,11 @@ myAppGrid = [ ("Firefox", "firefox")
 myXPConfig :: XPConfig
 myXPConfig = def
   { font                = myFont
-  , bgColor             = "#292d3e"
-  , fgColor             = "#d0d0d0"
-  , bgHLight            = "#c792ea"
-  , fgHLight            = "#000000"
-  , borderColor         = "#535974"
+  , bgColor             = "#2e3440"
+  , fgColor             = "#d8dee9"
+  , bgHLight            = "#88c0d0"
+  , fgHLight            = "#2e3440"
+  , borderColor         = "#88c0d0"
   , promptBorderWidth   = 0
   , promptKeymap        = myXPKeymap
   , position            = Top
@@ -180,7 +180,7 @@ myXPConfig = def
   , historySize         = 256
   , historyFilter       = id
   , defaultText         = []
-  , autoComplete        = Just 100000
+  --, autoComplete        = Just 100000
   , showCompletionOnTab = False
   , searchPredicate     = isPrefixOf
   , alwaysHighlight     = True
@@ -392,6 +392,7 @@ myKeys =
 
     -- Layouts
     , ("M-<Tab>", sendMessage NextLayout)
+    , ("M-S-<Tab>", sendMessage FirstLayout)
     , ("M-C-M1-<Up>", sendMessage Arrange)
     , ("M-C-M1-<Down>", sendMessage DeArrange)
     , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)
