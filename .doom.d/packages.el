@@ -49,4 +49,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+;; Show image preview in dired
 (package! peep-dired)
+
+;; Use Emacs as a window manager
+(package! exwm)
