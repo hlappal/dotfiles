@@ -1,5 +1,3 @@
-# export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH
-
 if [ -f ~/.bash_aliases ]
     . ~/.bash_aliases
 end
