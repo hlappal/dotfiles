@@ -46,6 +46,20 @@
 (use-package! wakatime-mode
   :hook (general-after-init . global-wakatime-mode))
 
+;; Config Emacs as X window manager
+(require 'exwm)
+(require 'exwm-config)
+(exwm-config-default)
+(require 'exwm-randr)
+(setq exwm-randr-workspace-monitor-plist '(0 "LVDS1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xrandr --output LVDS1 --mode 1600x900 --pos 0x0 --rotate normal")))
+(exwm-randr-enable)
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
