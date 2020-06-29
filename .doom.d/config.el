@@ -40,7 +40,7 @@
 (autoload 'helm-bibtex "heml-bibtex" "" t)
 
 ;; Open Org Agenda at startup
-(add-hook 'after-init-hook 'org-agenda-list)
+;; (add-hook 'after-init-hook 'org-agenda-list)
 
 ;; Enable Wakatime
 (use-package! wakatime-mode
