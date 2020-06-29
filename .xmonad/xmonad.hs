@@ -78,7 +78,7 @@ import XMonad.Prompt (defaultXPConfig, XPConfig(..), XPPosition(Top), Direction1
 import Control.Arrow (first)
 
 -- Utilities
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
@@ -477,10 +477,11 @@ myManageHook = composeAll
     , className =? "discord"        --> doShift "6:Chat"
     , className =? "zoom"           --> doShift "6:Chat"
     , className =? "Google-chrome"  --> doShift "7:Torn"
-    , className =? "vlc"            --> doShift "8:Media" --FIXME
+    , className =? "vlc"            --> doShift "8:Media"
     , className =? "Spotify"        --> doShift "8:Media" --FIXME
     , className =? "Gimp"           --> doShift "9:Other"
-    --, className =? "Tk"             --> doCenterFloat
+    , className =? "Tk"             --> doFloat
+    , className =? "Toplevel"       --> doFloat
     ] <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------------
@@ -592,7 +593,7 @@ main = do
     xmproc <- spawnPipe "xmobar /home/hlappal/.xmonad/xmobarrc"
     xmonad $ ewmh def
     -- xmonad $ desktopConfig
-        { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
+        { manageHook = myManageHook <+> manageDocks
         , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
@@ -615,3 +616,6 @@ main = do
         , normalBorderColor  = "#292d3e"
         , focusedBorderColor = "#bbc5ff"
         } `additionalKeysP`     myKeys 
+        `additionalMouseBindings`
+        [ ((mod4Mask, button4), (\w -> focus w >> Flex.mouseResizeWindow w))
+        ]
