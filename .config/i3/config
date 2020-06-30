@@ -14,8 +14,7 @@ exec --no-startup-id nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wa
 #exec --no-startup-id feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*
 
 # Start Polybar
-#exec --no-startup-id polybar mybar
-exec_always --no-startup-id /home/hlappal/.config/polybar/launch.sh
+#exec_always --no-startup-id /home/hlappal/.config/polybar/launch.sh
 
 # Start twmn (notification daemon)
 exec --no-startup-id twmnd
@@ -189,7 +188,7 @@ bindsym $mod+Ctrl+r reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # Set shut down, restart and locking features
 set $Locker i3lock && sleep 1
@@ -237,9 +236,29 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-#bar {
-        #status_command i3status
-#}
+bar {
+    status_command          i3status --config ~/.config/i3/i3status.conf
+    mode                    dock
+    position                top
+    output                  LVDS1
+    tray_output             primary
+    font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+    font                    pango:Mononoki Nerd 9
+    workspace_buttons       yes
+    strip_workspace_name    no
+    strip_workspace_numbers no
+    colors {
+        background          #2e3440
+        statusline          #eceff4
+        separator           #4c566a
+
+        focused_workspace   #4c7899 #285577 #ffffff
+        active_workspace    #333333 #5f676a #ffffff
+        inactive_workspace  #333333 #222222 #888888
+        urgent_workspace    #2f343a #900000 #ffffff
+        binding_mode        #2f343a #900000 #ffffff
+    }
+}
 
 #############################
 ### settings for i3-gaps: ###
