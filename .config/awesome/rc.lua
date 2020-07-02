@@ -519,7 +519,7 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey, "Shift" }, "Return", function () awful.spawn(menu) end,
               {description = "run dmenu", group = "launcher"}),
-    awful.key({ modkeyi, "Shift" }, "b", function () awful.spawn(browser) end,
+    awful.key({ modkey, "Shift" }, "b", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "f", function () awful.spawn(file_manager) end,
               {description = "run file manager", group = "launcher"}),
