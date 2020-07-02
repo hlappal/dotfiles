@@ -105,12 +105,12 @@ awful.util.terminal = "urxvt"
 -- Symbols from https://fontawesome.com/cheatsheet 
 awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: ", "7: ", "8: ", "9: " }
 awful.layout.layouts = {
+    --awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.tile,
     --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
     --awful.layout.suit.tile.top,
-    --awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
     --awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
     --awful.layout.suit.max.fullscreen,
@@ -696,8 +696,20 @@ awful.rules.rules = {
       properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Firefox" },
+    { rule = { class = "firefox" },
       properties = { screen = 1, tag = awful.util.tagnames[1] } },
+
+    { rule = { class = "Google-chrome" },
+      properties = { screen = 1, tag = awful.util.tagnames[7] } },
+
+    { rule = { class = "Mailspring" },
+      properties = { screen = 1, tag = awful.util.tagnames[5], maximized = true } },
+
+    { rule = { class = "electron-mail" },
+      properties = { screen = 1, tag = awful.util.tagnames[5], maximized = true } },
+
+    { rule = { class = "Spotify" },
+      properties = { screen = 1, tag = awful.util.tagnames[8] } },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
