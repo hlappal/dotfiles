@@ -14,9 +14,11 @@ local dpi   = require("beautiful.xresources").apply_dpi
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
+local wallpaper = io.popen("nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/")
+
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
-theme.wallpaper                                 = theme.dir .. "/wall.png"
+-- theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "Mononoki Nerd 9"
 -- theme.fg_normal                                 = "#DDDDFF"
 theme.fg_normal                                 = "#88C0D0"
