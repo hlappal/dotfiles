@@ -84,14 +84,24 @@ myTerminal = "alacritty" -- Sets default terminal
 myBorderWidth :: Dimension
 myBorderWidth = 2 -- Sets border width for windows
 
+-- Color scheme implemented from Nord
 myNormColor :: String
-myNormColor = "#292d3e" -- Border color of normal windows
+myNormColor = "#88c0d0" -- Border color of normal windows and visible workspace
 
 myFocusColor :: String
-myFocusColor = "#bbc5ff" -- Border color of focused windows
+myFocusColor = "#d8dee9" -- Border color of focused windows and active workspace
+
+myHiddenColor :: String
+myHiddenColor = "#8fbcbb"  -- Color of hidden workspace
 
 myEmptyColor :: String
-myEmptyColor = "#4c566a" -- Color for empty workspaces
+myEmptyColor = "#4c566a" -- Color for empty workspace
+
+myUrgentColor :: String
+myUrgentColor = "#bf616a"
+
+myTitleColor :: String
+myTitleColor = "#81a1c1"
 
 altMask :: KeyMask
 altMask = mod1Mask -- Setting this for use in xprompts
@@ -448,17 +458,17 @@ main = do
       , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
       , logHook = dynamicLogWithPP xmobarPP
                   { ppOutput = hPutStrLn xmproc
-                  -- , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
+                  -- , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]"    -- Current workspace in xmobar
                   , ppCurrent = xmobarColor myFocusColor "" . wrap "[" "]" -- Current workspace in xmobar
-                  -- , ppVisible = xmobarColor "#c3e88d" ""                -- Visible but not current workspace
-                  , ppVisible = xmobarColor myNormColor ""                -- Visible but not current workspace
-                  , ppHidden = xmobarColor "#82AAFF" "" . wrap "" ""    -- Hidden workspaces in xmobar
-                  -- , ppHiddenNoWindows = xmobarColor "#F07178" ""        -- Hidden workspaces (no windows)
+                  -- , ppVisible = xmobarColor "#c3e88d" ""                   -- Visible but not current workspace
+                  , ppVisible = xmobarColor myNormColor ""                 -- Visible but not current workspace
+                  , ppHidden = xmobarColor myHiddenColor "" . wrap "" ""       -- Hidden workspaces in xmobar
+                  -- , ppHiddenNoWindows = xmobarColor "#F07178" ""           -- Hidden workspaces (no windows)
                   , ppHiddenNoWindows = xmobarColor myEmptyColor ""        -- Hidden workspaces (no windows)
-                  , ppTitle = xmobarColor "#d0d0d0" "" . shorten 80     -- Title of active window in xmobar
-                  , ppSep =  "<fc=#666666> | </fc>"                     -- Separators in xmobar
-                  , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
-                  , ppExtras  = [windowCount]                           -- # of windows current workspace
+                  , ppTitle = xmobarColor myTitleColor "" . shorten 80        -- Title of active window in xmobar
+                  , ppSep =  "<fc=#d8dee9> | </fc>"                        -- Separators in xmobar
+                  , ppUrgent = xmobarColor myUrgentColor "" . wrap "!" "!"     -- Urgent workspace
+                  , ppExtras  = [windowCount]                              -- # of windows current workspace
                   , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
                   }
       , modMask            = myModMask
@@ -467,6 +477,6 @@ main = do
       , layoutHook         = myLayoutHook 
       , workspaces         = myWorkspaces
       , borderWidth        = myBorderWidth
-      , normalBorderColor  = "#292d3e"
-      , focusedBorderColor = "#bbc5ff"
-      } `additionalKeysP`     myKeys 
+      , normalBorderColor  = myNormColor
+      , focusedBorderColor = myFocusColor
+      } `additionalKeysP`    myKeys 
