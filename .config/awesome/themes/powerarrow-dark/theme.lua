@@ -14,11 +14,12 @@ local dpi   = require("beautiful.xresources").apply_dpi
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
-local wallpaper = io.popen("nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/")
-
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
 -- theme.wallpaper                                 = theme.dir .. "/wall.png"
+theme.wallpaper                                 = function()
+                                                    wall_cmd = io.popen("nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/")
+                                                  end
 theme.font                                      = "Mononoki Nerd 9"
 -- theme.fg_normal                                 = "#DDDDFF"
 theme.fg_normal                                 = "#88C0D0"
@@ -99,12 +100,12 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 
 -- Caps lock indicator
--- local caps = wibox.widget.textbox(
---     awful.spawn("xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 5 | sed 's/on/CAPS/g' | sed 's/off//g'"),
---     function(widget, stdout)
---         widget:set_markup(" " .. markup.font(theme.font, stdout))
---     end
--- )
+local caps_text = "xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 5 | sed 's/on/CAPS/g' | sed 's/off//g'"
+local caps = awful.widget.watch(
+    function(widget, stdout)
+        widget:set_markup(widget .. markup.font(theme.font, stdout))
+    end
+)
 
 -- Textclock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
