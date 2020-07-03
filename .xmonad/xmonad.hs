@@ -126,41 +126,41 @@ myStartupHook = do
 ------------------------------------------------------------------------------
 -- GRID SELECT
 ------------------------------------------------------------------------------
-myColorizer :: Window -> Bool -> X (String, String)
-myColorizer = colorRangeFromClassName
-  (0x31,0x2e,0x39) -- lowest inactive bg
-  (0x31,0x2e,0x39) -- highest inactive bg
-  (0x61,0x57,0x72) -- active bg
-  (0xc0,0xa7,0x9a) -- inactive fg
-  (0xff,0xff,0xff) -- active fg
+-- myColorizer :: Window -> Bool -> X (String, String)
+-- myColorizer = colorRangeFromClassName
+--   (0x31,0x2e,0x39) -- lowest inactive bg
+--   (0x31,0x2e,0x39) -- highest inactive bg
+--   (0x61,0x57,0x72) -- active bg
+--   (0xc0,0xa7,0x9a) -- inactive fg
+--   (0xff,0xff,0xff) -- active fg
                   
--- gridSelect menu layout
-mygridConfig colorizer = (buildDefaultGSConfig myColorizer)
-  { gs_cellheight   = 30
-  , gs_cellwidth    = 200
-  , gs_cellpadding  = 8
-  , gs_originFractX = 0.5
-  , gs_originFractY = 0.5
-  , gs_font         = myFont
-  }
+-- -- gridSelect menu layout
+-- mygridConfig colorizer = (buildDefaultGSConfig myColorizer)
+--   { gs_cellheight   = 30
+--   , gs_cellwidth    = 200
+--   , gs_cellpadding  = 8
+--   , gs_originFractX = 0.5
+--   , gs_originFractY = 0.5
+--   , gs_font         = myFont
+--   }
     
-spawnSelected' :: [(String, String)] -> X ()
-spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
-  where conf = defaultGSConfig
+-- spawnSelected' :: [(String, String)] -> X ()
+-- spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
+--   where conf = defaultGSConfig
 
--- Set apps for the spawnSelected'
-myAppGrid :: [(String, String)]
-myAppGrid = [ ("Firefox", "firefox")
-            , ("Chrome", "google-chrome-stable")
-            , ("Discord", "discord")
-            , ("Electron-mail", "electron-mail")
-            , ("Nautilus", "nautilus")
-            , ("Spotify", "spotify")
-            , ("Zoom", "zoom")
-            , ("Emacs", "emacs")
-            , ("Slack", "slack")
-            , ("Mailspring", "mailspring")
-            ]
+-- -- Set apps for the spawnSelected'
+-- myAppGrid :: [(String, String)]
+-- myAppGrid = [ ("Firefox", "firefox")
+--             , ("Chrome", "google-chrome-stable")
+--             , ("Discord", "discord")
+--             , ("Electron-mail", "electron-mail")
+--             , ("Nautilus", "nautilus")
+--             , ("Spotify", "spotify")
+--             , ("Zoom", "zoom")
+--             , ("Emacs", "emacs")
+--             , ("Slack", "slack")
+--             , ("Mailspring", "mailspring")
+--             ]
 
 ------------------------------------------------------------------------------
 -- XPROMPT SETTINGS
@@ -192,20 +192,20 @@ myXPConfig' = myXPConfig
   { autoComplete = Nothing
   }
 
--- A list of all the standard Xmonad prompts
-promptList :: [(String, XPConfig -> X ())]
-promptList = [ ("m", manPrompt)
-             , ("p", passPrompt)
-             , ("g", passGeneratePrompt)
-             , ("r", passRemovePrompt)
-             , ("s", sshPrompt)
-             , ("x", xmonadPrompt)
-             ]
+-- -- A list of all the standard Xmonad prompts
+-- promptList :: [(String, XPConfig -> X ())]
+-- promptList = [ ("m", manPrompt)
+--              , ("p", passPrompt)
+--              , ("g", passGeneratePrompt)
+--              , ("r", passRemovePrompt)
+--              , ("s", sshPrompt)
+--              , ("x", xmonadPrompt)
+--              ]
 
--- A list of custom prompts
-promptList' :: [(String, XPConfig -> String -> X (), String)]
-promptList' = [ ("c", calcPrompt, "qalc") -- requires qalculate-gtk
-              ]
+-- -- A list of custom prompts
+-- promptList' :: [(String, XPConfig -> String -> X (), String)]
+-- promptList' = [ ("c", calcPrompt, "qalc") -- requires qalculate-gtk
+--               ]
 
 ------------------------------------------------------------------------------
 -- CUSTOM PROMPTS
@@ -213,13 +213,13 @@ promptList' = [ ("c", calcPrompt, "qalc") -- requires qalculate-gtk
 -- calcPrompt requires a cli calculator called qalcualte-gtk.
 -- You could use this as a template for other custom prompts that
 -- use command line programs that return a single line of output.
-calcPrompt :: XPConfig -> String -> X ()
-calcPrompt c ans =
-  inputPrompt c (trim ans) ?+ \input ->
-  liftIO(runProcessWithInput "qalc" [input] "") >>= calcPrompt c
-  where
-    trim = f . f
-      where f = reverse . dropWhile isSpace
+-- calcPrompt :: XPConfig -> String -> X ()
+-- calcPrompt c ans =
+--   inputPrompt c (trim ans) ?+ \input ->
+--   liftIO(runProcessWithInput "qalc" [input] "") >>= calcPrompt c
+--   where
+--     trim = f . f
+--       where f = reverse . dropWhile isSpace
 
 ------------------------------------------------------------------------------
 -- XPROMPT KEYMAP (emacs-like key bindings)
@@ -275,37 +275,48 @@ archwiki = S.searchEngine "archwiki" "https://wiki.archlinux.org/index.php?searc
 news     = S.searchEngine "news" "https://news.google.com/search?q="
 reddit   = S.searchEngine "reddit" "https://www.reddit.com/search/?q="
 
--- This is the list of search engines that I want to use. Some are from
--- XMonad.Actions.Search, and some are the ones that I added above.
-searchList :: [(String, S.SearchEngine)]
-searchList = [ ("a", archwiki)
-             , ("d", S.duckduckgo)
-             , ("g", S.google)
-             , ("i", S.images)
-             , ("n", news)
-             , ("r", reddit)
-             , ("w", S.wikipedia)
-             ]
+-- -- This is the list of search engines that I want to use. Some are from
+-- -- XMonad.Actions.Search, and some are the ones that I added above.
+-- searchList :: [(String, S.SearchEngine)]
+-- searchList = [ ("a", archwiki)
+--              , ("d", S.duckduckgo)
+--              , ("g", S.google)
+--              , ("i", S.images)
+--              , ("n", news)
+--              , ("r", reddit)
+--              , ("w", S.wikipedia)
+--              ]
 
 ------------------------------------------------------------------------------
 -- TREE SELECT
 ------------------------------------------------------------------------------
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
-  [ Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
+  [ Node (TS.TSNode "programs" "most used programs" (return ()))
+    [ Node (TS.TSNode "firefox" "default browser" (spawn "firefox")) []
+    , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome")) []
+    , Node (TS.TSNode "nemo" "file manager" (spawn "nemo")) []
+    , Node (TS.TSNode "mailspring" "Gmail / Aalto-mail" (spawn "mailspring")) []
+    , Node (TS.TSNode "electron-mail" "protonmail" (spawn "electron-mail")) []
+    , Node (TS.TSNode "spotify" "music player" (spawn "spotify")) []
+    , Node (TS.TSNode "discord" "open chat" (spawn "discord")) []
+    , Node (TS.TSNode "slack" "open another chat" (spawn "slack")) []
+    , Node (TS.TSNode "zoom" "open video chat" (spawn "zoom")) []
+    ]
+  , Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
     [ Node (TS.TSNode "shutdown" "poweroff system" (spawn "shutdown now")) []
     , Node (TS.TSNode "reboot" "reboot system" (spawn "reboot")) []
     , Node (TS.TSNode "suspend" "suspend system" (spawn "systemctl suspend")) []
-    ]
-  , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
-    [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn (myTerminal ++ " -e vi ~/.xmonad/xmonad.hs"))) []
-    , Node (TS.TSNode "recompile xmonad" "recompile xmonad" (spawn "xmonad --recompile")) []
-    , Node (TS.TSNode "restart xmonad" "restart xmonad" (spawn "xmonad --restart")) []
     ]
   , Node (TS.TSNode "brightness" "Sets screen brightness using xbacklight" (return ()))
     [ Node (TS.TSNode "bright" "full power" (spawn "xbacklight -set 100")) []
     , Node (TS.TSNode "normal" "normal brightness (50%)" (spawn "xbacklight -set 50")) []
     , Node (TS.TSNode "dim" "quite dark" (spawn "xbacklight -set 10")) []
+    ]
+  , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
+    [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn ("emacsclient -c -a 'emacs' --eval '(find-file \"~/.xmonad/xmonad.hs\")'"))) []
+    , Node (TS.TSNode "recompile xmonad" "recompile xmonad" (spawn "xmonad --recompile")) []
+    , Node (TS.TSNode "restart xmonad" "restart xmonad" (spawn "xmonad --restart")) []
     ]
   , Node (TS.TSNode "system monitors" "system monitoring applications" (return ()))
     [ Node (TS.TSNode "htop" "a much better top" (spawn (myTerminal ++ " -e htop"))) []
@@ -315,11 +326,11 @@ treeselectAction a = TS.treeselectAction a
 
 tsDefaultConfig :: TS.TSConfig a
 tsDefaultConfig = TS.TSConfig { TS.ts_hidechildren = True
-                              , TS.ts_background   = 0xdd292d3e
+                              , TS.ts_background   = 0xdd2e3440
                               , TS.ts_font         = "xft:Mononoki Nerd Font:bold:pixelsize=13"
-                              , TS.ts_node         = (0xffd0d0d0, 0xff202331)
-                              , TS.ts_nodealt      = (0xffd0d0d0, 0xff292d3e)
-                              , TS.ts_highlight    = (0xffffffff, 0xff755999)
+                              , TS.ts_node         = (0xfff0f0f0, 0xff4c566a)
+                              , TS.ts_nodealt      = (0xfff0f0f0, 0xff2b4252)
+                              , TS.ts_highlight    = (0xff2e3440, 0xff8fbcbb)
                               , TS.ts_extra        = 0xffd0d0d0
                               , TS.ts_node_width   = 200
                               , TS.ts_node_height  = 20
@@ -356,7 +367,7 @@ myKeys =
     , ("M-S-q", io exitSuccess)
 
     -- Open My Preferred Terminal
-    , ("M-<Return>", spawn (myTerminal ++ " -e fish"))
+    , ("M-<Return>", spawn (myTerminal))
 
     -- Run Prompt
     , ("M-S-<Return>", shellPrompt myXPConfig)
@@ -382,13 +393,13 @@ myKeys =
     , ("M1-C-<Tab>", rotAllDown)
     , ("M-C-s", killAllOtherCopies)
 
-    -- Grid Select
-    , ("M-g g", spawnSelected' myAppGrid)
-    , ("M-g t", goToSelected $ mygridConfig myColorizer)
-    , ("M-g b", bringSelected $ mygridConfig myColorizer)
+    -- -- Grid Select
+    -- , ("M-g g", spawnSelected' myAppGrid)
+    -- , ("M-g t", goToSelected $ mygridConfig myColorizer)
+    -- , ("M-g b", bringSelected $ mygridConfig myColorizer)
 
     -- Tree Select
-    , ("M-S-t", treeselectAction tsDefaultConfig)
+    , ("M-S-m", treeselectAction tsDefaultConfig)
 
     -- Layouts
     , ("M-<Tab>", sendMessage NextLayout)
@@ -413,16 +424,13 @@ myKeys =
     , ("M-S-<Left>", shiftTo Prev NonEmptyWS)
 
     -- Scratchpads
-    , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
+    -- , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
 
     -- Lpass menu
     , ("M-S-p", spawn "dmenu-lpass-nu")
 
     -- Emacs
-    , ("M-e e", spawn "emacsclient -c -a ''")
-    , ("M-e a", spawn "emacsclient -c -a '' --eval '(org-agenda-list)'")
-    , ("M-e b", spawn "emacsclient -c -a '' --eval '(ibuffer)'")
-    , ("M-e d", spawn "emacsclient -c -a '' --eval '(dired nil)'")
+    , ("M-S-e", spawn "emacsclient -c -a 'emacs'")
 
     -- My Applications (Super+Alt+Key)
     -- e.g.:
@@ -436,10 +444,10 @@ myKeys =
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 2")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
     ]
-    ++ [("M-s " ++ k, S.promptSearch myXPConfig' f) | (k,f) <- searchList ]
-    ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
-    ++ [("M-p " ++ k, f myXPConfig') | (k,f) <- promptList ]
-    ++ [("M-p " ++ k, f myXPConfig' g) | (k,f,g) <- promptList' ]
+    -- ++ [("M-s " ++ k, S.promptSearch myXPConfig' f) | (k,f) <- searchList ]
+    -- ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
+    -- ++ [("M-p " ++ k, f myXPConfig') | (k,f) <- promptList ]
+    -- ++ [("M-p " ++ k, f myXPConfig' g) | (k,f,g) <- promptList' ]
         where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
               nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
 
@@ -482,7 +490,7 @@ myManageHook = composeAll
     , className =? "Gimp"           --> doShift "9:Other"
     , className =? "Tk"             --> doFloat
     , className =? "Toplevel"       --> doFloat
-    ] <+> namedScratchpadManageHook myScratchPads
+    ] -- <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------------
 -- WINDOWS
@@ -556,34 +564,34 @@ tabs     = renamed [Replace "tabs"]
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts floats $
                mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
   where
-    myDefaultLayout = tall |||
+    myDefaultLayout = spirals |||
+                      tall |||
                       magnify |||
                       oneBig |||
                       noBorders monocle |||
-                      floats |||
-                      grid |||
-                      noBorders tabs |||
-                      spirals |||
-                      threeCol |||
-                      threeRow
+                      -- floats |||
+                      -- grid |||
+                      noBorders tabs
+                      -- threeCol |||
+                      -- threeRow
 
 ------------------------------------------------------------------------------
 -- SCRATCHPADS
 ------------------------------------------------------------------------------
-myScratchPads :: [NamedScratchpad]
-myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
-               --, NS "cmus" spawnCmus findCmus manageCmus  
-               ]
+-- myScratchPads :: [NamedScratchpad]
+-- myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
+--                --, NS "cmus" spawnCmus findCmus manageCmus  
+--                ]
 
-   where
-   spawnTerm  = myTerminal ++  " -n scratchpad"
-   findTerm   = resource =? "scratchpad"
-   manageTerm = customFloating $ W.RationalRect l t w h
-                where
-                h = 0.9
-                w = 0.9
-                t = 0.95 -h
-                l = 0.95 -w
+--    where
+--    spawnTerm  = myTerminal ++  " -n scratchpad"
+--    findTerm   = resource =? "scratchpad"
+--    manageTerm = customFloating $ W.RationalRect l t w h
+--                 where
+--                 h = 0.9
+--                 w = 0.9
+--                 t = 0.95 -h
+--                 l = 0.95 -w
 
 ------------------------------------------------------------------------------
 -- MAIN
@@ -616,6 +624,6 @@ main = do
         , normalBorderColor  = "#292d3e"
         , focusedBorderColor = "#bbc5ff"
         } `additionalKeysP`     myKeys 
-        `additionalMouseBindings`
-        [ ((mod4Mask, button4), (\w -> focus w >> Flex.mouseResizeWindow w))
-        ]
+        --`additionalMouseBindings`
+        --[ ((mod4Mask, button4), (\w -> focus w >> Flex.mouseResizeWindow w))
+        --]
