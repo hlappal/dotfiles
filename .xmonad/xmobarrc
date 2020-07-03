@@ -2,8 +2,8 @@ Config {
 
    -- appearance
      font =         "xft:Mononoki Nerd Font:size=9:bold:antialias=true"
-   , bgColor =      "black"
-   , fgColor =      "#646464"
+   , bgColor =      "#2e3440"
+   , fgColor =      "#d8dee9"
    , position =     Top
    , border =       BottomB
    , borderColor =  "#646464"
@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% <fc=#ff0000>%locks%</fc> }{ <fc=#ababab>%vol%</fc> | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
+   , template = "%StdinReader% <fc=#bf616a>%locks%</fc> }{ <fc=#ababab>%vol%</fc> | %battery% | %multicpu% | %memory% | %dynnetwork% | %date% | %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -45,18 +45,18 @@ Config {
         , Run DynNetwork     [ "--template" , "<tx>kB/s|<rx>kB/s"
                              , "--Low"      , "1000"       -- units: B/s
                              , "--High"     , "5000"       -- units: B/s
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#8fbcbb"
+                             , "--normal"   , "#ebcb8b"
+                             , "--high"     , "#bf616a"
                              ] 10
 
         -- cpu activity monitor
         , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#8fbcbb"
+                             , "--normal"   , "#ebcb8b"
+                             , "--high"     , "#bf616a"
                              ] 10
 
         -- cpu core temperature monitor
@@ -70,43 +70,42 @@ Config {
 
         -- audio volume
         , Run Com "/home/hlappal/.xmonad/get-volume.sh" [] "vol" 1
-                          
+
         -- memory usage monitor
         , Run Memory         [ "--template" ,"Mem: <usedratio>%"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "90"        -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#8fbcbb"
+                             , "--normal"   , "#ebcb8b"
+                             , "--high"     , "#bf616a"
                              ] 10
 
         -- battery monitor
-        , Run Battery        [ "--template" , "<fc=#ababab>Batt:</fc> <acstatus>"
+        , Run Battery        [ "--template" , "<fc=#d8dee9>Batt:</fc> <acstatus>"
                              , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
-                             , "--low"      , "darkred"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkgreen"
+                             , "--low"      , "#bf616a"
+                             , "--normal"   , "#ebcb8b"
+                             , "--high"     , "#8fbcbb"
 
                              , "--" -- battery specific options
                                        -- discharging status
-                                       , "-o"	, "<left>% (<timeleft>)"
+                                       , "-o" , "<left>% (<timeleft>)"
                                        -- AC "on" status
-                                       , "-O"	, "<fc=#dAA520>Charging</fc>"
+                                       , "-O" , "<fc=#ebcb8b>Charging</fc>"
                                        -- charged status
-                                       , "-i"	, "<fc=#006000>Charged</fc>"
+                                       , "-i" , "<fc=#8fbcbb>Charged</fc>"
                              ] 50
         , Run StdinReader
         , Run Locks
 
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#ababab>%d.%m.(%a) %T</fc>" "date" 10
+        , Run Date           "<fc=#d8dee9>%a %d.%m.  %T</fc>" "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("fi"        , "<fc=darkgreen>FI</fc>")
-                             , ("us"        , "<fc=darkorange>US</fc>")
+        , Run Kbd            [ ("fi"        , "<fc=#81a1c1>FI</fc>")
+                             , ("us"        , "<fc=#d08770>US</fc>")
                              ]
         ]
    }
- 
