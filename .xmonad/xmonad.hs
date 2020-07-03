@@ -9,25 +9,20 @@
 ------------------------------------------------------------------------------
 -- Base
 import XMonad
-import XMonad.Config.Desktop
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 
 -- Actions
-import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
-import XMonad.Actions.CycleWS (moveTo, shiftTo, shiftToNext, shiftToPrev, toggleWS, WSType(NonEmptyWS, WSIs))
-import XMonad.Actions.GridSelect
+import XMonad.Actions.CopyWindow (killAllOtherCopies)
+import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(NonEmptyWS, WSIs))
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
 import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
 import qualified XMonad.Actions.TreeSelect as TS
-import XMonad.Actions.WindowGo (runOrRaise)
-import XMonad.Actions.WithAll (sinkAll, killAll)
-import qualified XMonad.Actions.Search as S
+import XMonad.Actions.WithAll (sinkAll)
 
 -- Data
-import Data.Char (isSpace)
 import Data.List
 import Data.Monoid
 import Data.Maybe (isJust)
@@ -38,7 +33,6 @@ import qualified Data.Map as M
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks -- (avoidStruts, manageDocks, toggleStruts)
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
 
@@ -60,7 +54,6 @@ import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBO
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.Spacing
-import XMonad.Layout.Gaps
 import XMonad.Layout.WindowArranger -- (windowArrange)
 import XMonad.Layout.Reflect (REFLECTX(..), REFLECTY(..))
 import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
@@ -68,19 +61,12 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
 -- Prompt
 import XMonad.Prompt
-import XMonad.Prompt.Input
-import XMonad.Prompt.Man
-import XMonad.Prompt.Pass
 import XMonad.Prompt.Shell (shellPrompt)
-import XMonad.Prompt.Ssh
-import XMonad.Prompt.XMonad
-import XMonad.Prompt (defaultXPConfig, XPConfig(..), XPPosition(Top), Direction1D(..))
 import Control.Arrow (first)
 
 -- Utilities
 import XMonad.Util.EZConfig
-import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
+import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.SpawnOnce
 
 ------------------------------------------------------------------------------
@@ -88,7 +74,6 @@ import XMonad.Util.SpawnOnce
 ------------------------------------------------------------------------------
 myFont :: String
 myFont = "xft:Mononoki Nerd Font:regular:pixelsize=9"
--- myFont          = "xft:DejaVuSansMono Nerd Font:regular:antialias=true:pixelsize=9"
 
 myModMask :: KeyMask
 myModMask = mod4Mask -- Sets modkey to super/windows key
@@ -105,6 +90,9 @@ myNormColor = "#292d3e" -- Border color of normal windows
 myFocusColor :: String
 myFocusColor = "#bbc5ff" -- Border color of focused windows
 
+myEmptyColor :: String
+myEmptyColor = "#4c566a" -- Color for empty workspaces
+
 altMask :: KeyMask
 altMask = mod1Mask -- Setting this for use in xprompts
 
@@ -118,49 +106,8 @@ myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
   spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
-  -- spawnOnce "volumeicon &"
-  -- spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --aplpha 0 -- tint 0x292d3e --height 18 &"
   spawnOnce "/usr/bin/emacs --daemon &" 
   setWMName "LG3D"
-
-------------------------------------------------------------------------------
--- GRID SELECT
-------------------------------------------------------------------------------
--- myColorizer :: Window -> Bool -> X (String, String)
--- myColorizer = colorRangeFromClassName
---   (0x31,0x2e,0x39) -- lowest inactive bg
---   (0x31,0x2e,0x39) -- highest inactive bg
---   (0x61,0x57,0x72) -- active bg
---   (0xc0,0xa7,0x9a) -- inactive fg
---   (0xff,0xff,0xff) -- active fg
-                  
--- -- gridSelect menu layout
--- mygridConfig colorizer = (buildDefaultGSConfig myColorizer)
---   { gs_cellheight   = 30
---   , gs_cellwidth    = 200
---   , gs_cellpadding  = 8
---   , gs_originFractX = 0.5
---   , gs_originFractY = 0.5
---   , gs_font         = myFont
---   }
-    
--- spawnSelected' :: [(String, String)] -> X ()
--- spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
---   where conf = defaultGSConfig
-
--- -- Set apps for the spawnSelected'
--- myAppGrid :: [(String, String)]
--- myAppGrid = [ ("Firefox", "firefox")
---             , ("Chrome", "google-chrome-stable")
---             , ("Discord", "discord")
---             , ("Electron-mail", "electron-mail")
---             , ("Nautilus", "nautilus")
---             , ("Spotify", "spotify")
---             , ("Zoom", "zoom")
---             , ("Emacs", "emacs")
---             , ("Slack", "slack")
---             , ("Mailspring", "mailspring")
---             ]
 
 ------------------------------------------------------------------------------
 -- XPROMPT SETTINGS
@@ -180,46 +127,11 @@ myXPConfig = def
   , historySize         = 256
   , historyFilter       = id
   , defaultText         = []
-  --, autoComplete        = Just 100000
   , showCompletionOnTab = False
   , searchPredicate     = isPrefixOf
   , alwaysHighlight     = True
   , maxComplRows        = Nothing -- set to 5 for 5 rows
   }
-
-myXPConfig' :: XPConfig
-myXPConfig' = myXPConfig
-  { autoComplete = Nothing
-  }
-
--- -- A list of all the standard Xmonad prompts
--- promptList :: [(String, XPConfig -> X ())]
--- promptList = [ ("m", manPrompt)
---              , ("p", passPrompt)
---              , ("g", passGeneratePrompt)
---              , ("r", passRemovePrompt)
---              , ("s", sshPrompt)
---              , ("x", xmonadPrompt)
---              ]
-
--- -- A list of custom prompts
--- promptList' :: [(String, XPConfig -> String -> X (), String)]
--- promptList' = [ ("c", calcPrompt, "qalc") -- requires qalculate-gtk
---               ]
-
-------------------------------------------------------------------------------
--- CUSTOM PROMPTS
-------------------------------------------------------------------------------
--- calcPrompt requires a cli calculator called qalcualte-gtk.
--- You could use this as a template for other custom prompts that
--- use command line programs that return a single line of output.
--- calcPrompt :: XPConfig -> String -> X ()
--- calcPrompt c ans =
---   inputPrompt c (trim ans) ?+ \input ->
---   liftIO(runProcessWithInput "qalc" [input] "") >>= calcPrompt c
---   where
---     trim = f . f
---       where f = reverse . dropWhile isSpace
 
 ------------------------------------------------------------------------------
 -- XPROMPT KEYMAP (emacs-like key bindings)
@@ -264,37 +176,13 @@ myXPKeymap  = M.fromList $
   ]
 
 ------------------------------------------------------------------------------
--- SEARCH ENGINES
-------------------------------------------------------------------------------
--- Xmonad has several search engines available to use located in
--- XMonad.Actions.Search. Additionally, you can add other search engines
--- such as those listed below.
-archwiki, news, reddit :: S.SearchEngine
-
-archwiki = S.searchEngine "archwiki" "https://wiki.archlinux.org/index.php?search="
-news     = S.searchEngine "news" "https://news.google.com/search?q="
-reddit   = S.searchEngine "reddit" "https://www.reddit.com/search/?q="
-
--- -- This is the list of search engines that I want to use. Some are from
--- -- XMonad.Actions.Search, and some are the ones that I added above.
--- searchList :: [(String, S.SearchEngine)]
--- searchList = [ ("a", archwiki)
---              , ("d", S.duckduckgo)
---              , ("g", S.google)
---              , ("i", S.images)
---              , ("n", news)
---              , ("r", reddit)
---              , ("w", S.wikipedia)
---              ]
-
-------------------------------------------------------------------------------
 -- TREE SELECT
 ------------------------------------------------------------------------------
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
   [ Node (TS.TSNode "programs" "most used programs" (return ()))
     [ Node (TS.TSNode "firefox" "default browser" (spawn "firefox")) []
-    , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome")) []
+    , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome-stable")) []
     , Node (TS.TSNode "nemo" "file manager" (spawn "nemo")) []
     , Node (TS.TSNode "mailspring" "Gmail / Aalto-mail" (spawn "mailspring")) []
     , Node (TS.TSNode "electron-mail" "protonmail" (spawn "electron-mail")) []
@@ -378,7 +266,7 @@ myKeys =
     , ("M-S-<Delete>", sinkAll)
     , ("M-S-h", sendMessage MirrorShrink)
     , ("M-S-l", sendMessage MirrorExpand)
-    -- , ("M-S-f", withFocused $ windows . flip W.float center)
+    --TODO toggle float for individual windows
     --TODO move & resize floating windows with keyboard
     --TODO move & resize floating windows with mouse
 
@@ -392,11 +280,6 @@ myKeys =
     , ("M1-S-<Tab>", rotSlavesDown)
     , ("M1-C-<Tab>", rotAllDown)
     , ("M-C-s", killAllOtherCopies)
-
-    -- -- Grid Select
-    -- , ("M-g g", spawnSelected' myAppGrid)
-    -- , ("M-g t", goToSelected $ mygridConfig myColorizer)
-    -- , ("M-g b", bringSelected $ mygridConfig myColorizer)
 
     -- Tree Select
     , ("M-S-m", treeselectAction tsDefaultConfig)
@@ -423,18 +306,11 @@ myKeys =
     , ("M-S-<Right>", shiftTo Next NonEmptyWS)
     , ("M-S-<Left>", shiftTo Prev NonEmptyWS)
 
-    -- Scratchpads
-    -- , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
-
     -- Lpass menu
     , ("M-S-p", spawn "dmenu-lpass-nu")
 
     -- Emacs
     , ("M-S-e", spawn "emacsclient -c -a 'emacs'")
-
-    -- My Applications (Super+Alt+Key)
-    -- e.g.:
-    --, ("M-S-f", spawn (myTerminal ++ " -e fish"))
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
@@ -443,13 +319,8 @@ myKeys =
     , ("<Print>", spawn "scrot")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 2")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
-    ]
-    -- ++ [("M-s " ++ k, S.promptSearch myXPConfig' f) | (k,f) <- searchList ]
-    -- ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
-    -- ++ [("M-p " ++ k, f myXPConfig') | (k,f) <- promptList ]
-    -- ++ [("M-p " ++ k, f myXPConfig' g) | (k,f,g) <- promptList' ]
-        where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
-              nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
+    ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
+            nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
 
 ------------------------------------------------------------------------------
 -- WORKSPACES
@@ -464,13 +335,9 @@ xmobarEscape = concatMap doubleLts
     doubleLts x = [x]
     
 myWorkspaces :: [String]
-myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
--- myWorkspaces = clickable . map xmobarEscape
---                $ ["1:Web", "2:Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
---   where
---     clickable l = [ "<action=xdotool key super+" ++ show n ++ ">" ++ ws ++ "</action>" |
---                   (i,ws) <- zip [1..9] l,
---                   let n = i ]
+myWorkspaces = ["1: Web", "2: Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
+-- TODO Use special characters in workspace names
+-- TODO Make workspace names clickable
 
 ------------------------------------------------------------------------------
 -- MANAGEHOOK
@@ -486,16 +353,11 @@ myManageHook = composeAll
     , className =? "zoom"           --> doShift "6:Chat"
     , className =? "Google-chrome"  --> doShift "7:Torn"
     , className =? "vlc"            --> doShift "8:Media"
-    , className =? "Spotify"        --> doShift "8:Media" --FIXME
+    , className =? "spotify"        --> doShift "8:Media" --FIXME
     , className =? "Gimp"           --> doShift "9:Other"
     , className =? "Tk"             --> doFloat
     , className =? "Toplevel"       --> doFloat
     ] -- <+> namedScratchpadManageHook myScratchPads
-
-------------------------------------------------------------------------------
--- WINDOWS
-------------------------------------------------------------------------------
-center = W.RationalRect (1/4) (1/4) (1/2) (1/2)
 
 ------------------------------------------------------------------------------
 -- LAYOUTS
@@ -512,12 +374,12 @@ mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 tall     = renamed [Replace "tall"]
            $ limitWindows 12
-           $ mySpacing 3
+           -- $ mySpacing 3
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ magnifier
            $ limitWindows 12
-           $ mySpacing 3
+           -- $ mySpacing 3
            $ ResizableTall 1 (3/00) (1/2) []
 oneBig   = renamed [Replace "oneBig"]
            $ limitWindows 6
@@ -533,19 +395,19 @@ floats   = renamed [Replace "floats"]
            $ limitWindows 20 simplestFloat
 grid     = renamed [Replace "grid"]
            $ limitWindows 12
-           $ mySpacing 3
+           -- $ mySpacing 3
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals  = renamed [Replace "spirals"]
-           $ mySpacing' 3
+           -- $ mySpacing' 3
            $ spiral (6/7)
 threeCol = renamed [Replace "threeCol"]
            $ limitWindows 7
-           $ mySpacing' 4
+           -- $ mySpacing' 4
            $ ThreeCol 1 (3/100) (1/2)
 threeRow = renamed [Replace "threeRow"]
            $ limitWindows 7
-           $ mySpacing' 4
+           -- $ mySpacing' 4
            $ Mirror
            $ ThreeCol 1 (3/100) (1/2)
 tabs     = renamed [Replace "tabs"]
@@ -566,32 +428,14 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
   where
     myDefaultLayout = spirals |||
                       tall |||
-                      magnify |||
+                      -- magnify |||
                       oneBig |||
-                      noBorders monocle |||
+                      -- noBorders monocle |||
                       -- floats |||
                       -- grid |||
                       noBorders tabs
                       -- threeCol |||
                       -- threeRow
-
-------------------------------------------------------------------------------
--- SCRATCHPADS
-------------------------------------------------------------------------------
--- myScratchPads :: [NamedScratchpad]
--- myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
---                --, NS "cmus" spawnCmus findCmus manageCmus  
---                ]
-
---    where
---    spawnTerm  = myTerminal ++  " -n scratchpad"
---    findTerm   = resource =? "scratchpad"
---    manageTerm = customFloating $ W.RationalRect l t w h
---                 where
---                 h = 0.9
---                 w = 0.9
---                 t = 0.95 -h
---                 l = 0.95 -w
 
 ------------------------------------------------------------------------------
 -- MAIN
@@ -600,30 +444,29 @@ main :: IO ()
 main = do
     xmproc <- spawnPipe "xmobar /home/hlappal/.xmonad/xmobarrc"
     xmonad $ ewmh def
-    -- xmonad $ desktopConfig
-        { manageHook = myManageHook <+> manageDocks
-        , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
-        , logHook = dynamicLogWithPP xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
-                        , ppVisible = xmobarColor "#c3e88d" ""                -- Visible but not current workspace
-                        , ppHidden = xmobarColor "#82AAFF" "" . wrap "" ""    -- Hidden workspaces in xmobar
-                        --, ppHiddenNoWindows = xmobarColor "#F07178" ""        -- Hidden workspaces (no windows)
-                        , ppTitle = xmobarColor "#d0d0d0" "" . shorten 80     -- Title of active window in xmobar
-                        , ppSep =  "<fc=#666666> | </fc>"                     -- Separators in xmobar
-                        , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
-                        , ppExtras  = [windowCount]                           -- # of windows current workspace
-                        , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
-                        }
-        , modMask            = myModMask
-        , terminal           = myTerminal
-        , startupHook        = myStartupHook
-        , layoutHook         = myLayoutHook 
-        , workspaces         = myWorkspaces
-        , borderWidth        = myBorderWidth
-        , normalBorderColor  = "#292d3e"
-        , focusedBorderColor = "#bbc5ff"
-        } `additionalKeysP`     myKeys 
-        --`additionalMouseBindings`
-        --[ ((mod4Mask, button4), (\w -> focus w >> Flex.mouseResizeWindow w))
-        --]
+      { manageHook = myManageHook <+> manageDocks
+      , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
+      , logHook = dynamicLogWithPP xmobarPP
+                  { ppOutput = hPutStrLn xmproc
+                  -- , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
+                  , ppCurrent = xmobarColor myFocusColor "" . wrap "[" "]" -- Current workspace in xmobar
+                  -- , ppVisible = xmobarColor "#c3e88d" ""                -- Visible but not current workspace
+                  , ppVisible = xmobarColor myNormColor ""                -- Visible but not current workspace
+                  , ppHidden = xmobarColor "#82AAFF" "" . wrap "" ""    -- Hidden workspaces in xmobar
+                  -- , ppHiddenNoWindows = xmobarColor "#F07178" ""        -- Hidden workspaces (no windows)
+                  , ppHiddenNoWindows = xmobarColor myEmptyColor ""        -- Hidden workspaces (no windows)
+                  , ppTitle = xmobarColor "#d0d0d0" "" . shorten 80     -- Title of active window in xmobar
+                  , ppSep =  "<fc=#666666> | </fc>"                     -- Separators in xmobar
+                  , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
+                  , ppExtras  = [windowCount]                           -- # of windows current workspace
+                  , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+                  }
+      , modMask            = myModMask
+      , terminal           = myTerminal
+      , startupHook        = myStartupHook
+      , layoutHook         = myLayoutHook 
+      , workspaces         = myWorkspaces
+      , borderWidth        = myBorderWidth
+      , normalBorderColor  = "#292d3e"
+      , focusedBorderColor = "#bbc5ff"
+      } `additionalKeysP`     myKeys 
