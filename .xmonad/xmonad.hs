@@ -1,8 +1,7 @@
+
 -- The xmonad configuration
 -- Heikki Lappalainen
---
--- Thanks to Derek Taylor (DistroTube)
--- http://www.gitlab.com/dwt1/
+-- heikki.lappalainen@protonmail.com
 
 ------------------------------------------------------------------------------
 -- IMPORTS
@@ -343,6 +342,47 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 ------------------------------------------------------------------------------
+-- DZEN CONFIGS
+------------------------------------------------------------------------------
+  
+-- Dzen logger clickable areas
+-- calendarCA :: CA
+-- calendarCA = CA
+--   { leftClickCA   = "/home/nnoell/bin/dzencal.sh"
+--   , middleClickCA = "/home/nnoell/bin/dzencal.sh"
+--   , rightClickCA  = "/home/nnoell/bin/dzencal.sh"
+--   , wheelUpCA     = "/home/nnoell/bin/dzencal.sh"
+--   , wheelDownCA   = "/home/nnoell/bin/dzencal.sh"
+--   }
+
+-- layoutCA :: CA
+-- layoutCA = CA
+--   { leftClickCA   = "/usr/bin/xdotool key super+space"
+--   , middleClickCA = "/usr/bin/xdotool key super+v"
+--   , rightClickCA  = "/usr/bin/xdotool key super+shift+space"
+--   , wheelUpCA     = "/usr/bin/xdotool key super+f"
+--   , wheelDownCA   = "/usr/bin/xdotool key super+control+f"
+--   }
+
+-- workspaceCA :: CA
+-- workspaceCA = CA
+--   { leftClickCA   = "/usr/bin/xdotool key super+1"
+--   , middleClickCA = "/usr/bin/xdotool key super+g"
+--   , rightClickCA  = "/usr/bin/xdotool key super+0"
+--   , wheelUpCA     = "/usr/bin/xdotool key ctrl+alt+Right"
+--   , wheelDownCA   = "/usr/bin/xdotool key ctrl+alt+Left"
+--   }
+
+-- focusCA :: CA
+-- focusCA = CA
+--   { leftClickCA   = "/usr/bin/xdotool key super+m"
+--   , middleClickCA = "/usr/bin/xdotool key super+c"
+--   , rightClickCA  = "/usr/bin/xdotool key super+shift+m"
+--   , wheelUpCA     = "/usr/bin/xdotool key super+shift+j"
+--   , wheelDownCA   = "/usr/bin/xdotool key super+shift+k"
+--   }
+
+------------------------------------------------------------------------------
 -- WORKSPACES
 ------------------------------------------------------------------------------
 -- My workspaces are clickable meaning that the mouse can be used to switch
@@ -462,32 +502,32 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
 ------------------------------------------------------------------------------
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar /home/hlappal/.xmonad/xmobarrc"
-    xmonad $ ewmh def
-      { manageHook = myManageHook <+> manageDocks
-      , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
-      , logHook = dynamicLogWithPP xmobarPP
-                  { ppOutput = hPutStrLn xmproc
-                  -- , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]"    -- Current workspace in xmobar
-                  , ppCurrent = xmobarColor myFocusColor "" . wrap "[" "]" -- Current workspace in xmobar
-                  -- , ppVisible = xmobarColor "#c3e88d" ""                   -- Visible but not current workspace
-                  , ppVisible = xmobarColor myNormColor ""                 -- Visible but not current workspace
-                  , ppHidden = xmobarColor myHiddenColor "" . wrap "" ""   -- Hidden workspaces in xmobar
-                  -- , ppHiddenNoWindows = xmobarColor "#F07178" ""           -- Hidden workspaces (no windows)
-                  , ppHiddenNoWindows = xmobarColor myEmptyColor ""        -- Hidden workspaces (no windows)
-                  , ppTitle = xmobarColor myTitleColor "" . shorten 80     -- Title of active window in xmobar
-                  , ppSep =  "<fc=#d8dee9> | </fc>"                        -- Separators in xmobar
-                  , ppUrgent = xmobarColor myUrgentColor "" . wrap "!" "!" -- Urgent workspace
-                  , ppExtras  = [windowCount]                              -- # of windows current workspace
-                  , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
-                  }
-      , modMask            = myModMask
-      , terminal           = myTerminal
-      , startupHook        = myStartupHook
-      , layoutHook         = myLayoutHook 
-      , workspaces         = myWorkspaces
-      , borderWidth        = myBorderWidth
-      , normalBorderColor  = myNormColor
-      , focusedBorderColor = myFocusColor
-      , mouseBindings      = myMouseBindings
-      } `additionalKeysP`    myKeys 
+  xmproc <- spawnPipe "xmobar /home/hlappal/.xmonad/xmobarrc"
+  xmonad $ ewmh def
+    { manageHook = myManageHook <+> manageDocks
+    , handleEventHook = serverModeEventHookCmd <+> serverModeEventHook <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn) <+> docksEventHook
+    , logHook = dynamicLogWithPP xmobarPP
+                { ppOutput = hPutStrLn xmproc
+                -- , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]"    -- Current workspace in xmobar
+                , ppCurrent = xmobarColor myFocusColor "" . wrap "[" "]" -- Current workspace in xmobar
+                -- , ppVisible = xmobarColor "#c3e88d" ""                   -- Visible but not current workspace
+                , ppVisible = xmobarColor myNormColor ""                 -- Visible but not current workspace
+                , ppHidden = xmobarColor myHiddenColor "" . wrap "" ""   -- Hidden workspaces in xmobar
+                -- , ppHiddenNoWindows = xmobarColor "#F07178" ""           -- Hidden workspaces (no windows)
+                , ppHiddenNoWindows = xmobarColor myEmptyColor ""        -- Hidden workspaces (no windows)
+                , ppTitle = xmobarColor myTitleColor "" . shorten 80     -- Title of active window in xmobar
+                , ppSep =  "<fc=#d8dee9> | </fc>"                        -- Separators in xmobar
+                , ppUrgent = xmobarColor myUrgentColor "" . wrap "!" "!" -- Urgent workspace
+                , ppExtras  = [windowCount]                              -- # of windows current workspace
+                , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+                }
+    , modMask            = myModMask
+    , terminal           = myTerminal
+    , startupHook        = myStartupHook
+    , layoutHook         = myLayoutHook 
+    , workspaces         = myWorkspaces
+    , borderWidth        = myBorderWidth
+    , normalBorderColor  = myNormColor
+    , focusedBorderColor = myFocusColor
+    , mouseBindings      = myMouseBindings
+    } `additionalKeysP`    myKeys 
