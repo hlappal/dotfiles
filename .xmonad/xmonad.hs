@@ -15,12 +15,13 @@ import qualified XMonad.StackSet as W
 
 -- Actions
 import XMonad.Actions.CopyWindow (killAllOtherCopies)
-import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(NonEmptyWS, WSIs))
+import XMonad.Actions.CycleWS -- (moveTo, shiftTo, WSType(NonEmptyWS, WSIs))
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
 import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
-import qualified XMonad.Actions.TreeSelect as TS
 import XMonad.Actions.WithAll (sinkAll)
+import qualified XMonad.Actions.TreeSelect as TS
+import qualified XMonad.Actions.FlexibleResize as Flex
 
 -- Data
 import Data.List
@@ -82,14 +83,14 @@ myTerminal :: String
 myTerminal = "alacritty" -- Sets default terminal
 
 myBorderWidth :: Dimension
-myBorderWidth = 2 -- Sets border width for windows
+myBorderWidth = 1 -- Sets border width for windows
 
 -- Color scheme implemented from Nord
 myNormColor :: String
-myNormColor = "#88c0d0" -- Border color of normal windows and visible workspace
+myNormColor = "#4c566a" -- Border color of normal windows
 
 myFocusColor :: String
-myFocusColor = "#d8dee9" -- Border color of focused windows and active workspace
+myFocusColor = "#d8dee9" -- Border color of focused windows
 
 myHiddenColor :: String
 myHiddenColor = "#8fbcbb"  -- Color of hidden workspace
@@ -276,9 +277,6 @@ myKeys =
     , ("M-S-<Delete>", sinkAll)
     , ("M-S-h", sendMessage MirrorShrink)
     , ("M-S-l", sendMessage MirrorExpand)
-    --TODO toggle float for individual windows
-    --TODO move & resize floating windows with keyboard
-    --TODO move & resize floating windows with mouse
 
     -- Windows navigation
     , ("M-m", windows W.focusMaster)
@@ -331,6 +329,18 @@ myKeys =
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
     ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "nsp"))
             nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
+
+-- Mouse bindigs
+myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
+myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
+  [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)) --Set the window to floating mode and move by dragging
+  , ((modMask, button2), (\w -> focus w >> windows W.shiftMaster))                      --Raise the window to the top of the stack
+  , ((modMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))                   --Set the window to floating mode and resize by dragging
+  , ((modMask, button4), (\_ -> prevWS))                                                --Switch to previous workspace
+  , ((modMask, button5), (\_ -> nextWS))                                                --Switch to next workspace
+  , (((modMask .|. shiftMask), button4), (\_ -> shiftToPrev))                           --Send client to previous workspace
+  , (((modMask .|. shiftMask), button5), (\_ -> shiftToNext))                           --Send client to next workspace
+  ]
 
 ------------------------------------------------------------------------------
 -- WORKSPACES
@@ -462,12 +472,12 @@ main = do
                   , ppCurrent = xmobarColor myFocusColor "" . wrap "[" "]" -- Current workspace in xmobar
                   -- , ppVisible = xmobarColor "#c3e88d" ""                   -- Visible but not current workspace
                   , ppVisible = xmobarColor myNormColor ""                 -- Visible but not current workspace
-                  , ppHidden = xmobarColor myHiddenColor "" . wrap "" ""       -- Hidden workspaces in xmobar
+                  , ppHidden = xmobarColor myHiddenColor "" . wrap "" ""   -- Hidden workspaces in xmobar
                   -- , ppHiddenNoWindows = xmobarColor "#F07178" ""           -- Hidden workspaces (no windows)
                   , ppHiddenNoWindows = xmobarColor myEmptyColor ""        -- Hidden workspaces (no windows)
-                  , ppTitle = xmobarColor myTitleColor "" . shorten 80        -- Title of active window in xmobar
+                  , ppTitle = xmobarColor myTitleColor "" . shorten 80     -- Title of active window in xmobar
                   , ppSep =  "<fc=#d8dee9> | </fc>"                        -- Separators in xmobar
-                  , ppUrgent = xmobarColor myUrgentColor "" . wrap "!" "!"     -- Urgent workspace
+                  , ppUrgent = xmobarColor myUrgentColor "" . wrap "!" "!" -- Urgent workspace
                   , ppExtras  = [windowCount]                              -- # of windows current workspace
                   , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
                   }
@@ -479,4 +489,5 @@ main = do
       , borderWidth        = myBorderWidth
       , normalBorderColor  = myNormColor
       , focusedBorderColor = myFocusColor
+      , mouseBindings      = myMouseBindings
       } `additionalKeysP`    myKeys 
