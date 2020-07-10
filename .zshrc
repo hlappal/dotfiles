@@ -102,6 +102,11 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+# For autocompleion (Python argcomplete)
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete /home/hlappal/.local/bin/torntrader)"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/hlappal/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
