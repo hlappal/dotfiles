@@ -1,5 +1,6 @@
 
--- The xmonad configuration
+-- My Xmonad configuration
+--
 -- Heikki Lappalainen
 -- heikki.lappalainen@protonmail.com
 
@@ -68,6 +69,10 @@ import Control.Arrow (first)
 import XMonad.Util.EZConfig
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Cursor
+import Control.Applicative
+import Control.Concurrent
+import XMonad.Actions.FloatKeys
 
 ------------------------------------------------------------------------------
 -- VARIABLES
@@ -210,6 +215,7 @@ treeselectAction a = TS.treeselectAction a
     [ Node (TS.TSNode "bright" "full power" (spawn "xbacklight -set 100")) []
     , Node (TS.TSNode "normal" "normal brightness (50%)" (spawn "xbacklight -set 50")) []
     , Node (TS.TSNode "dim" "quite dark" (spawn "xbacklight -set 10")) []
+    , Node (TS.TSNode "very dim" "very dark" (spawn "xbacklight -set 0")) []
     ]
   , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
     [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn ("emacsclient -c -a 'emacs' --eval '(find-file \"~/.xmonad/xmonad.hs\")'"))) []
@@ -321,8 +327,8 @@ myKeys =
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
-    , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 2%- unmute")
-    , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 2%+ unmute")
+    , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 5%- unmute")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 5%+ unmute")
     , ("<Print>", spawn "scrot")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 2")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
@@ -344,44 +350,9 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 ------------------------------------------------------------------------------
 -- DZEN CONFIGS
 ------------------------------------------------------------------------------
+
+-- Coming...
   
--- Dzen logger clickable areas
--- calendarCA :: CA
--- calendarCA = CA
---   { leftClickCA   = "/home/nnoell/bin/dzencal.sh"
---   , middleClickCA = "/home/nnoell/bin/dzencal.sh"
---   , rightClickCA  = "/home/nnoell/bin/dzencal.sh"
---   , wheelUpCA     = "/home/nnoell/bin/dzencal.sh"
---   , wheelDownCA   = "/home/nnoell/bin/dzencal.sh"
---   }
-
--- layoutCA :: CA
--- layoutCA = CA
---   { leftClickCA   = "/usr/bin/xdotool key super+space"
---   , middleClickCA = "/usr/bin/xdotool key super+v"
---   , rightClickCA  = "/usr/bin/xdotool key super+shift+space"
---   , wheelUpCA     = "/usr/bin/xdotool key super+f"
---   , wheelDownCA   = "/usr/bin/xdotool key super+control+f"
---   }
-
--- workspaceCA :: CA
--- workspaceCA = CA
---   { leftClickCA   = "/usr/bin/xdotool key super+1"
---   , middleClickCA = "/usr/bin/xdotool key super+g"
---   , rightClickCA  = "/usr/bin/xdotool key super+0"
---   , wheelUpCA     = "/usr/bin/xdotool key ctrl+alt+Right"
---   , wheelDownCA   = "/usr/bin/xdotool key ctrl+alt+Left"
---   }
-
--- focusCA :: CA
--- focusCA = CA
---   { leftClickCA   = "/usr/bin/xdotool key super+m"
---   , middleClickCA = "/usr/bin/xdotool key super+c"
---   , rightClickCA  = "/usr/bin/xdotool key super+shift+m"
---   , wheelUpCA     = "/usr/bin/xdotool key super+shift+j"
---   , wheelDownCA   = "/usr/bin/xdotool key super+shift+k"
---   }
-
 ------------------------------------------------------------------------------
 -- WORKSPACES
 ------------------------------------------------------------------------------
@@ -395,7 +366,7 @@ xmobarEscape = concatMap doubleLts
     doubleLts x = [x]
     
 myWorkspaces :: [String]
-myWorkspaces = ["1: Web", "2: Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
+myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
 -- TODO Use special characters in workspace names
 -- TODO Make workspace names clickable
 
