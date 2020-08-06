@@ -3,6 +3,7 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; Load custom keybindings specified in file 'bindings.el'
 (load! "bindings")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -39,26 +40,58 @@
 ;; Helm-bibtex
 (autoload 'helm-bibtex "heml-bibtex" "" t)
 
-;; Open Org Agenda at startup
+;; Set Emacs to save temporarily active regions (selected with mouse) into
+;; primary selection
+(setq mouse-drag-copy-region t)
+(setq select-enable-primary t)
+;; (setq select-enable-clipboard nil)
+(setq select-active-regions t)
+
+;; ;; Open Org Agenda at startup
 ;; (add-hook 'after-init-hook 'org-agenda-list)
 
-;; Enable Wakatime
-(use-package! wakatime-mode
-  :hook (general-after-init . global-wakatime-mode))
+;; ;; Enable Wakatime
+;; (use-package! wakatime-mode
+;;   :hook (general-after-init . global-wakatime-mode))
 
-;; Config Emacs as X window manager
-;(require 'exwm)
-;(require 'exwm-config)
-;(exwm-config-default)
-;(require 'exwm-randr)
-;(setq exwm-randr-workspace-monitor-plist '(0 "LVDS1"))
-;(add-hook 'exwm-randr-screen-change-hook
-          ;(lambda ()
-            ;(start-process-shell-command
-             ;"xrandr" nil "xrandr --output LVDS1 --mode 1600x900 --pos 0x0 --rotate normal")))
-;(exwm-randr-enable)
-;(require 'exwm-systemtray)
-;(exwm-systemtray-enable)
+;; ;; Config Emacs as X window manager
+;; ;;
+;; (require 'exwm)
+;; (require 'exwm-config)
+;; (exwm-config-default)
+;; (require 'exwm-randr)
+;; (setq exwm-randr-workspace-monitor-plist '(0 "LVDS1"))
+;; (add-hook 'exwm-randr-screen-change-hook
+;;          ;(lambda ()
+;;            ;(start-process-shell-command
+;;             ;"xrandr" nil "xrandr --output LVDS1 --mode 1600x900 --pos 0x0 --rotate normal")))
+;; (exwm-randr-enable)
+;; (require 'exwm-systemtray)
+;; (exwm-systemtray-enable)
+
+;; ;; Mu4e Configurations
+;; ;;
+;; ;; Contexts function
+;; (defun my-make-mu4e-context (name address signature)
+;;   "Return a mu4e context named NAME with :match-func matching
+;; its ADDRESS in From or CC fields of the parent message. The
+;; context's `user-mail-address' is set to ADDRESS and its
+;; `mu4e-compose-signature' to SIGNATURE."
+;;   (lexical-let ((addr-lex address))
+;;     (make-mu4e-context :name name
+;;                        :vars `((user-mail-address . ,address)
+;;                                (mu4e-compose-signature . ,signature))
+;;                        :match-func
+;;                        (lambda (msg)
+;;                          (when msg
+;;                            (or (mu4e-message-contact-field-matches msg :to addr-lex)
+;;                                (mu4e-message-contact-field-matches-msg :cc addr-lex)))))))
+;; ;; Define contexts
+;; (setq mu4e-contexts
+;;       `( ,(my-make-mu4e-context "Gmail" "heikki.olavi.lappalainen@gmail.com"
+;;                                 "")
+;;          ,(my-make-mu4e-context "Aalto" "heikki.2.lappalainen@aalto.fi"
+;;                                 "")))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
