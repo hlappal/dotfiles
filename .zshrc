@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH
 
+export CLASSPATH=$CLASSPATH:$HOME/projects/algorithms/algs4.jar
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/hlappal/.oh-my-zsh"
 
