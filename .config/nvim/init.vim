@@ -12,7 +12,7 @@ if !exists('g:vscode')
   Plug 'jiangmiao/auto-pairs'
 
   " Vim plugin for automatic time tracking and metrics generated from your programming activity
-  Plug 'wakatime/vim-wakatime'
+  "Plug 'wakatime/vim-wakatime'
 
   "Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' }
   ""Plug 'zchee/deoplete-jedi'
