@@ -199,6 +199,7 @@ treeselectAction a = TS.treeselectAction a
     [ Node (TS.TSNode "firefox" "default browser" (spawn "firefox")) []
     , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome-stable")) []
     , Node (TS.TSNode "nemo" "file manager" (spawn "nemo")) []
+    , Node (TS.TSNode "ranger" "text based file manager" (spawn "urxvt -e ranger")) []
     , Node (TS.TSNode "mailspring" "Gmail / Aalto-mail" (spawn "mailspring")) []
     , Node (TS.TSNode "electron-mail" "protonmail" (spawn "electron-mail")) []
     , Node (TS.TSNode "spotify" "music player" (spawn "spotify")) []
