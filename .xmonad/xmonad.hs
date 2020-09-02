@@ -122,6 +122,7 @@ myStartupHook = do
   spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
   spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
   spawnOnce "/usr/bin/emacs --daemon &" 
+  spawnOnce "/usr/bin/dropbox &" 
   setWMName "LG3D"
 
 ------------------------------------------------------------------------------
@@ -458,16 +459,16 @@ tabs     = renamed [Replace "tabs"]
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts floats $
                mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
   where
-    myDefaultLayout = spirals |||
-                      tall |||
-                      -- magnify |||
-                      oneBig |||
-                      -- noBorders monocle |||
-                      -- floats |||
-                      -- grid |||
-                      noBorders tabs
-                      -- threeCol |||
-                      -- threeRow
+      myDefaultLayout = tall |||
+                        spirals |||
+                        -- magnify |||
+                        oneBig |||
+                        -- noBorders monocle |||
+                        -- floats |||
+                        -- grid |||
+                        noBorders tabs
+                        -- threeCol |||
+                        -- threeRow
 
 ------------------------------------------------------------------------------
 -- MAIN
