@@ -14,7 +14,8 @@ exec --no-startup-id nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wa
 #exec --no-startup-id feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*
 
 # Start Polybar
-#exec_always --no-startup-id /home/hlappal/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id autotiling
 
 # Start twmn (notification daemon)
 exec --no-startup-id twmnd
@@ -31,6 +32,9 @@ set $alt Mod1
 
 # Hide borders
 hide_edge_borders none
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -68,7 +72,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+c kill
@@ -78,9 +82,11 @@ bindsym $mod+Shift+c kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
+
 # Start rofi (program launcher)
-#bindsym $mod+Shift+Return exec --no-startup-id rofi -show run
-bindsym $mod+Shift+Return exec --no-startup-id dmenu_run
+bindsym $mod+Shift+Return exec --no-startup-id "rofi -combi-modi window,drun,ssh -theme solarized -font \\"hack 10\\" -show combi -icon-theme \\"Papirus\\" -show-icons"
+
+bindsym $mod+Shift+p exec --no-startup-id dmenu-lpass-nu
 
 # app launch keybindings
 #bindsym $mod+F2 exec urxvt -e ranger
@@ -117,7 +123,7 @@ bindsym $mod+v split v; exec notify-send 'tile vertically'
 bindsym $mod+q split toggle
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+space fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -126,10 +132,10 @@ bindsym $mod+e layout toggle split
 #stacking 
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+f floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+t focus mode_toggle
 
 # focus the parent container
 bindsym $mod+p focus parent
@@ -164,7 +170,7 @@ bindsym $mod+6 workspace number $ws6
 bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
-#bindsym $mod+0 workspace number $ws10
+bindsym $mod+0 workspace number $ws10
 
 # switch workspace with arrow keys
 bindsym $mod+Right workspace next
@@ -208,7 +214,7 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+0 mode "$mode_system"
+bindsym Ctrl+$alt+Delete mode "$mode_system"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -239,29 +245,29 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-    status_command          i3status --config ~/.config/i3/i3status.conf
-    mode                    dock
-    position                top
-    output                  LVDS1
-    tray_output             primary
-    font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-    font                    pango:Mononoki Nerd 9
-    workspace_buttons       yes
-    strip_workspace_name    no
-    strip_workspace_numbers no
-    colors {
-        background          #2e3440
-        statusline          #eceff4
-        separator           #4c566a
+# bar {
+#     status_command          i3status --config ~/.config/i3/i3status.conf
+#     mode                    dock
+#     position                top
+#     output                  LVDS1
+#     tray_output             primary
+#     font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+#     font                    pango:Mononoki Nerd 9
+#     workspace_buttons       yes
+#     strip_workspace_name    no
+#     strip_workspace_numbers no
+#     colors {
+#         background          #2e3440
+#         statusline          #eceff4
+#         separator           #4c566a
 
-        focused_workspace   #4c7899 #285577 #ffffff
-        active_workspace    #333333 #5f676a #ffffff
-        inactive_workspace  #333333 #222222 #888888
-        urgent_workspace    #2f343a #900000 #ffffff
-        binding_mode        #2f343a #900000 #ffffff
-    }
-}
+#         focused_workspace   #4c7899 #285577 #ffffff
+#         active_workspace    #333333 #5f676a #ffffff
+#         inactive_workspace  #333333 #222222 #888888
+#         urgent_workspace    #2f343a #900000 #ffffff
+#         binding_mode        #2f343a #900000 #ffffff
+#     }
+# }
 
 #############################
 ### settings for i3-gaps: ###
