@@ -123,6 +123,7 @@ myStartupHook = do
   spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
   spawnOnce "/usr/bin/emacs --daemon &" 
   spawnOnce "/usr/bin/dropbox &" 
+  spawnOnce "/usr/bin/earlyoom &"
   setWMName "LG3D"
 
 ------------------------------------------------------------------------------
@@ -329,8 +330,8 @@ myKeys =
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
-    , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 5%- unmute")
-    , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 5%+ unmute")
+    , ("<XF86AudioLowerVolume>", spawn "amixer set -q Master 2%- unmute")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set -q Master 2%+ unmute")
     , ("<Print>", spawn "scrot")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 2")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 2")
@@ -460,13 +461,13 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
   where
       myDefaultLayout = tall |||
-                        spirals |||
+                        -- spirals |||
+                        noBorders tabs
                         -- magnify |||
-                        oneBig |||
+                        -- oneBig |||
                         -- noBorders monocle |||
                         -- floats |||
                         -- grid |||
-                        noBorders tabs
                         -- threeCol |||
                         -- threeRow
 
