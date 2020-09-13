@@ -45,6 +45,548 @@ compositing-border = over
 
 
 ;=======================================
+; MODULES
+;=======================================
+
+[module/i3]
+;https://github.com/jaagr/polybar/wiki/Module:-i3
+type = internal/i3
+pin-workspaces = true
+strip-wsnumbers = false
+index-sort = false
+enable-click = true
+enable-scroll = true
+wrapping-scroll = false
+reverse-scroll = false
+fuzzy-match = false
+
+;extra icons to choose from
+;http://fontawesome.io/cheatsheet/
+ws-icon-0 = 1;Web 
+ws-icon-1 = 2;Term 
+ws-icon-2 = 3;Dev 
+ws-icon-3 = 4;Doc 
+ws-icon-4 = 5;Mail 
+ws-icon-5 = 6;Chat 
+ws-icon-6 = 7;Torn 
+ws-icon-7 = 8;Media 
+ws-icon-8 = 9;Other 
+ws-icon-9 = 10;Rand 
+ws-icon-default = " "
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+format = <label-state> <label-mode>
+
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-foreground = ${colors.foreground}
+label-mode-background = ${colors.background}
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+; focused = Active workspace on focused monitor
+label-focused = %icon% %name%
+label-focused-background = ${colors.buffer}
+label-focused-foreground = ${colors.foreground}
+label-focused-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %icon% %name%
+label-unfocused-padding = 2
+label-unfocused-background = ${colors.background}
+label-unfocused-foreground = ${colors.foreground}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %icon% %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+; urgent = Workspace with urgency hint set
+label-urgent = %icon% %name%
+label-urgent-background = ${self.label-focused-background}
+label-urgent-foreground = ${colors.urgent}
+label-urgent-padding = 2
+
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+
+[module/backlight]
+;https://github.com/jaagr/polybar/wiki/Module:-backlight
+
+type = internal/backlight
+
+; Use the following command to list available cards:
+; $ ls -1 /sys/class/backlight/
+card = intel_backlight
+
+; Available tags:
+;   <label> (default)
+;   <ramp>
+;   <bar>
+format = <ramp>
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+; Available tokens:
+;   %percentage% (default)
+label = %percentage%%
+
+; Only applies if <ramp> is used
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑
+
+; Only applies if <bar> is used
+bar-width = 10
+bar-indicator = |
+bar-fill = ─
+bar-empty = ─
+
+
+[module/battery]
+;https://github.com/jaagr/polybar/wiki/Module:-battery
+type = internal/battery
+battery = BAT0
+adapter = AC0
+full-at = 100
+
+format-charging = <animation-charging> <label-charging>
+label-charging = %percentage%%
+format-charging-foreground = ${colors.foreground}
+format-charging-background = ${colors.background}
+
+format-discharging = <ramp-capacity> <label-discharging>
+label-discharging = %percentage%%
+format-discharging-foreground = ${colors.foreground}
+format-discharging-background = ${colors.background}
+
+format-full-prefix = " "
+label-full = Full %percentage%%
+format-full-foreground = ${colors.foreground}
+format-full-background = ${colors.background}
+
+ramp-capacity-0 = 
+ramp-capacity-0-foreground = ${colors.urgent}
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = ${colors.warning}
+ramp-capacity-2 = 
+ramp-capacity-2-foreground = ${colors.warning}
+ramp-capacity-3 = 
+ramp-capacity-3-foreground = ${colors.notify}
+ramp-capacity-4 = 
+ramp-capacity-4-foreground = ${colors.success}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colors.success}
+animation-charging-framerate = 750
+
+
+[module/cpu]
+;https://github.com/jaagr/polybar/wiki/Module:-cpu
+type = internal/cpu
+; Seconds to sleep between updates
+; Default: 1
+interval = 1
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+;   
+format-prefix = " "
+format-prefix-foreground = ${colors.nord9}
+; format-underline = #645377
+
+; Available tags:
+;   <label> (default)
+;   <bar-load>
+;   <ramp-load>
+;   <ramp-coreload>
+format = <ramp-coreload>
+
+format-padding = 0
+
+; Available tokens:
+;   %percentage% (default) - total cpu load
+;   %percentage-cores% - load percentage for each core
+;   %percentage-core[1-9]% - load percentage for specific core
+; label = CPU: %percentage%%
+ramp-coreload-0 = ▁
+ramp-coreload-0-foreground = ${colors.success}
+ramp-coreload-1 = ▂
+ramp-coreload-1-foreground = ${colors.success}
+ramp-coreload-2 = ▃
+ramp-coreload-2-foreground = ${colors.notify}
+ramp-coreload-3 = ▄
+ramp-coreload-3-foreground = ${colors.notify}
+ramp-coreload-4 = ▅
+ramp-coreload-4-foreground = ${colors.warning}
+ramp-coreload-5 = ▆
+ramp-coreload-5-foreground = ${colors.warning}
+ramp-coreload-6 = ▇
+ramp-coreload-6-foreground = ${colors.urgent}
+ramp-coreload-7 = █
+ramp-coreload-7-foreground = ${colors.urgent}
+
+
+[module/memory]
+;https://github.com/jaagr/polybar/wiki/Module:-memory
+type = internal/memory
+interval = 1
+; Available tokens:
+;   %percentage_used% (default)
+;   %percentage_free%
+;   %gb_used%
+;   %gb_free%
+;   %gb_total%
+;   %mb_used%
+;   %mb_free%
+;   %mb_total%
+label = %percentage_used%%
+
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${colors.nord9}
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+
+[module/date]
+;https://github.com/jaagr/polybar/wiki/Module:-date
+type = internal/date
+; Seconds to sleep between updates
+interval = 5
+; See "http://en.cppreference.com/w/cpp/io/manip/put_time" for details on how to format the date string
+; NOTE: if you want to use syntax tags here you need to use %%{...}
+date = " %a %b %d, %Y"
+date-alt = " %a %b %d, %Y"
+time = %H:%M
+time-alt = %l:%M%p
+format-prefix = ""
+format-prefix-foreground = ${colors.nord9}
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+label = "%date% %time% "
+
+
+[module/arch-aur-updates]
+type = custom/script
+exec = ~/.config/polybar/scripts/check-all-updates.sh
+interval = 1000
+label = %output%
+format-foreground = ${colors.notify}
+format-background = ${colors.background}
+format-prefix = ""
+format-prefix-foreground = ${colors.nord9}
+
+
+[module/pacman-updates]
+type = custom/script
+; exec = checkupdates | wc -l
+exec = pacman -Qu | wc -l
+interval = 1000
+label = %output%
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+format-prefix = ""
+format-prefix-foreground = ${colors.nord9}
+
+
+[module/filesystem]
+;https://github.com/jaagr/polybar/wiki/Module:-filesystem
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /
+;mount-1 = /home
+;mount-2 = /var
+
+; Seconds to sleep between updates
+; Default: 30
+interval = 30
+
+; Display fixed precision values
+; Default: false
+fixed-values = false
+
+; Spacing between entries
+; Default: 2
+spacing = 4
+
+; Available tags:
+;   <label-mounted> (default)
+;   <bar-free>
+;   <bar-used>
+;   <ramp-capacity>
+format-mounted = <label-mounted>
+format-mounted-foreground = ${colors.foreground}
+format-mounted-background = ${colors.background}
+
+; Available tokens:
+;   %mountpoint%
+;   %type%
+;   %fsname%
+;   %percentage_free%
+;   %percentage_used%
+;   %total%
+;   %free%
+;   %used%
+; Default: %mountpoint% %percentage_free%%
+label-mounted = %mountpoint% : %used% used of %total%
+
+; Available tokens:
+;   %mountpoint%
+; Default: %mountpoint% is not mounted
+label-unmounted = %mountpoint% not mounted
+format-unmounted-foreground = ${colors.foreground}
+format-unmounted-background = ${colors.background}
+;format-unmounted-underline = ${colors.alert}
+
+
+[module/mpd]
+;https://github.com/jaagr/polybar/wiki/Module:-mpd
+type = internal/mpd
+;format-online =  "<label-song>   <icon-prev>  <icon-stop>  <toggle>  <icon-next>"
+format-online =  "<label-song>  <bar-progress>"
+;format-online =  "<label-song>  <bar-progress> <icon-prev>  <icon-stop>  <toggle>  <icon-next>"
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+label-song-maxlen = 40
+label-song-ellipsis = true
+bar-progress-width = 10
+bar-progress-indicator = 
+bar-progress-fill = 
+bar-progress-empty = 
+bar-progress-fill-foreground = ${colors.foreground}
+bar-progress-fill-background = ${colors.background}
+bar-progress-indicator-foreground = ${colors.foreground}
+format-online-foreground = ${colors.foreground}
+format-online-background = ${colors.background}
+
+
+[module/networkspeedup]
+;https://github.com/jaagr/polybar/wiki/Module:-network
+type = internal/network
+interface = wlp3s0
+;interface = enp14s0
+;interface = enp0s31f6
+;interface = enp4s0
+label-connected = "%upspeed%"
+format-connected = <label-connected>
+format-connected-prefix = ""
+format-connected-prefix-foreground = ${colors.nord9}
+format-connected-foreground = ${colors.foreground}
+format-connected-background = ${colors.background}
+
+
+[module/networkspeeddown]
+;https://github.com/jaagr/polybar/wiki/Module:-network
+type = internal/network
+interface = wlp3s0
+;interface = enp14s0
+;interface = enp0s31f6
+;interface = enp4s0
+label-connected = "%downspeed%"
+format-connected = <label-connected>
+format-connected-prefix = ""
+format-connected-prefix-foreground = ${colors.nord9}
+format-connected-foreground = ${colors.foreground}
+format-connected-background = ${colors.background}
+
+
+[module/volume]
+;https://github.com/jaagr/polybar/wiki/Module:-volume
+type = internal/volume
+format-volume = "<label-volume>  <bar-volume>"
+
+label-volume = ""
+label-volume-foreground = ${colors.nord9}
+label-muted = -------------
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.nord9}
+bar-volume-foreground-1 = ${colors.nord9}
+bar-volume-foreground-2 = ${colors.nord9}
+bar-volume-foreground-3 = ${colors.nord9}
+bar-volume-foreground-4 = ${colors.nord9}
+bar-volume-foreground-5 = ${colors.nord9}
+bar-volume-foreground-6 = ${colors.nord9}
+bar-volume-gradient = false
+bar-volume-indicator = 
+bar-volume-indicator-font = 2
+bar-volume-fill = 
+bar-volume-fill-font = 2
+bar-volume-empty = 
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground}
+format-volume-foreground = ${colors.foreground}
+format-volume-background = ${colors.background}
+format-muted-prefix = " "
+format-muted-prefix-foreground = ${colors.nord9}
+format-muted-foreground = ${colors.foreground}
+format-muted-background = ${colors.background}
+
+
+[module/spotify1]
+;https://github.com/NicholasFeldman/dotfiles/blob/master/polybar/.config/polybar/spotify.sh
+type = custom/script
+exec = ~/.config/polybar/scripts/spotify1.sh
+interval = 1
+
+;format = <label>
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+format-padding = 2
+;format-underline = #0f0
+format-prefix = ""
+format-prefix-foreground = ${colors.nord9}
+label = %output:0:150%
+
+
+[module/temperature1]
+;https://github.com/jaagr/polybar/wiki/Module:-temperature
+type = internal/temperature
+; Thermal zone to use
+; To list all the zone types, run
+; $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
+; Default: 0
+thermal-zone = 0
+
+; Full path of temperature sysfs path
+; Use `sensors` to find preferred temperature source, then run
+; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
+; to find path to desired file
+; Default reverts to thermal zone setting
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
+
+warn-temperature = 70
+format = <ramp> <label>
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+format-warn = <ramp> <label-warn>
+label = %temperature%
+label-warn =  %temperature%
+label-warn-foreground = ${colors.warning}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+ramp-foreground =${colors.nord9}
+
+
+[module/wired-network]
+;https://github.com/jaagr/polybar/wiki/Module:-network
+type = internal/network
+interface = enp4s0
+;interface = enp14s0
+interval = 3.0
+
+; Available tokens:
+;   %ifname%    [wireless+wired]
+;   %local_ip%  [wireless+wired]
+;   %essid%     [wireless]
+;   %signal%    [wireless]
+;   %upspeed%   [wireless+wired]
+;   %downspeed% [wireless+wired]
+;   %linkspeed% [wired]
+; Default: %ifname% %local_ip%
+label-connected =  %ifname%
+label-disconnected = %ifname% disconnected
+
+format-connected-foreground = ${colors.foreground}
+format-connected-background = ${colors.background}
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.nord9}
+format-connected-prefix-background = ${colors.background}
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.alert}
+label-disconnected-foreground = ${colors.foreground}
+
+
+[module/xbacklight]
+;https://github.com/jaagr/polybar/wiki/Module:-xbacklight
+type = internal/xbacklight
+format = <label> <bar>
+format-prefix = "   "
+format-prefix-foreground = ${colors.foreground}
+format-prefix-background = ${colors.background}
+label = %percentage%%
+bar-width = 10
+bar-indicator = 
+bar-indicator-foreground = ${colors.foreground}
+bar-indicator-font = 2
+bar-fill = 
+bar-fill-font = 2
+bar-fill-foreground = ${colors.foreground}
+bar-empty = 
+bar-empty-font = 2
+bar-empty-foreground = ${colors.foreground}
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+
+[module/xkeyboard]
+;https://github.com/jaagr/polybar/wiki/Module:-xkeyboard
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+;format-prefix = " "
+format-prefix-foreground = ${colors.foreground}
+format-prefix-background = ${colors.background}
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+;label-layout = %layout%
+label-layout =
+label-indicator-padding = 2
+label-indicator-margin = 0
+label-indicator-background = ${colors.background}
+label-indicator-foreground = ${colors.urgent}
+;label-indicator-underline = ${colors.red_fg}
+
+
+[module/xwindow]
+;https://github.com/jaagr/polybar/wiki/Module:-xwindow
+type = internal/xwindow
+
+; Available tokens:
+;   %title%
+; Default: %title%
+label = %title%
+label-maxlen = 80
+
+format-prefix = "  "
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
+
+
+;=======================================
 ;
 ; MAINBAR-I3
 ;
@@ -92,7 +634,7 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = xkeyboard pacman-updates arch-aur-updates backlight pavolume memory cpu networkspeedup networkspeeddown date battery
+modules-right = xkeyboard arch-aur-updates backlight volume memory cpu networkspeedup networkspeeddown date battery
 
 separator = " "
 
@@ -188,7 +730,7 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 modules-left = 
 modules-center = 
-modules-right = battery backlight xkeyboard pavolume memory cpu arch-aur-updates date
+modules-right = battery backlight xkeyboard volume memory cpu arch-aur-updates date
 
 separator =
 
@@ -352,619 +894,5 @@ tray-maxsize = 20
 tray-scale = 1.0
 tray-background = ${colors.background}
 
-
-;=======================================
-;
-; MODULES
-;
-;=======================================
-
-[module/i3]
-;https://github.com/jaagr/polybar/wiki/Module:-i3
-type = internal/i3
-
-; Only show workspaces defined on the same output as the bar
-;
-; Useful if you want to show monitor specific workspaces
-; on different bars
-;
-; Default: false
-pin-workspaces = true
-
-; This will split the workspace name on ':'
-; Default: false
-strip-wsnumbers = false
-
-; Sort the workspaces by index instead of the default
-; sorting that groups the workspaces by output
-; Default: false
-index-sort = false
-
-; Create click handler used to focus workspace
-; Default: true
-enable-click = true
-
-; Create scroll handlers used to cycle workspaces
-; Default: true
-enable-scroll = true
-
-; Wrap around when reaching the first/last workspace
-; Default: true
-wrapping-scroll = false
-
-; Set the scroll cycle direction
-; Default: true
-reverse-scroll = false
-
-; Use fuzzy (partial) matching on labels when assigning
-; icons to workspaces
-; Example: code;♚ will apply the icon to all workspaces
-; containing 'code' in the label
-; Default: false
-fuzzy-match = false
-
-;extra icons to choose from
-;http://fontawesome.io/cheatsheet/
-;        v      
-
-ws-icon-0 = 1;Web 
-ws-icon-1 = 2;Term 
-ws-icon-2 = 3;Dev 
-ws-icon-3 = 4;Doc 
-ws-icon-4 = 5;Mail 
-ws-icon-5 = 6;Chat 
-ws-icon-6 = 7;Torn 
-ws-icon-7 = 8;Media 
-ws-icon-8 = 9;Other 
-ws-icon-9 = 10;Rand 
-ws-icon-default = " "
-
-; Available tags:
-;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
-;   <label-mode> (default)
-format = <label-state> <label-mode>
-
-label-mode = %mode%
-label-mode-padding = 2
-label-mode-foreground = #000000
-label-mode-background = #FFBB00
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon%  %name%
-; focused = Active workspace on focused monitor
-label-focused = %icon% %name%
-label-focused-background = ${colors.buffer}
-label-focused-foreground = ${colors.foreground}
-label-focused-underline = ${colors.buffer}
-label-focused-padding = 2
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-; unfocused = Inactive workspace on any monitor
-label-unfocused = %icon% %name%
-label-unfocused-padding = 2
-label-unfocused-background = ${colors.background}
-label-unfocused-foreground = ${colors.foreground}
-label-unfocused-underline =
-
-; visible = Active workspace on unfocused monitor
-label-visible = %icon% %name%
-label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
-label-visible-padding = 2
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-; urgent = Workspace with urgency hint set
-label-urgent = %icon% %name%
-label-urgent-background = ${self.label-focused-background}
-label-urgent-foreground = ${colors.urgent}
-label-urgent-padding = 2
-
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-
-[module/arch-aur-updates]
-type = custom/script
-exec = ~/.config/polybar/scripts/check-all-updates.sh
-interval = 1000
-label = %output%
-format-foreground = ${colors.notify}
-format-background = ${colors.background}
-format-prefix = ""
-format-prefix-foreground = ${colors.nord9}
-
-
-[module/pacman-updates]
-type = custom/script
-; exec = checkupdates | wc -l
-exec = pacman -Qu | wc -l
-interval = 1000
-label = %output%
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-format-prefix = ""
-format-prefix-foreground = ${colors.nord9}
-
-
-[module/backlight]
-;https://github.com/jaagr/polybar/wiki/Module:-backlight
-
-type = internal/backlight
-
-; Use the following command to list available cards:
-; $ ls -1 /sys/class/backlight/
-card = intel_backlight
-
-; Available tags:
-;   <label> (default)
-;   <ramp>
-;   <bar>
-format = <ramp>
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-; Available tokens:
-;   %percentage% (default)
-label = %percentage%%
-
-; Only applies if <ramp> is used
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
-
-; Only applies if <bar> is used
-bar-width = 10
-bar-indicator = |
-bar-fill = ─
-bar-empty = ─
-
-
-[module/battery]
-;https://github.com/jaagr/polybar/wiki/Module:-battery
-type = internal/battery
-battery = BAT0
-adapter = AC0
-full-at = 100
-
-format-charging = <animation-charging> <label-charging>
-label-charging = %percentage%%
-format-charging-foreground = ${colors.foreground}
-format-charging-background = ${colors.background}
-
-format-discharging = <ramp-capacity> <label-discharging>
-label-discharging = %percentage%%
-format-discharging-foreground = ${colors.foreground}
-format-discharging-background = ${colors.background}
-
-format-full-prefix = " "
-label-full = Full %percentage%%
-format-full-foreground = ${colors.foreground}
-format-full-background = ${colors.background}
-
-ramp-capacity-0 = 
-ramp-capacity-0-foreground = ${colors.urgent}
-ramp-capacity-1 = 
-ramp-capacity-1-foreground = ${colors.warning}
-ramp-capacity-2 = 
-ramp-capacity-2-foreground = ${colors.warning}
-ramp-capacity-3 = 
-ramp-capacity-3-foreground = ${colors.notify}
-ramp-capacity-4 = 
-ramp-capacity-4-foreground = ${colors.success}
-
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-charging-foreground = ${colors.success}
-animation-charging-framerate = 750
-
-
-;[module/compton]
-;;https://github.com/jaagr/polybar/wiki/User-contributed-modules#compton
-;type = custom/script
-;exec = ~/.config/polybar/scripts/compton.sh
-;click-left = ~/.config/polybar/scripts/compton-toggle.sh
-;interval = 5
-;format-foreground = ${colors.foreground}
-;format-background = ${colors.background}
-;;format-underline = #00AF02
-
-
-[module/cpu]
-;https://github.com/jaagr/polybar/wiki/Module:-cpu
-type = internal/cpu
-; Seconds to sleep between updates
-; Default: 1
-interval = 1
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-;   
-format-prefix = " "
-format-prefix-foreground = ${colors.nord9}
-; format-underline = #645377
-
-; Available tags:
-;   <label> (default)
-;   <bar-load>
-;   <ramp-load>
-;   <ramp-coreload>
-format = <ramp-coreload>
-
-format-padding = 0
-
-; Available tokens:
-;   %percentage% (default) - total cpu load
-;   %percentage-cores% - load percentage for each core
-;   %percentage-core[1-9]% - load percentage for specific core
-; label = CPU: %percentage%%
-ramp-coreload-0 = ▁
-ramp-coreload-0-foreground = ${colors.success}
-ramp-coreload-1 = ▂
-ramp-coreload-1-foreground = ${colors.success}
-ramp-coreload-2 = ▃
-ramp-coreload-2-foreground = ${colors.notify}
-ramp-coreload-3 = ▄
-ramp-coreload-3-foreground = ${colors.notify}
-ramp-coreload-4 = ▅
-ramp-coreload-4-foreground = ${colors.warning}
-ramp-coreload-5 = ▆
-ramp-coreload-5-foreground = ${colors.warning}
-ramp-coreload-6 = ▇
-ramp-coreload-6-foreground = ${colors.urgent}
-ramp-coreload-7 = █
-ramp-coreload-7-foreground = ${colors.urgent}
-
-
-[module/date]
-;https://github.com/jaagr/polybar/wiki/Module:-date
-type = internal/date
-; Seconds to sleep between updates
-interval = 5
-; See "http://en.cppreference.com/w/cpp/io/manip/put_time" for details on how to format the date string
-; NOTE: if you want to use syntax tags here you need to use %%{...}
-date = " %a %b %d, %Y"
-date-alt = " %a %b %d, %Y"
-time = %H:%M
-time-alt = %l:%M%p
-format-prefix = ""
-format-prefix-foreground = ${colors.nord9}
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-label = "%date% %time% "
-
-
-[module/filesystem]
-;https://github.com/jaagr/polybar/wiki/Module:-filesystem
-type = internal/fs
-
-; Mountpoints to display
-mount-0 = /
-;mount-1 = /home
-;mount-2 = /var
-
-; Seconds to sleep between updates
-; Default: 30
-interval = 30
-
-; Display fixed precision values
-; Default: false
-fixed-values = false
-
-; Spacing between entries
-; Default: 2
-spacing = 4
-
-; Available tags:
-;   <label-mounted> (default)
-;   <bar-free>
-;   <bar-used>
-;   <ramp-capacity>
-format-mounted = <label-mounted>
-format-mounted-foreground = ${colors.foreground}
-format-mounted-background = ${colors.background}
-
-; Available tokens:
-;   %mountpoint%
-;   %type%
-;   %fsname%
-;   %percentage_free%
-;   %percentage_used%
-;   %total%
-;   %free%
-;   %used%
-; Default: %mountpoint% %percentage_free%%
-label-mounted = %mountpoint% : %used% used of %total%
-
-; Available tokens:
-;   %mountpoint%
-; Default: %mountpoint% is not mounted
-label-unmounted = %mountpoint% not mounted
-format-unmounted-foreground = ${colors.foreground}
-format-unmounted-background = ${colors.background}
-;format-unmounted-underline = ${colors.alert}
-
-
-[module/memory]
-;https://github.com/jaagr/polybar/wiki/Module:-memory
-type = internal/memory
-interval = 1
-; Available tokens:
-;   %percentage_used% (default)
-;   %percentage_free%
-;   %gb_used%
-;   %gb_free%
-;   %gb_total%
-;   %mb_used%
-;   %mb_free%
-;   %mb_total%
-label = %percentage_used%%
-
-format = <label>
-format-prefix = " "
-format-prefix-foreground = ${colors.nord9}
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-
-[module/mpd]
-;https://github.com/jaagr/polybar/wiki/Module:-mpd
-type = internal/mpd
-;format-online =  "<label-song>   <icon-prev>  <icon-stop>  <toggle>  <icon-next>"
-format-online =  "<label-song>  <bar-progress>"
-;format-online =  "<label-song>  <bar-progress> <icon-prev>  <icon-stop>  <toggle>  <icon-next>"
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-label-song-maxlen = 40
-label-song-ellipsis = true
-bar-progress-width = 10
-bar-progress-indicator = 
-bar-progress-fill = 
-bar-progress-empty = 
-bar-progress-fill-foreground = ${colors.foreground}
-bar-progress-fill-background = ${colors.background}
-bar-progress-indicator-foreground = ${colors.foreground}
-format-online-foreground = ${colors.foreground}
-format-online-background = ${colors.background}
-
-
-[module/networkspeedup]
-;https://github.com/jaagr/polybar/wiki/Module:-network
-type = internal/network
-interface = wlp3s0
-;interface = enp14s0
-;interface = enp0s31f6
-;interface = enp4s0
-label-connected = "%upspeed%"
-format-connected = <label-connected>
-format-connected-prefix = ""
-format-connected-prefix-foreground = ${colors.nord9}
-format-connected-foreground = ${colors.foreground}
-format-connected-background = ${colors.background}
-
-
-[module/networkspeeddown]
-;https://github.com/jaagr/polybar/wiki/Module:-network
-type = internal/network
-interface = wlp3s0
-;interface = enp14s0
-;interface = enp0s31f6
-;interface = enp4s0
-label-connected = "%downspeed%"
-format-connected = <label-connected>
-format-connected-prefix = ""
-format-connected-prefix-foreground = ${colors.nord9}
-format-connected-foreground = ${colors.foreground}
-format-connected-background = ${colors.background}
-
-
-[module/pavolume]
-type = custom/script
-tail = true
-label = %output%
-exec = ~/.config/polybar/scripts/pavolume.sh --listen
-click-right = exec pavucontrol
-click-left = ~/.config/polybar/scripts/pavolume.sh --togmute
-scroll-up = ~/.config/polybar/scripts/pavolume.sh --up
-scroll-down = ~/.config/polybar/scripts/pavolume.sh --down
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-
-[module/spotify1]
-;https://github.com/NicholasFeldman/dotfiles/blob/master/polybar/.config/polybar/spotify.sh
-type = custom/script
-exec = ~/.config/polybar/scripts/spotify1.sh
-interval = 1
-
-;format = <label>
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-format-padding = 2
-;format-underline = #0f0
-format-prefix = "  "
-format-prefix-foreground = ${colors.nord9}
-label = %output:0:150%
-
-
-[module/temperature1]
-;https://github.com/jaagr/polybar/wiki/Module:-temperature
-type = internal/temperature
-; Thermal zone to use
-; To list all the zone types, run
-; $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
-; Default: 0
-thermal-zone = 0
-
-; Full path of temperature sysfs path
-; Use `sensors` to find preferred temperature source, then run
-; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
-; to find path to desired file
-; Default reverts to thermal zone setting
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
-
-warn-temperature = 70
-format = <ramp> <label>
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-format-warn = <ramp> <label-warn>
-label = %temperature%
-label-warn =  %temperature%
-label-warn-foreground = ${colors.warning}
-
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-3 = 
-ramp-4 = 
-ramp-foreground =${colors.nord9}
-
-
-[module/volume]
-;https://github.com/jaagr/polybar/wiki/Module:-volume
-type = internal/volume
-format-volume = "<label-volume>  <bar-volume>"
-
-label-volume = ""
-label-volume-foreground = ${colors.nord9}
-label-muted = muted
-
-ramp-signal-0 = ▁
-ramp-signal-1 = ▂
-ramp-signal-2 = ▃
-ramp-signal-3 = ▄
-ramp-signal-4 = ▅
-ramp-signal-5 = ▆
-ramp-signal-6 = ▇
-ramp-signal-7 = █
-ramp-signal-foreground = ${colors.nord9}
-
-bar-volume-width = 10
-bar-volume-foreground-0 = ${colors.nord9}
-bar-volume-foreground-1 = ${colors.nord9}
-bar-volume-foreground-2 = ${colors.nord9}
-bar-volume-foreground-3 = ${colors.nord9}
-bar-volume-foreground-4 = ${colors.nord9}
-bar-volume-foreground-5 = ${colors.nord9}
-bar-volume-foreground-6 = ${colors.nord9}
-bar-volume-gradient = false
-bar-volume-indicator = 
-bar-volume-indicator-font = 2
-bar-volume-fill = 
-bar-volume-fill-font = 2
-bar-volume-empty = 
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground}
-format-volume-foreground = ${colors.foreground}
-format-volume-background = ${colors.background}
-format-muted-prefix = ""
-format-muted-prefix-foreground = ${colors.nord9}
-format-muted-foreground = ${colors.foreground}
-format-muted-background = ${colors.background}
-
-
-[module/wired-network]
-;https://github.com/jaagr/polybar/wiki/Module:-network
-type = internal/network
-interface = enp4s0
-;interface = enp14s0
-interval = 3.0
-
-; Available tokens:
-;   %ifname%    [wireless+wired]
-;   %local_ip%  [wireless+wired]
-;   %essid%     [wireless]
-;   %signal%    [wireless]
-;   %upspeed%   [wireless+wired]
-;   %downspeed% [wireless+wired]
-;   %linkspeed% [wired]
-; Default: %ifname% %local_ip%
-label-connected =  %ifname%
-label-disconnected = %ifname% disconnected
-
-format-connected-foreground = ${colors.foreground}
-format-connected-background = ${colors.background}
-format-connected-prefix = " "
-format-connected-prefix-foreground = ${colors.nord9}
-format-connected-prefix-background = ${colors.background}
-
-format-disconnected = <label-disconnected>
-format-disconnected-underline = ${colors.alert}
-label-disconnected-foreground = ${colors.foreground}
-
-
-[module/xbacklight]
-;https://github.com/jaagr/polybar/wiki/Module:-xbacklight
-type = internal/xbacklight
-format = <label> <bar>
-format-prefix = "   "
-format-prefix-foreground = ${colors.foreground}
-format-prefix-background = ${colors.background}
-label = %percentage%%
-bar-width = 10
-bar-indicator = 
-bar-indicator-foreground = ${colors.foreground}
-bar-indicator-font = 2
-bar-fill = 
-bar-fill-font = 2
-bar-fill-foreground = ${colors.foreground}
-bar-empty = 
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground}
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-
-[module/xkeyboard]
-;https://github.com/jaagr/polybar/wiki/Module:-xkeyboard
-type = internal/xkeyboard
-blacklist-0 = num lock
-
-;format-prefix = " "
-format-prefix-foreground = ${colors.foreground}
-format-prefix-background = ${colors.background}
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
-
-;label-layout = %layout%
-label-layout =
-label-indicator-padding = 2
-label-indicator-margin = 0
-label-indicator-background = ${colors.background}
-label-indicator-foreground = ${colors.urgent}
-;label-indicator-underline = ${colors.red_fg}
-
-
-[module/xwindow]
-;https://github.com/jaagr/polybar/wiki/Module:-xwindow
-type = internal/xwindow
-
-; Available tokens:
-;   %title%
-; Default: %title%
-label = %title%
-label-maxlen = 50
-
-format-prefix = "  "
-format-foreground = ${colors.foreground}
-format-background = ${colors.background}
 
 # vim:ft=dosini
