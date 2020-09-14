@@ -127,6 +127,12 @@ format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
 
+[module/xmonad]
+type = custom/script
+exec = xmonad-log
+tail = true
+
+
 [module/backlight]
 ;https://github.com/jaagr/polybar/wiki/Module:-backlight
 
@@ -149,11 +155,11 @@ format-background = ${colors.background}
 label = %percentage%%
 
 ; Only applies if <ramp> is used
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
+ramp-0 = " 🌕"
+ramp-1 = " 🌔"
+ramp-2 = " 🌓"
+ramp-3 = " 🌒"
+ramp-4 = " 🌑"
 
 ; Only applies if <bar> is used
 bar-width = 10
@@ -179,7 +185,7 @@ label-discharging = %percentage%%
 format-discharging-foreground = ${colors.foreground}
 format-discharging-background = ${colors.background}
 
-format-full-prefix = " "
+format-full-prefix = "   "
 label-full = Full %percentage%%
 format-full-foreground = ${colors.foreground}
 format-full-background = ${colors.background}
@@ -213,7 +219,7 @@ interval = 1
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 ;   
-format-prefix = " "
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 ; format-underline = #645377
 
@@ -265,7 +271,7 @@ interval = 1
 label = %percentage_used%%
 
 format = <label>
-format-prefix = " "
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
@@ -282,7 +288,7 @@ date = " %a %b %d, %Y"
 date-alt = " %a %b %d, %Y"
 time = %H:%M
 time-alt = %l:%M%p
-format-prefix = ""
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
@@ -296,7 +302,7 @@ interval = 1000
 label = %output%
 format-foreground = ${colors.notify}
 format-background = ${colors.background}
-format-prefix = ""
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 
 
@@ -308,7 +314,7 @@ interval = 1000
 label = %output%
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
-format-prefix = ""
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 
 
@@ -396,7 +402,7 @@ interface = wlp3s0
 ;interface = enp4s0
 label-connected = "%upspeed%"
 format-connected = <label-connected>
-format-connected-prefix = ""
+format-connected-prefix = "  "
 format-connected-prefix-foreground = ${colors.nord9}
 format-connected-foreground = ${colors.foreground}
 format-connected-background = ${colors.background}
@@ -411,7 +417,7 @@ interface = wlp3s0
 ;interface = enp4s0
 label-connected = "%downspeed%"
 format-connected = <label-connected>
-format-connected-prefix = ""
+format-connected-prefix = "  "
 format-connected-prefix-foreground = ${colors.nord9}
 format-connected-foreground = ${colors.foreground}
 format-connected-background = ${colors.background}
@@ -422,9 +428,9 @@ format-connected-background = ${colors.background}
 type = internal/volume
 format-volume = "<label-volume>  <bar-volume>"
 
-label-volume = ""
+label-volume = " "
 label-volume-foreground = ${colors.nord9}
-label-muted = -------------
+label-muted = " ------------"
 
 bar-volume-width = 10
 bar-volume-foreground-0 = ${colors.nord9}
@@ -444,7 +450,7 @@ bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground}
 format-volume-foreground = ${colors.foreground}
 format-volume-background = ${colors.background}
-format-muted-prefix = " "
+format-muted-prefix = "  "
 format-muted-prefix-foreground = ${colors.nord9}
 format-muted-foreground = ${colors.foreground}
 format-muted-background = ${colors.background}
@@ -460,8 +466,7 @@ interval = 1
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 format-padding = 2
-;format-underline = #0f0
-format-prefix = ""
+format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 label = %output:0:150%
 
@@ -520,7 +525,7 @@ label-disconnected = %ifname% disconnected
 
 format-connected-foreground = ${colors.foreground}
 format-connected-background = ${colors.background}
-format-connected-prefix = " "
+format-connected-prefix = "  "
 format-connected-prefix-foreground = ${colors.nord9}
 format-connected-prefix-background = ${colors.background}
 
@@ -728,7 +733,7 @@ font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=8;1"
 font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=8;1"
 font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
-modules-left = 
+modules-left = xmonad
 modules-center = 
 modules-right = battery backlight xkeyboard volume memory cpu arch-aur-updates date
 
