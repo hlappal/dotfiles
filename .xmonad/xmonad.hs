@@ -1,8 +1,12 @@
+------------------------------------------------------------------------------
+-- __  __                                _
+-- \ \/ /_ __ ___   ___  _ __   __ _  __| |
+--  \  /| '_ ` _ \ / _ \| '_ \ / _` |/ _` |
+--  /  \| | | | | | (_) | | | | (_| | (_| |
+-- /_/\_\_| |_| |_|\___/|_| |_|\__,_|\__,_|
+-- 
+------------------------------------------------------------------------------
 
--- My Xmonad configuration
---
--- Heikki Lappalainen
--- heikki.lappalainen@protonmail.com
 
 ------------------------------------------------------------------------------
 -- IMPORTS
@@ -74,6 +78,7 @@ import Control.Applicative
 import Control.Concurrent
 import XMonad.Actions.FloatKeys
 
+
 ------------------------------------------------------------------------------
 -- VARIABLES
 ------------------------------------------------------------------------------
@@ -84,7 +89,7 @@ myModMask :: KeyMask
 myModMask = mod4Mask -- Sets modkey to super/windows key
 
 myTerminal :: String
-myTerminal = "urxvt" -- Sets default terminal
+myTerminal = "alacritty" -- Sets default terminal
 
 myBorderWidth :: Dimension
 myBorderWidth = 1 -- Sets border width for windows
@@ -114,6 +119,7 @@ altMask = mod1Mask -- Setting this for use in xprompts
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
+
 ------------------------------------------------------------------------------
 -- AUTOSTART
 ------------------------------------------------------------------------------
@@ -125,6 +131,7 @@ myStartupHook = do
   spawnOnce "/usr/bin/dropbox &" 
   spawnOnce "/usr/bin/earlyoom &"
   setWMName "LG3D"
+
 
 ------------------------------------------------------------------------------
 -- XPROMPT SETTINGS
@@ -149,6 +156,7 @@ myXPConfig = def
   , alwaysHighlight     = True
   , maxComplRows        = Nothing -- set to 5 for 5 rows
   }
+
 
 ------------------------------------------------------------------------------
 -- XPROMPT KEYMAP (emacs-like key bindings)
@@ -191,6 +199,7 @@ myXPKeymap  = M.fromList $
   , (xK_Up, moveHistory W.focusDown')
   , (xK_Escape, quit)
   ]
+
 
 ------------------------------------------------------------------------------
 -- TREE SELECT
@@ -263,6 +272,7 @@ myTreeNavigation = M.fromList
   , ((0, xK_i),      TS.moveHistForward)
   ]
 
+
 ------------------------------------------------------------------------------
 -- KEYBINDINGS
 ------------------------------------------------------------------------------
@@ -277,7 +287,8 @@ myKeys =
     , ("M-<Return>", spawn (myTerminal))
 
     -- Run Prompt
-    , ("M-S-<Return>", shellPrompt myXPConfig)
+    -- , ("M-S-<Return>", shellPrompt myXPConfig)
+    , ("M-S-<Return>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -font \"hack 10\" -show combi -icon-theme \"Papirus\" -show-icons")
     
     -- Windows
     , ("M-f", sendMessage (T.Toggle "floats"))
@@ -350,12 +361,14 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   , (((modMask .|. shiftMask), button5), (\_ -> shiftToNext))                           --Send client to next workspace
   ]
 
+
 ------------------------------------------------------------------------------
 -- DZEN CONFIGS
 ------------------------------------------------------------------------------
 
 -- Coming...
   
+
 ------------------------------------------------------------------------------
 -- WORKSPACES
 ------------------------------------------------------------------------------
@@ -372,6 +385,7 @@ myWorkspaces :: [String]
 myWorkspaces = ["1:Web", "2:Term", "3:Dev", "4:Docs", "5:Mail", "6:Chat", "7:Torn", "8:Media", "9:Other"]
 -- TODO Use special characters in workspace names
 -- TODO Make workspace names clickable
+
 
 ------------------------------------------------------------------------------
 -- MANAGEHOOK
@@ -392,6 +406,7 @@ myManageHook = composeAll
     , className =? "Tk"             --> doFloat
     , className =? "Toplevel"       --> doFloat
     ] -- <+> namedScratchpadManageHook myScratchPads
+
 
 ------------------------------------------------------------------------------
 -- LAYOUTS
@@ -470,6 +485,7 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                         -- grid |||
                         -- threeCol |||
                         -- threeRow
+
 
 ------------------------------------------------------------------------------
 -- MAIN
