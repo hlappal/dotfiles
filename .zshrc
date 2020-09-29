@@ -124,3 +124,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
+autoload bashcompinit
+bashcompinit
+source ~/.nomad-autocompletion.sh
