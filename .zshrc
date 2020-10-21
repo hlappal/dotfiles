@@ -127,4 +127,4 @@ unset __conda_setup
 
 autoload bashcompinit
 bashcompinit
-source ~/.nomad-autocompletion.sh
+# source ~/.nomad-autocompletion.sh
