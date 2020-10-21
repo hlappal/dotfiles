@@ -288,7 +288,7 @@ myKeys =
 
     -- Run Prompt
     , ("M-S-<Return>", shellPrompt myXPConfig)
-    -- , ("M-S-<Return>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -font \"hack 10\" -show combi -icon-theme \"Papirus\" -show-icons")
+    , ("M-<F2>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -font \"hack 10\" -show combi -icon-theme \"Papirus\" -show-icons")
     
     -- Windows
     , ("M-f", sendMessage (T.Toggle "floats"))
