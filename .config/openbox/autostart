@@ -22,8 +22,8 @@ xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1 &
 # Start picom composition
 picom &
 
-# Start tint2 panel
-tint2 &
+# Start polybar panel
+polybar openbox &
 
 # Audio control & battery status
 volumeicon &
