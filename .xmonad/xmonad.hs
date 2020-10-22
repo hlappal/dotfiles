@@ -336,8 +336,9 @@ myKeys =
     -- Lpass menu
     , ("M-S-p", spawn "dmenu-lpass-nu")
 
-    -- Emacs
-    , ("M-S-e", spawn "emacsclient -c -a 'emacs'")
+    -- GUI Editors
+    , ("M-e", spawn "emacsclient -c -a 'emacs'")
+    , ("M-v", spawn "gvim")
 
     -- Multimedia Keys
     , ("<XF86AudioMute>", spawn "amixer set -q Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
