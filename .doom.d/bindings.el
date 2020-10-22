@@ -1,7 +1,14 @@
 ;;; ~/.doom.d/bindings.el -*- lexical-binding: t; -*-
 
 ;; Comment line
-(map! "C-/" #'comment-line)
+(map! :leader
+      :desc "Comment line"
+      "/" #'comment-line)
+
+;; Treemacs
+(map! :leader
+      :desc "Toggle Treemacs"
+      "t t" #'treemacs)
 
 ;; Dired image preview
 (after! dired-jump
