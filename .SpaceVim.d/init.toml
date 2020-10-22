@@ -31,6 +31,7 @@
 # Enable autocomplete layer
 [[layers]]
 name = 'autocomplete'
+name = 'colorscheme'
 auto_completion_return_key_behavior = "complete"
 auto_completion_tab_key_behavior = "cycle"
 
