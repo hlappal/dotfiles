@@ -130,6 +130,7 @@ myStartupHook = do
   spawnOnce "/usr/bin/emacs --daemon &" 
   spawnOnce "/usr/bin/dropbox &" 
   spawnOnce "/usr/bin/earlyoom &"
+  spawnOnce "/usr/bin/dunst &"
   setWMName "LG3D"
 
 
