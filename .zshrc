@@ -109,6 +109,10 @@ autoload -U bashcompinit
 bashcompinit
 eval "$(register-python-argcomplete /home/hlappal/.local/bin/torntrader)"
 
+# Python virtualenvwrapper config
+export WORKON_HOME=~/.virtualenvs
+source /usr/bin/virtualenvwrapper_lazy.sh
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/hlappal/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
