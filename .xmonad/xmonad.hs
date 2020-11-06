@@ -128,7 +128,7 @@ myStartupHook = do
   spawnOnce "nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/ &" 
   spawnOnce "killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00 &"  -- Prevent shaded/dim screen share in Zoom
   spawnOnce "/usr/bin/emacs --daemon &" 
-  spawnOnce "/usr/bin/dropbox &" 
+  -- spawnOnce "/usr/bin/dropbox &" 
   spawnOnce "/usr/bin/earlyoom &"
   spawnOnce "/usr/bin/dunst &"
   setWMName "LG3D"
