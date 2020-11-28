@@ -54,3 +54,9 @@
 
 ;; Use Emacs as a window manager
 (package! exwm)
+
+;; Thesaurus backend
+(package! synosaurus)
+
+;; Helm-bibtex
+(package! helm-bibtex)

@@ -3,7 +3,7 @@
 ;; Comment line
 (map! :leader
       :desc "Comment line"
-      "/" #'comment-line)
+      "c /" #'comment-line)
 
 ;; Treemacs
 (map! :leader
