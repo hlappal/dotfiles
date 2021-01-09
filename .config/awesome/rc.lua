@@ -69,12 +69,11 @@ awful.spawn.with_shell(
     'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
     'xrdb -merge <<< "awesome.started:true";' ..
     -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-    'nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/;' ..
+    'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
     'killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00;' ..
     '/usr/bin/emacs --daemon;' ..
     '/usr/bin/earlyoom;' ..
     '/usr/bin/dunst;' ..
-    '/usr/bin/plasmashell;' ..
     'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
 )
 -- }}}
@@ -94,7 +93,7 @@ local themes = {
     "vertex",          -- 10
 }
 
-local chosen_theme = themes[7]
+local chosen_theme = themes[10]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "alacritty"
