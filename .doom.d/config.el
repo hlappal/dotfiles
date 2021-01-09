@@ -31,14 +31,26 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Dropbox/org/")
+;; NOTE: DROPBOX POISSA KÄYTÖSTÄ
+;;(setq org-directory "~/Dropbox/org/")
+
+;; Open Org Agenda at startup
+;;(add-hook 'after-init-hook 'org-agenda-list)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
 ;; Helm-bibtex
-(autoload 'helm-bibtex "heml-bibtex" "" t)
+(autoload 'helm-bibtex "helm-bibtex" "" t)
+(setq bibtex-completion-bibliography
+      '("./bibliography.bib"))
+
+;; Start with minimap enabled
+(minimap-mode 1)
+
+;; Enable minimap in LaTeX mode
+;;(setq minimap-major-modes '(prog-mode latex-mode))
 
 ;; Set Emacs to save temporarily active regions (selected with mouse) into
 ;; primary selection
@@ -47,15 +59,7 @@
 ;; (setq select-enable-clipboard nil)
 (setq select-active-regions t)
 
-;; ;; Open Org Agenda at startup
-;; (add-hook 'after-init-hook 'org-agenda-list)
-
-;; ;; Enable Wakatime
-;; (use-package! wakatime-mode
-;;   :hook (general-after-init . global-wakatime-mode))
-
 ;; ;; Config Emacs as X window manager
-;; ;;
 ;; (require 'exwm)
 ;; (require 'exwm-config)
 ;; (exwm-config-default)

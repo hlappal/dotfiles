@@ -60,3 +60,6 @@
 
 ;; Helm-bibtex
 (package! helm-bibtex)
+
+;; Helm Spotify Plus
+(package! helm-spotify-plus)

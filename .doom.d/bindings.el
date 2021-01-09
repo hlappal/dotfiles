@@ -3,12 +3,17 @@
 ;; Comment line
 (map! :leader
       :desc "Comment line"
-      "c /" #'comment-line)
+      "c l" #'comment-line)
 
 ;; Treemacs
 (map! :leader
       :desc "Toggle Treemacs"
       "t t" #'treemacs)
+
+;; Helm-bibtex
+(map! :leader
+      :desc "Helm-bibtex"
+      "m b" #'helm-bibtex)
 
 ;; Dired image preview
 (after! dired-jump
