@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH:$HOME/.cargo/bin
 
 export CLASSPATH=$CLASSPATH:$HOME/projects/algorithms/algs4.jar
 
@@ -100,8 +100,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.sh_aliases ]; then
+    . ~/.sh_aliases
 fi
 
 # For autocompleion (Python argcomplete)
@@ -111,3 +111,12 @@ bashcompinit
 # Python virtualenvwrapper config
 export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper_lazy.sh
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+
+# Enable Starship prompt
+eval "$(starship init zsh)"
+
+#export DOT_REPO=https://github.com/hlappal/dotfiles
+#export DOT_DEST=./
+#export DOT_REPO=https://github.com/hlappal/dotfiles
+#export DOT_DEST=.
