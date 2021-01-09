@@ -24,10 +24,9 @@ local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
 -- local shifty        = require("awesome-shifty")
 local vicious       = require("vicious")
-local cyclefocus = require('cyclefocus') --Enable cycling through the most recently used clients with Alt+Tab
+local cyclefocus    = require('cyclefocus') --Enable cycling through the most recently used clients with Alt+Tab
 --local leaved        = require("awesome-leaved")
 -- }}}
-
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -70,7 +69,8 @@ awful.spawn.with_shell(
     'xrdb -merge <<< "awesome.started:true";' ..
     -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
     'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
-    'killall xcompmgr & xcompmgr -c -l0 -t0 -r0 -o.00;' ..
+    'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
+    -- '/usr/bin/picom;' ..
     '/usr/bin/emacs --daemon;' ..
     '/usr/bin/earlyoom;' ..
     '/usr/bin/dunst;' ..

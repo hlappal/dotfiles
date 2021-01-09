@@ -18,7 +18,7 @@ local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
 -- theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.wallpaper                                 = function()
-                                                    wall_cmd = io.popen("nitrogen --set-zoom-fill --random /home/hlappal/Pictures/Wallpapers/")
+                                                    wall_cmd = io.popen("feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*")
                                                   end
 theme.font                                      = "Mononoki Nerd 9"
 -- theme.fg_normal                                 = "#DDDDFF"
@@ -31,7 +31,7 @@ theme.bg_normal                                 = "#2E3440"
 -- theme.bg_focus                                  = "#313131"
 theme.bg_focus                                  = "#4C566A"
 theme.bg_urgent                                 = "#1A1A1A"
-theme.border_width                              = dpi(1)
+theme.border_width                              = dpi(2)
 theme.border_normal                             = "#3F3F3F"
 theme.border_focus                              = "#7F7F7F"
 theme.border_marked                             = "#CC9393"
