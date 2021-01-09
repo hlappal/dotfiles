@@ -1,0 +1,21 @@
+#alias ls='ls --color=auto'
+#alias ll='ls -l --color=auto'
+alias vi='nvim'
+alias emacs='emacs -nw'
+alias jupyter-lab='jupyter-lab --LabApp.webbrowser_open_new=1'
+alias config="/usr/bin/git --git-dir=/home/hlappal/.cfg/ --work-tree=/home/hlappal"
+
+# rust powered utilities
+alias ls='exa'
+alias ll='exa -l'
+alias la='exa -la'
+alias find='fd'
+alias grep='rg'
+alias du='dust'
+alias cat='bat'
+alias time='hyperfine'
+alias cloc='tokei'
+alias ps='procs'
+#alias sed='sd'
+alias top='btm'
+alias htop='btm'
