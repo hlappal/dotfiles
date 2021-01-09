@@ -7,3 +7,5 @@ end
 eval /home/hlappal/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
+# Enable Starship prompt
+#starship init fish | source
