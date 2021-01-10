@@ -128,7 +128,16 @@ theme.cal = lain.widget.cal({
 })
 
 -- Updates
-local updates = awful.widget.watch('bash -c "yay -Qu | wc -l"', 30)
+local updates = awful.widget.watch(
+    'bash -c "if [[ $(yay -Qu | wc -l) == 0 ]]; then echo ""; else echo $(yay -Qu | wc -l); fi"', 30
+  -- settings = function()
+      -- if widget.status != 0 then
+          -- widget:set_markup.font(theme.font, markup("#7AC82E"))
+      -- else
+          -- widget:set_text("")
+      -- end
+  -- end
+)
 
 -- Mail IMAP check
 local mailicon = wibox.widget.imagebox(theme.widget_mail)
