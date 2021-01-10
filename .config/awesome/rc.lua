@@ -24,8 +24,9 @@ local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
 -- local shifty        = require("awesome-shifty")
 local vicious       = require("vicious")
-local cyclefocus    = require('cyclefocus') --Enable cycling through the most recently used clients with Alt+Tab
+local cyclefocus    = require("cyclefocus") --Enable cycling through the most recently used clients with Alt+Tab
 --local leaved        = require("awesome-leaved")
+local capslock      = require("capslock")
 -- }}}
 
 -- {{{ Error handling
@@ -68,7 +69,7 @@ awful.spawn.with_shell(
     'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
     'xrdb -merge <<< "awesome.started:true";' ..
     -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-    'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
+    -- 'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
     'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
     -- '/usr/bin/picom;' ..
     '/usr/bin/emacs --daemon;' ..
@@ -269,6 +270,9 @@ globalkeys = my_table.join(
     awful.key({ }, "Print", function() os.execute("scrot") end,
               {description = "take a screenshot", group = "hotkeys"}),
 
+    -- Capslock
+    capslock.key,
+
     -- X screen locker
     awful.key({ modkey, }, "l", function () os.execute(scrlocker) end,
               {description = "lock screen", group = "hotkeys"}),
@@ -351,30 +355,29 @@ globalkeys = my_table.join(
               --{description = "focus the next screen", group = "screen"}),
     --awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
               --{description = "focus the previous screen", group = "screen"}),
-    --awful.key({ modkey, }, "u", awful.client.urgent.jumpto,
-              --{description = "jump to urgent client", group = "client"}),
-    --awful.key({ modkey, }, "Tab",
-        --function ()
-            --if cycle_prev then
-                --awful.client.focus.history.previous()
-            --else
-                --awful.client.focus.byidx(-1)
-            --end
-            --if client.focus then
-                --client.focus:raise()
-            --end
-        --end,
-        --{description = "cycle with previous/go back", group = "client"}),
-    --awful.key({ modkey, "Shift" }, "Tab",
-        --function ()
-            --if cycle_prev then
-                --awful.client.focus.byidx(1)
-                --if client.focus then
-                    --client.focus:raise()
-                --end
-            --end
-        --end,
-        --{description = "go forth", group = "client"}),
+    awful.key({ modkey, }, "u", awful.client.urgent.jumpto,
+              {description = "jump to urgent client", group = "client"}),
+    awful.key({ modkey, }, "Tab",
+        function ()
+            if cycle_prev then
+                awful.client.focus.history.previous()
+            else
+                awful.client.focus.byidx(-1)
+            end
+            if client.focus then
+                client.focus:raise()
+            end
+        end,
+        {description = "cycle with previous/go back", group = "client"}), awful.key({ modkey, "Shift" }, "Tab",
+        function ()
+            if cycle_prev then
+                awful.client.focus.byidx(1)
+                if client.focus then
+                    client.focus:raise()
+                end
+            end
+        end,
+        {description = "go forth", group = "client"}),
 
     -- Show/Hide Wibox
     awful.key({ modkey, }, "b", function ()
@@ -425,7 +428,7 @@ globalkeys = my_table.join(
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l", function () awful.tag.incncol(-1, nil, true) end,
               {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey, "Shift" }, "space", function () awful.layout.inc( 1) end,
+    awful.key({ modkey,         }, "space", function () awful.layout.inc( 1) end,
               {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end,
               {description = "select previous", group = "layout"}),
@@ -539,7 +542,7 @@ globalkeys = my_table.join(
               {description = "run browser", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "f", function () awful.spawn(file_manager) end,
               {description = "run file manager", group = "launcher"}),
-    awful.key({ modkey, "Shift" }, "e", function () awful.spawn(gui_editor) end,
+    awful.key({ modkey,         }, "e", function () awful.spawn(gui_editor) end,
               {description = "run gui editor", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "p", function () awful.spawn(pass_menu) end,
               {description = "run lpass menu", group = "launcher"}),

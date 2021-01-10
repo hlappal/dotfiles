@@ -5,21 +5,22 @@
 
 --]]
 
-local gears = require("gears")
-local lain  = require("lain")
-local awful = require("awful")
-local wibox = require("wibox")
-local dpi   = require("beautiful.xresources").apply_dpi
+local gears     = require("gears")
+local lain      = require("lain")
+local awful     = require("awful")
+local wibox     = require("wibox")
+local capslock  = require("capslock")
+local dpi       = require("beautiful.xresources").apply_dpi
 
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
--- theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.wallpaper                                 = function()
-                                                    wall_cmd = io.popen("feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*")
-                                                  end
+theme.wallpaper                                 = theme.dir .. "/wall.png"
+-- theme.wallpaper                                 = function()
+                                                    -- wall_cmd = io.popen("feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*")
+                                                  -- end
 theme.font                                      = "Mononoki Nerd 9"
 -- theme.fg_normal                                 = "#DDDDFF"
 theme.fg_normal                                 = "#88C0D0"
@@ -100,12 +101,12 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 
 -- Caps lock indicator
-local caps_text = "xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 5 | sed 's/on/CAPS/g' | sed 's/off//g'"
-local caps = awful.widget.watch(
-    function(widget, stdout)
-        widget:set_markup(widget .. markup.font(theme.font, stdout))
-    end
-)
+-- local caps_text = "xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 5 | sed 's/on/CAPS/g' | sed 's/off//g'"
+-- local caps = awful.widget.watch(
+    -- function(widget, stdout)
+        -- widget:set_markup(widget .. markup.font(theme.font, stdout))
+    -- end
+-- )
 
 -- Textclock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
@@ -125,6 +126,9 @@ theme.cal = lain.widget.cal({
         bg   = theme.bg_normal
     }
 })
+
+-- Updates
+local updates = awful.widget.watch('bash -c "yay -Qu | wc -l"', 30)
 
 -- Mail IMAP check
 local mailicon = wibox.widget.imagebox(theme.widget_mail)
@@ -331,18 +335,19 @@ function theme.at_screen_connect(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            -- wibox.widget.systray(),
-            -- caps,
+            wibox.widget.systray(),
+            updates,
             -- spr,
             -- arrl_ld,
             -- wibox.container.background(mpdicon, theme.bg_focus),
             -- wibox.container.background(theme.mpd.widget, theme.bg_focus),
             -- arrl_dl,
-            volicon,
-            theme.volume.widget,
+            capslock,
+            -- mailicon,
+            -- theme.mail.widget
             arrl_ld,
-            wibox.container.background(mailicon, theme.bg_focus),
-            --wibox.container.background(theme.mail.widget, theme.bg_focus),
+            wibox.container.background(volicon, theme.bg_focus),
+            wibox.container.background(theme.volume.widget, theme.bg_focus),
             arrl_dl,
             memicon,
             mem.widget,
