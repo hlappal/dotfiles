@@ -72,7 +72,7 @@ awful.spawn.with_shell(
     -- 'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
     'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
     -- '/usr/bin/picom;' ..
-    '/usr/bin/emacs --daemon;' ..
+    -- '/usr/bin/emacs --with-x-toolkit=lucid;' ..
     '/usr/bin/earlyoom;' ..
     '/usr/bin/dunst;' ..
     'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
@@ -101,7 +101,7 @@ local terminal     = "alacritty"
 local vi_focus     = true -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "nvim"
-local gui_editor   = os.getenv("GUI_EDITOR") or "emacsclient -c"
+local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
 local file_manager = os.getenv("FILE_MANAGER") or "nemo"
 local browser      = os.getenv("BROWSER") or "firefox"
 local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons"
