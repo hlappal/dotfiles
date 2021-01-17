@@ -72,7 +72,7 @@ awful.spawn.with_shell(
     -- 'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
     'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
     -- '/usr/bin/picom;' ..
-    -- '/usr/bin/emacs --with-x-toolkit=lucid;' ..
+    -- 'emacs --daemon;' ..
     '/usr/bin/earlyoom;' ..
     '/usr/bin/dunst;' ..
     'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
@@ -103,7 +103,7 @@ local cycle_prev   = true -- cycle trough all previous client or just the first 
 local editor       = os.getenv("EDITOR") or "nvim"
 local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
 local file_manager = os.getenv("FILE_MANAGER") or "nemo"
-local browser      = os.getenv("BROWSER") or "firefox"
+local browser      = os.getenv("BROWSER") or "brave"
 local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons"
 local pass_menu    = os.getenv("PASS_MENU") or "dmenu-lpass-nu"
 local scrlocker    = "slock"
@@ -542,7 +542,7 @@ globalkeys = my_table.join(
               {description = "run browser", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "f", function () awful.spawn(file_manager) end,
               {description = "run file manager", group = "launcher"}),
-    awful.key({ modkey,         }, "e", function () awful.spawn(gui_editor) end,
+    awful.key({ modkey, "Shift" }, "e", function () awful.spawn(gui_editor) end,
               {description = "run gui editor", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "p", function () awful.spawn(pass_menu) end,
               {description = "run lpass menu", group = "launcher"}),
@@ -715,10 +715,10 @@ awful.rules.rules = {
       properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "firefox" },
+    { rule = { class = "Brave-browser" },
       properties = { screen = 1, tag = awful.util.tagnames[1] } },
 
-    { rule = { class = "Google-chrome" },
+    { rule = { class = "Chromium" },
       properties = { screen = 1, tag = awful.util.tagnames[7] } },
 
     { rule = { class = "Mailspring" },
