@@ -715,8 +715,8 @@ awful.rules.rules = {
       properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Brave-browser" },
-      properties = { screen = 1, tag = awful.util.tagnames[1] } },
+    -- { rule = { class = "Brave-browser" },
+      -- properties = { screen = 1, tag = awful.util.tagnames[1] } },
 
     { rule = { class = "Chromium" },
       properties = { screen = 1, tag = awful.util.tagnames[7] } },
