@@ -289,17 +289,17 @@ globalkeys = my_table.join(
               {description = "go back", group = "tag"}),
 
     -- Non-empty tag browsing
-    awful.key({ altkey, "Shift" }, "Left", function () lain.util.tag_view_nonempty(-1) end,
+    awful.key({ modkey, "Ctrl"  }, "Left", function () lain.util.tag_view_nonempty(-1) end,
 	      {description = "view previous nonempty", group = "tag"}),
-    awful.key({ altkey, "Shift" }, "Right", function () lain.util.tag_view_nonempty(1) end,
+    awful.key({ modkey, "Ctrl"  }, "Right", function () lain.util.tag_view_nonempty(1) end,
 	      {description = "view previous nonempty", group = "tag"}),
 
     -- Cycle through recently used clients with Alt+Tab
-    awful.key({ altkey, }, "Tab", function () awful.client.focus.history.previous()
-      if client.focus then
-        client.focus:raise()
-      end
-    end),
+    -- awful.key({ altkey, }, "Tab", function () awful.client.focus.history.previous()
+      -- if client.focus then
+        -- client.focus:raise()
+      -- end
+    -- end),
 
     -- Default client focus
     awful.key({ modkey, }, "j",
