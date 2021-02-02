@@ -56,10 +56,13 @@
 (package! exwm)
 
 ;; Thesaurus backend
-(package! synosaurus)
+;; (package! synosaurus)
 
 ;; Helm-bibtex
 (package! helm-bibtex)
 
 ;; Helm Spotify Plus
 (package! helm-spotify-plus)
+
+;; Tabnine autocomplete
+(package! company-tabnine)
