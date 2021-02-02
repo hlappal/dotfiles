@@ -5,6 +5,9 @@
 
 --]]
 
+-- Hide tmux hotkeys from showing in the hotkeys_popup
+package.loaded["awful.hotkeys_popup.keys.tmux"] = {}
+
 -- {{{ Required libraries
 local awesome, client, mouse, screen, tag = awesome, client, mouse, screen, tag
 local ipairs, string, os, table, tostring, tonumber, type = ipairs, string, os, table, tostring, tonumber, type
@@ -62,19 +65,23 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+run_once({
+  "urxvtd",
+  "unclutter -root",
+  "killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00",
+  "earlyoom",
+  "dunst",
+  "emacs --daemon"
+}) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 awful.spawn.with_shell(
     'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
     'xrdb -merge <<< "awesome.started:true";' ..
     -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-    -- 'feh --bg-fill --randomize /home/hlappal/Pictures/Wallpapers/*;' ..
-    'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
-    -- '/usr/bin/picom;' ..
-    -- 'emacs --daemon;' ..
-    '/usr/bin/earlyoom;' ..
-    '/usr/bin/dunst;' ..
+    -- 'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
+    -- '/usr/bin/earlyoom;' ..
+    -- '/usr/bin/dunst;' ..
     'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
 )
 -- }}}
@@ -101,7 +108,7 @@ local terminal     = "alacritty"
 local vi_focus     = true -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "nvim"
-local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
+local gui_editor   = os.getenv("GUI_EDITOR") or "emacsclient -c"
 local file_manager = os.getenv("FILE_MANAGER") or "nemo"
 local browser      = os.getenv("BROWSER") or "brave"
 local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons"
@@ -112,28 +119,28 @@ awful.util.terminal = "alacritty"
 -- Symbols from https://fontawesome.com/cheatsheet 
 awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: ", "7: ", "8: ", "9: " }
 awful.layout.layouts = {
-    --awful.layout.suit.spiral,
-    awful.layout.suit.tile,
-    awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.tile.left,
-    --awful.layout.suit.tile.bottom,
-    --awful.layout.suit.tile.top,
-    --awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.spiral,
+
+    -- awful.layout.suit.spiral.dwindle,
+    -- awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.top,
+    -- awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
-    --awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
-    --awful.layout.suit.floating,
-    --awful.layout.suit.fair,
-    --awful.layout.suit.corner.nw,
-    --awful.layout.suit.corner.ne,
-    --awful.layout.suit.corner.sw,
-    --awful.layout.suit.corner.se,
-    --lain.layout.cascade,
-    --lain.layout.cascade.tile,
-    --lain.layout.centerwork,
-    --lain.layout.centerwork.horizontal,
-    --lain.layout.termfair,
-    --lain.layout.termfair.center,
+    -- awful.layout.suit.max.fullscreen,
+    -- awful.layout.suit.magnifier,
+    -- awful.layout.suit.floating,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.corner.nw,
+    -- awful.layout.suit.corner.ne,
+    -- awful.layout.suit.corner.sw,
+    -- awful.layout.suit.corner.se,
+    -- lain.layout.cascade,
+    -- lain.layout.cascade.tile,
+    lain.layout.centerwork,
+    -- lain.layout.centerwork.horizontal,
+    -- lain.layout.termfair,
+    -- lain.layout.termfair.center,
 }
 
 awful.util.taglist_buttons = my_table.join(
@@ -274,7 +281,7 @@ globalkeys = my_table.join(
     capslock.key,
 
     -- X screen locker
-    awful.key({ modkey, }, "l", function () os.execute(scrlocker) end,
+    awful.key({ "Ctrl", altkey, }, "l", function () os.execute(scrlocker) end,
               {description = "lock screen", group = "hotkeys"}),
 
     -- Hotkeys
@@ -357,27 +364,27 @@ globalkeys = my_table.join(
               --{description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey, }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey, }, "Tab",
-        function ()
-            if cycle_prev then
-                awful.client.focus.history.previous()
-            else
-                awful.client.focus.byidx(-1)
-            end
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "cycle with previous/go back", group = "client"}), awful.key({ modkey, "Shift" }, "Tab",
-        function ()
-            if cycle_prev then
-                awful.client.focus.byidx(1)
-                if client.focus then
-                    client.focus:raise()
-                end
-            end
-        end,
-        {description = "go forth", group = "client"}),
+    -- awful.key({ modkey, }, "Tab",
+        -- function ()
+            -- if cycle_prev then
+                -- awful.client.focus.history.previous()
+            -- else
+                -- awful.client.focus.byidx(-1)
+            -- end
+            -- if client.focus then
+                -- client.focus:raise()
+            -- end
+        -- end,
+        -- {description = "cycle with previous/go back", group = "client"}), awful.key({ modkey, "Shift" }, "Tab",
+        -- function ()
+            -- if cycle_prev then
+                -- awful.client.focus.byidx(1)
+                -- if client.focus then
+                    -- client.focus:raise()
+                -- end
+            -- end
+        -- end,
+        -- {description = "go forth", group = "client"}),
 
     -- Show/Hide Wibox
     awful.key({ modkey, }, "b", function ()
@@ -411,6 +418,12 @@ globalkeys = my_table.join(
     -- Standard program
     awful.key({ modkey, }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+    awful.key({ "Control", altkey, }, "t", function () awful.spawn("alacritty", {
+                floating = true,
+                width = 300,
+                height = 200,
+                placement = awful.placement.top_right }) end,
+              {description = "open a floating terminal", group = "launcher" }),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift" }, "q", awesome.quit,
@@ -546,10 +559,13 @@ globalkeys = my_table.join(
               {description = "run gui editor", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "p", function () awful.spawn(pass_menu) end,
               {description = "run lpass menu", group = "launcher"}),
+    awful.key({ modkey, "Shift" }, "m", function () awful.spawn(
+      'brave --new-window "https://mail.aalto.fi" "https://gmail.com" "https://protonmail.com"') end,
+              {description = "open mail clients", group = "launcher"}),
 
     -- Default
     -- Menubar
-    awful.key({ modkey, "Shift" }, "m", function() menubar.show() end,
+    awful.key({ modkey, "Shift" }, "i", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
     --[[ dmenu
     awful.key({ modkey, }, "x", function ()

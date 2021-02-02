@@ -345,13 +345,15 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
-            updates,
+            arrl_ld,
+            wibox.container.background(capslock, theme.bg_focus),
+            arrl_dl,
             -- spr,
             -- arrl_ld,
             -- wibox.container.background(mpdicon, theme.bg_focus),
             -- wibox.container.background(theme.mpd.widget, theme.bg_focus),
             -- arrl_dl,
-            capslock,
+            updates,
             -- mailicon,
             -- theme.mail.widget
             arrl_ld,
