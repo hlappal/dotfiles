@@ -49,11 +49,8 @@ URxvt.scrollBar: false
 !URxvt.cursorColor: white
 
 !! Extensions
-URxvt.perl-ext-common: default,matcher,resize-font,url-select,keyboard-select,clipboard
+! URxvt.perl-ext-common: default,matcher,resize-font,url-select,keyboard-select,clipboard
 !URxvt.colorUL: #4682B4
-! resize-font
-URxvt.resize-font.smaller: C-j
-URxvt.resize-font.bigger:  C-k
 
 URxvt*depth: 32
 
@@ -61,81 +58,81 @@ URxvt*depth: 32
 !! Colorschemes
 
 !! special
-!URxvt*foreground:  #cec8c1
-!URxvt*background:  #303030
-!URxvt*cursorColor: #afbfbf
-!
-!! black
-!*.color0: #263640
-!*.color8: #4a697d
-!
-!! red
-!*.color1: #d12f2c
-!*.color9: #fa3935
-!
-!! green
-!*.color2: #819400
-!*.color10: #a4bd00
-!
-!! yellow
-!*.color3: #b08500
-!*.color11: #d9a400
-!
-!! blue
-!*.color4: #2587cc
-!*.color12: #2ca2f5
-!
-!! magenta
-!*.color5: #696ebf
-!*.color13: #8086e8
-!
-!! cyan
-!*.color6: #289c93
-!*.color14: #33c5ba
-!
-!! white
-!*.color7: #bfbaac
-!*.color15: #fdf6e3
+URxvt*foreground:  #cec8c1
+URxvt*background:  #303030
+URxvt*cursorColor: #afbfbf
 
-! Nord colorsheme
-! Repository: https://github.com/arcticicestudio/nord-xresources
+! black
+*.color0: #263640
+*.color8: #4a697d
 
-#define nord0 #2E3440
-#define nord1 #3B4252
-#define nord2 #434C5E
-#define nord3 #4C566A
-#define nord4 #D8DEE9
-#define nord5 #E5E9F0
-#define nord6 #ECEFF4
-#define nord7 #8FBCBB
-#define nord8 #88C0D0
-#define nord9 #81A1C1
-#define nord10 #5E81AC
-#define nord11 #BF616A
-#define nord12 #D08770
-#define nord13 #EBCB8B
-#define nord14 #A3BE8C
-#define nord15 #B48EAD
+! red
+*.color1: #d12f2c
+*.color9: #fa3935
 
-*.foreground:   nord4
-*.background:   nord0
-*.cursorColor:  nord4
-*fading: 35
-*fadeColor: nord3
+! green
+*.color2: #819400
+*.color10: #a4bd00
 
-*.color0: nord1
-*.color1: nord11
-*.color2: nord14
-*.color3: nord13
-*.color4: nord9
-*.color5: nord15
-*.color6: nord8
-*.color7: nord5
-*.color8: nord3
-*.color9: nord11
-*.color10: nord14
-*.color11: nord13
-*.color12: nord9
-*.color13: nord15
-*.color14: nord7
-*.color15: nord6
+! yellow
+*.color3: #b08500
+*.color11: #d9a400
+
+! blue
+*.color4: #2587cc
+*.color12: #2ca2f5
+
+! magenta
+*.color5: #696ebf
+*.color13: #8086e8
+
+! cyan
+*.color6: #289c93
+*.color14: #33c5ba
+
+! white
+*.color7: #bfbaac
+*.color15: #fdf6e3
+
+! ! Nord colorsheme
+! ! Repository: https://github.com/arcticicestudio/nord-xresources
+! 
+! #define nord0 #2E3440
+! #define nord1 #3B4252
+! #define nord2 #434C5E
+! #define nord3 #4C566A
+! #define nord4 #D8DEE9
+! #define nord5 #E5E9F0
+! #define nord6 #ECEFF4
+! #define nord7 #8FBCBB
+! #define nord8 #88C0D0
+! #define nord9 #81A1C1
+! #define nord10 #5E81AC
+! #define nord11 #BF616A
+! #define nord12 #D08770
+! #define nord13 #EBCB8B
+! #define nord14 #A3BE8C
+! #define nord15 #B48EAD
+! 
+! *.foreground:   nord4
+! *.background:   nord0
+! *.cursorColor:  nord4
+! *fading: 35
+! *fadeColor: nord3
+! 
+! *.color0: nord1
+! *.color1: nord11
+! *.color2: nord14
+! *.color3: nord13
+! *.color4: nord9
+! *.color5: nord15
+! *.color6: nord8
+! *.color7: nord5
+! *.color8: nord3
+! *.color9: nord11
+! *.color10: nord14
+! *.color11: nord13
+! *.color12: nord9
+! *.color13: nord15
+! *.color14: nord7
+! *.color15: nord6
