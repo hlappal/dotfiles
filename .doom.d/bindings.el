@@ -5,6 +5,11 @@
       :desc "Comment line"
       "c l" #'comment-line)
 
+;; Open calculator
+(map! :leader
+      :desc "Open calculator"
+      "o c" #'calc)
+
 ;; Treemacs
 (map! :leader
       :desc "Toggle Treemacs"
