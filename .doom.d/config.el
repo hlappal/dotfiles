@@ -26,8 +26,58 @@
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-nord)
+;; `load-theme' function. This is the default: (setq doom-theme 'doom-nord)
+;; Available themse:
+;;   doom-one
+;;   doom-one-light
+;;   doom-vibrant
+;;   doom-acario-dark
+;;   doom-acario-light
+;;   doom-city-lights
+;;   doom-challenger-deep
+;;   doom-dark+
+;;   doom-dracula
+;;   doom-ephemeral
+;;   doom-fairy-floss
+;;   doom-flatwhite
+;;   doom-gruvbox
+;;   doom-gruvbox-light
+;;   doom-henna
+;;   doom-horizon
+;;   doom-Iosvkem
+;;   doom-laserwave
+;;   doom-material
+;;   doom-manegarm
+;;   doom-miramare
+;;   doom-molokai
+;;   doom-monokai-classic
+;;   doom-monokai-pro
+;;   doom-moonlight
+;;   doom-nord
+;;   doom-nord-light
+;;   doom-nova
+;;   doom-oceanic-next
+;;   doom-old-hope
+;;   doom-opera
+;;   doom-opera-light
+;;   doom-outrun-electric
+;;   doom-palenight
+;;   doom-plain
+;;   doom-peacock
+;;   doom-rouge
+;;   doom-snazzy
+;;   doom-solarized-dark
+;;   doom-solarized-light
+;;   doom-sourcerer
+;;   doom-spacegrey
+;;   doom-tomorrow-day
+;;   doom-tomorrow-night
+;;   doom-wilmersdorf
+;;   doom-zenburn
+;;   (unavailable) doom-mono-dark
+;;   (unavailable) doom-mono-light
+;;   (unavailable) doom-tron
+(setq doom-theme 'doom-Iosvkem)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -58,6 +108,11 @@
 (setq select-enable-primary t)
 ;; (setq select-enable-clipboard nil)
 (setq select-active-regions t)
+
+;; Tabnine config
+(add-to-list 'company-backends #'company-tabnine)
+(setq company-idle-delay 0)
+(setq company-show-numbers t)
 
 ;; ;; Config Emacs as X window manager
 ;; (require 'exwm)
