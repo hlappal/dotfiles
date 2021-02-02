@@ -1,16 +1,23 @@
-------------------------------------------------------------------------------
--- __  __                                _
--- \ \/ /_ __ ___   ___  _ __   __ _  __| |
---  \  /| '_ ` _ \ / _ \| '_ \ / _` |/ _` |
---  /  \| | | | | | (_) | | | | (_| | (_| |
--- /_/\_\_| |_| |_|\___/|_| |_|\__,_|\__,_|
--- 
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--
+--    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+--    ░   ░░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   ░
+--    ▒▒   ▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ▒
+--    ▒▒▒   ▒   ▒▒▒▒    ▒   ▒   ▒▒▒▒▒   ▒▒▒▒▒   ▒   ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒▒   ▒
+--    ▓▓▓▓▓   ▓▓▓▓▓▓▓   ▓▓  ▓▓   ▓▓   ▓▓   ▓▓▓   ▓▓   ▓▓   ▓▓   ▓▓▓   ▓   ▓
+--    ▓▓▓   ▓   ▓▓▓▓▓   ▓▓  ▓▓   ▓   ▓▓▓▓   ▓▓   ▓▓   ▓   ▓▓▓   ▓▓  ▓▓▓   ▓
+--    ▓▓   ▓▓▓   ▓▓▓▓   ▓▓  ▓▓   ▓▓   ▓▓   ▓▓▓   ▓▓   ▓   ▓▓▓   ▓▓  ▓▓▓   ▓
+--    █   ██████   █    ██  ██   ████   █████    ██   ███   █    ██   █   █
+--    █████████████████████████████████████████████████████████████████████
+--
+-- Heikki Lappalainen ( https://github.com/hlappal )
+--
+--------------------------------------------------------------------------------
 
-
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- IMPORTS
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 -- Base
 import XMonad
 import System.IO (hPutStrLn)
@@ -288,8 +295,8 @@ myKeys =
     , ("M-<Return>", spawn (myTerminal))
 
     -- Run Prompt
-    , ("M-S-<Return>", shellPrompt myXPConfig)
-    , ("M-<F2>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -font \"hack 10\" -show combi -icon-theme \"Papirus\" -show-icons")
+    , ("M-<F2>", shellPrompt myXPConfig)
+    , ("M-S-<Return>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons")
     
     -- Windows
     , ("M-f", sendMessage (T.Toggle "floats"))
@@ -425,12 +432,12 @@ mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 tall     = renamed [Replace "tall"]
            $ limitWindows 12
-           -- $ mySpacing 3
+           $ mySpacing 3
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ magnifier
            $ limitWindows 12
-           -- $ mySpacing 3
+           $ mySpacing 3
            $ ResizableTall 1 (3/00) (1/2) []
 oneBig   = renamed [Replace "oneBig"]
            $ limitWindows 6
@@ -438,30 +445,33 @@ oneBig   = renamed [Replace "oneBig"]
            $ mkToggle (single MIRROR)
            $ mkToggle (single REFLECTX)
            $ mkToggle (single REFLECTY)
+           $ mySpacing' 3
            $ OneBig (5/9) (8/12)
 monocle  = renamed [Replace "monocle"]
            $ limitWindows 20
+           $ mySpacing' 3
            $ Full
 floats   = renamed [Replace "floats"]
            $ limitWindows 20 simplestFloat
 grid     = renamed [Replace "grid"]
            $ limitWindows 12
-           -- $ mySpacing 3
+           $ mySpacing 3
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals  = renamed [Replace "spirals"]
-           -- $ mySpacing' 3
+           $ mySpacing' 3
            $ spiral (6/7)
 threeCol = renamed [Replace "threeCol"]
            $ limitWindows 7
-           -- $ mySpacing' 4
+           $ mySpacing' 3
            $ ThreeCol 1 (3/100) (1/2)
 threeRow = renamed [Replace "threeRow"]
            $ limitWindows 7
-           -- $ mySpacing' 4
+           $ mySpacing' 3
            $ Mirror
            $ ThreeCol 1 (3/100) (1/2)
 tabs     = renamed [Replace "tabs"]
+           $ mySpacing' 3
            $ tabbed shrinkText myTabConfig
   where
     myTabConfig = def { fontName            = myFont
