@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH:$HOME/.cargo/bin
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH:$HOME/.cargo/bin:$HOME//home/hlappal/.local/share/gem/ruby/2.7.0/
 
 export CLASSPATH=$CLASSPATH:$HOME/projects/algorithms/algs4.jar
 
