@@ -10,7 +10,7 @@
 --    █   ██████   █    ██  ██   ████   █████    ██   ███   █    ██   █   █
 --    █████████████████████████████████████████████████████████████████████
 --
--- Heikki Lappalainen ( https://github.com/hlappal )
+--    Heikki Lappalainen ( https://github.com/hlappal )
 --
 --------------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ myTerminal :: String
 myTerminal = "alacritty" -- Sets default terminal
 
 myBorderWidth :: Dimension
-myBorderWidth = 1 -- Sets border width for windows
+myBorderWidth = 2 -- Sets border width for windows
 
 -- Color scheme implemented from Nord
 myNormColor :: String
