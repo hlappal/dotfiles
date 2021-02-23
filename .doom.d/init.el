@@ -26,11 +26,11 @@
        ;;ivy               ; a search engine for love and life
 
        :ui
-       ;;deft              ; notational velocity for Emacs
+       deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; 🙂
+       (emoji +unicode)  ; 🙂
        fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
@@ -68,7 +68,7 @@
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;;ibuffer         ; interactive buffer management
+       ibuffer           ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
@@ -87,13 +87,13 @@
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ein               ; tame Jupyter notebooks with emacs
-       (eval +overlay)     ; run code, run (also, repls)
+       (eval +overlay)   ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
-       lookup              ; navigate your code and its documentation
-       ;;lsp
+       lookup            ; navigate your code and its documentation
+       lsp
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -101,13 +101,13 @@
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
        taskrunner        ; taskrunner for all your projects
-       ;;terraform         ; infrastructure as code
+       terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -135,13 +135,13 @@
        json              ; At least it ain't XML
        (java +meghanada) ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;julia             ; a better, faster MATLAB
+       julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        latex             ; writing papers in Emacs has never been so fun
        ;;lean
        ;;factor
-       ;;ledger            ; an accounting system in Emacs
-       ;;lua               ; one-based indices? one-based indices
+       ledger            ; an accounting system in Emacs
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"

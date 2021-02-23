@@ -77,12 +77,12 @@
 ;;   (unavailable) doom-mono-dark
 ;;   (unavailable) doom-mono-light
 ;;   (unavailable) doom-tron
-(setq doom-theme 'doom-Iosvkem)
+(setq doom-theme 'doom-sourcerer)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 ;; NOTE: DROPBOX POISSA KÄYTÖSTÄ
-;;(setq org-directory "~/Dropbox/org/")
+;; (setq org-directory "~/Dropbox/org/")
 
 ;; Open Org Agenda at startup
 ;;(add-hook 'after-init-hook 'org-agenda-list)
@@ -92,6 +92,7 @@
 (setq display-line-numbers-type 'relative)
 
 ;; Helm-bibtex
+;; "SPC m b" to open bibliography.bib file in the current directory
 (autoload 'helm-bibtex "helm-bibtex" "" t)
 (setq bibtex-completion-bibliography
       '("./bibliography.bib"))
@@ -100,7 +101,7 @@
 ;; (minimap-mode 1)
 
 ;; Enable minimap in LaTeX mode
-;;(setq minimap-major-modes '(prog-mode latex-mode))
+;; (setq minimap-major-modes '(prog-mode latex-mode))
 
 ;; Set Emacs to save temporarily active regions (selected with mouse) into
 ;; primary selection
@@ -110,9 +111,12 @@
 (setq select-active-regions t)
 
 ;; Tabnine config
-(add-to-list 'company-backends #'company-tabnine)
-(setq company-idle-delay 0)
-(setq company-show-numbers t)
+;; (add-to-list 'company-backends #'company-tabnine)
+;; (setq company-idle-delay 0)
+;; (setq company-show-numbers t)
+
+;; Set path for project search
+(setq projectile-project-search-path '("~/projects/"))
 
 ;; ;; Config Emacs as X window manager
 ;; (require 'exwm)

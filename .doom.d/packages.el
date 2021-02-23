@@ -65,4 +65,4 @@
 (package! helm-spotify-plus)
 
 ;; Tabnine autocomplete
-(package! company-tabnine)
+;; (package! company-tabnine)
