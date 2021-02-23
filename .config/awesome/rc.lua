@@ -1,219 +1,188 @@
---[[
+-------------------------------------------------------------------------------
+--
+--        ▄▄▄      █     █░ ▓█████  ██████  ▒█████   ███▄ ▄███▓ ▓█████
+--       ▒████▄   ▓█░ █ ░█░ ▓█   ▀▒██    ▒ ▒██▒  ██▒▓██▒▀█▀ ██▒ ▓█   ▀
+--       ▒██  ▀█▄ ▒█░ █ ░█  ▒███  ░ ▓██▄   ▒██░  ██▒▓██    ▓██░ ▒███
+--       ░██▄▄▄▄██░█░ █ ░█  ▒▓█  ▄  ▒   ██▒▒██   ██░▒██    ▒██  ▒▓█  ▄
+--        ▓█   ▓██░░██▒██▓ ▒░▒████▒██████▒▒░ ████▓▒░▒██▒   ░██▒▒░▒████
+--        ▒▒   ▓▒█░ ▓░▒ ▒  ░░░ ▒░ ▒ ▒▓▒ ▒ ░░ ▒░▒░▒░ ░ ▒░   ░  ░░░░ ▒░
+--         ░   ▒▒   ▒ ░ ░  ░ ░ ░  ░ ░▒  ░ ░  ░ ▒ ▒░ ░  ░      ░░ ░ ░
+--         ░   ▒    ░   ░      ░  ░  ░  ░  ░ ░ ░ ▒  ░      ░       ░
+--             ░      ░    ░   ░        ░      ░ ░         ░   ░   ░
+--
+--  My Awesome config
+--  Heikki Lappalainen ( github.com/hlappal )
+--
+-------------------------------------------------------------------------------
 
-     Awesome WM configuration template
-     github.com/lcpz
 
---]]
+-------------------------------------------------------------------------------
+-- Required libraries
+-------------------------------------------------------------------------------
 
--- Hide tmux hotkeys from showing in the hotkeys_popup
-package.loaded["awful.hotkeys_popup.keys.tmux"] = {}
+local gears         = require("gears")                      -- Utilities such as color parsing and objects
+local awful         = require("awful")                      -- Everything related to window managment
+                      require("awful.autofocus")
+local wibox         = require("wibox")                      -- Awesome own generic widget framework
+local beautiful     = require("beautiful")                  -- Awesome theme module
+local naughty       = require("naughty")                    -- Notifications
+-- local ruled         = require("ruled")                      -- Declarative object management
+local menubar       = require("menubar")                    -- Declarative object management
+local hotkeys_popup = require("awful.hotkeys_popup").widget -- Enable hotkeys help widget for VIM and other apps
+                      require("awful.hotkeys_popup.keys")   -- when client with a matching name is opened
+package.loaded["awful.hotkeys_popup.keys.tmux"] = {}        -- Hide tmux hotkeys from showing in the hotkeys popup
 
--- {{{ Required libraries
+
 local awesome, client, mouse, screen, tag = awesome, client, mouse, screen, tag
 local ipairs, string, os, table, tostring, tonumber, type = ipairs, string, os, table, tostring, tonumber, type
 
-local gears         = require("gears")
-local awful         = require("awful")
-                      require("awful.autofocus")
-local wibox         = require("wibox")
-local beautiful     = require("beautiful")
-local naughty       = require("naughty")
 local lain          = require("lain")
-local menubar       = require("menubar")
 local freedesktop   = require("freedesktop")
-local hotkeys_popup = require("awful.hotkeys_popup").widget
-                      require("awful.hotkeys_popup.keys")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
 -- local shifty        = require("awesome-shifty")
 local vicious       = require("vicious")
-local cyclefocus    = require("cyclefocus") --Enable cycling through the most recently used clients with Alt+Tab
 --local leaved        = require("awesome-leaved")
 local capslock      = require("capslock")
--- }}}
 
--- {{{ Error handling
+-------------------------------------------------------------------------------
+-- Error handling
+-------------------------------------------------------------------------------
+
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
+  naughty.notify({
+      preset = naughty.config.presets.critical,
+      title = "Oops, there were errors during startup!",
+      text = awesome.startup_errors
+  })
 end
 
 -- Handle runtime errors after startup
 do
-    local in_error = false
-    awesome.connect_signal("debug::error", function (err)
-        if in_error then return end
-        in_error = true
-
-        naughty.notify({ preset = naughty.config.presets.critical,
-                         title = "Oops, an error happened!",
-                         text = tostring(err) })
-        in_error = false
-    end)
+  local in_error = false
+  awesome.connect_signal(
+    "debug::error", function (err)
+      if in_error then return end
+      in_error = true
+      naughty.notify({
+          preset = naughty.config.presets.critical,
+          title = "Oops, an error happened!",
+          text = tostring(err)
+      })
+      in_error = false
+  end)
 end
--- }}}
 
--- {{{ Autostart windowless processes
+-------------------------------------------------------------------------------
+-- Autostart
+-------------------------------------------------------------------------------
 
 -- This function will run once every time Awesome is started
 local function run_once(cmd_arr)
-    for _, cmd in ipairs(cmd_arr) do
-        awful.spawn.with_shell(string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd))
-    end
+  for _, cmd in ipairs(cmd_arr) do
+    awful.spawn.with_shell(
+      string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd)
+    )
+  end
 end
 
+-- Programs to run in autostart
 run_once({
   "urxvtd",
   "unclutter -root",
-  "killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00",
   "earlyoom",
   "dunst",
   "emacs --daemon"
-}) -- entries must be separated by commas
+})
 
 -- This function implements the XDG autostart specification
 awful.spawn.with_shell(
-    'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
-    'xrdb -merge <<< "awesome.started:true";' ..
-    -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-    -- 'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
-    -- '/usr/bin/earlyoom;' ..
-    -- '/usr/bin/dunst;' ..
-    'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
+  'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;'
+  .. 'xrdb -merge <<< "awesome.started:true";' ..
+  -- list each of your autostart commands, followed by ; inside single quotes,
+  -- followed by ..
+  'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
+  'dex --environment Awesome --autostart \
+  --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"'
+  -- https://github.com/jceb/dex
 )
--- }}}
 
--- {{{ Variable definitions
+-------------------------------------------------------------------------------
+-- Variables
+-------------------------------------------------------------------------------
 
-local themes = {
-    "blackburn",       -- 1
-    "copland",         -- 2
-    "dremora",         -- 3
-    "holo",            -- 4
-    "multicolor",      -- 5
-    "powerarrow",      -- 6
-    "powerarrow-dark", -- 7
-    "rainbow",         -- 8
-    "steamburn",       -- 9
-    "vertex",          -- 10
-}
-
-local chosen_theme = themes[7]
+local chosen_theme = "darcsome"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "alacritty"
-local vi_focus     = true -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
-local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
+local vi_focus     = true -- vi-like client focus
+local cycle_prev   = false -- cycle trough all previous clients or just the
+                           -- first
 local editor       = os.getenv("EDITOR") or "nvim"
-local gui_editor   = os.getenv("GUI_EDITOR") or "emacsclient -c"
+local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
 local file_manager = os.getenv("FILE_MANAGER") or "nemo"
 local browser      = os.getenv("BROWSER") or "brave"
-local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons"
+local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh \
+                                           -theme solarized -show combi \
+                                           -icon-theme \"Papirus\" -show-icons"
 local pass_menu    = os.getenv("PASS_MENU") or "dmenu-lpass-nu"
 local scrlocker    = "slock"
 
-awful.util.terminal = "alacritty"
--- Symbols from https://fontawesome.com/cheatsheet 
-awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: ", "7: ", "8: ", "9: " }
-awful.layout.layouts = {
-    -- awful.layout.suit.spiral,
+-- Set terminal for applications that require it
+awful.util.terminal = terminal
+menubar.utils.terminal = terminal
 
-    -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
-    -- awful.layout.suit.fair.horizontal,
-    awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
-    -- awful.layout.suit.magnifier,
-    -- awful.layout.suit.floating,
-    -- awful.layout.suit.fair,
-    -- awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.sw,
-    -- awful.layout.suit.corner.se,
-    -- lain.layout.cascade,
-    -- lain.layout.cascade.tile,
-    lain.layout.centerwork,
-    -- lain.layout.centerwork.horizontal,
-    -- lain.layout.termfair,
-    -- lain.layout.termfair.center,
-}
+-------------------------------------------------------------------------------
+-- Tags and layouts
+-------------------------------------------------------------------------------
 
-awful.util.taglist_buttons = my_table.join(
-    awful.button({ }, 1, function(t) t:view_only() end),
-    awful.button({ modkey, }, 1, function(t)
-        if client.focus then
-            client.focus:move_to_tag(t)
-        end
-    end),
-    awful.button({ }, 3, awful.tag.viewtoggle),
-    awful.button({ modkey, }, 3, function(t)
-        if client.focus then
-            client.focus:toggle_tag(t)
-        end
-    end),
-    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
-)
+-- Tag names ( symbols from https://fontawesome.com/cheatsheet )
+awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: ",
+                        "7: ", "8: ", "9: " }
 
-awful.util.tasklist_buttons = my_table.join(
-    awful.button({ }, 1, function (c)
-        if c == client.focus then
-            c.minimized = true
-        else
-            --c:emit_signal("request::activate", "tasklist", {raise = true})<Paste>
+-- Selected default layouts
+tag.connect_signal(
+  "request::default_layouts", function()
+    awful.layout.append_default_layouts({
+        awful.layout.suit.tile, -- 1
+        awful.layout.suit.tile, -- 2
+        awful.layout.suit.tile, -- 3
+        awful.layout.suit.max,  -- 4
+        awful.layout.suit.max,  -- 5
+        awful.layout.suit.max,  -- 6
+        awful.layout.suit.tile, -- 7
+        awful.layout.suit.tile, -- 8
+        awful.layout.suit.tile, -- 9
+    })
+end)
 
-            -- Without this, the following
-            -- :isvisible() makes no sense
-            c.minimized = false
-            if not c:isvisible() and c.first_tag then
-                c.first_tag:view_only()
-            end
-            -- This will also un-minimize
-            -- the client, if needed
-            client.focus = c
-            c:raise()
-        end
-    end),
-    awful.button({ }, 2, function (c) c:kill() end),
-    awful.button({ }, 3, function ()
-        local instance = nil
+-- -- Pop-up for layout selection
+-- awful.popup {
+--     widget = awful.widget.layoutlist {
+--         screen      = 1,
+--         base_layout = wibox.layout.flex.vertical
+--     },
+--     maximum_height = #awful.layout.layouts * 24,
+--     minimum_height = #awful.layout.layouts * 24,
+--     placement      = awful.placement.centered,
+-- }
 
-        return function ()
-            if instance and instance.wibox.visible then
-                instance:hide()
-                instance = nil
-            else
-                instance = awful.menu.clients({theme = {width = dpi(250)}})
-            end
-        end
-    end),
-    awful.button({ }, 4, function () awful.client.focus.byidx(1) end),
-    awful.button({ }, 5, function () awful.client.focus.byidx(-1) end)
-)
+beautiful.init(
+  string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"),
+                chosen_theme))
 
-lain.layout.termfair.nmaster           = 3
-lain.layout.termfair.ncol              = 1
-lain.layout.termfair.center.nmaster    = 3
-lain.layout.termfair.center.ncol       = 1
-lain.layout.cascade.tile.offset_x      = dpi(2)
-lain.layout.cascade.tile.offset_y      = dpi(32)
-lain.layout.cascade.tile.extra_padding = dpi(5)
-lain.layout.cascade.tile.nmaster       = 5
-lain.layout.cascade.tile.ncol          = 2
 
-beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
--- }}}
+-------------------------------------------------------------------------------
+-- Menu
+-------------------------------------------------------------------------------
 
--- {{{ Menu
 local myawesomemenu = {
     { "hotkeys", function() return false, hotkeys_popup.show_help end },
     { "manual", terminal .. " -e man awesome" },
-    { "edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
+    { "edit config", string.format("%s -e %s %s",
+                                   terminal, editor, awesome.conffile) },
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end }
 }
@@ -229,13 +198,18 @@ awful.util.mymainmenu = freedesktop.menu.build({
     }
 })
 -- hide menu when mouse leaves it
---awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function() awful.util.mymainmenu:hide() end)
+-- awful.util.mymainmenu.wibox:connect_signal(
+--   "mouse::leave", function() awful.util.mymainmenu:hide()
+-- end)
 
---menubar.utils.terminal = terminal -- Set the Menubar terminal for applications that require it
--- }}}
+-- menubar.utils.terminal = terminal -- Set the Menubar terminal for
+--                                   -- applications that require it
 
--- {{{ Screen
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
+-------------------------------------------------------------------------------
+-- Screen
+-------------------------------------------------------------------------------
+
+-- Re-set wallpaper when a screen's geometry changes
 screen.connect_signal("property::geometry", function(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -260,18 +234,24 @@ screen.connect_signal("arrange", function (s)
     end
 end)
 -- Create a wibox for each screen and add it
-awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
--- }}}
+awful.screen.connect_for_each_screen(
+  function(s) beautiful.at_screen_connect(s)
+end)
 
--- {{{ Mouse bindings
+-------------------------------------------------------------------------------
+-- Mouse bindings
+-------------------------------------------------------------------------------
+
 root.buttons(my_table.join(
     awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
--- }}}
 
--- {{{ Key bindings
+-------------------------------------------------------------------------------
+-- Keybindings
+-------------------------------------------------------------------------------
+
 globalkeys = my_table.join(
     -- Take a screenshot
     awful.key({ }, "Print", function() os.execute("scrot") end,
@@ -296,17 +276,12 @@ globalkeys = my_table.join(
               {description = "go back", group = "tag"}),
 
     -- Non-empty tag browsing
-    awful.key({ modkey, "Ctrl"  }, "Left", function () lain.util.tag_view_nonempty(-1) end,
+    awful.key({ modkey, "Ctrl"  }, "Left", function ()
+        lain.util.tag_view_nonempty(-1) end,
 	      {description = "view previous nonempty", group = "tag"}),
-    awful.key({ modkey, "Ctrl"  }, "Right", function () lain.util.tag_view_nonempty(1) end,
+    awful.key({ modkey, "Ctrl"  }, "Right", function ()
+        lain.util.tag_view_nonempty(1) end,
 	      {description = "view previous nonempty", group = "tag"}),
-
-    -- Cycle through recently used clients with Alt+Tab
-    -- awful.key({ altkey, }, "Tab", function () awful.client.focus.history.previous()
-      -- if client.focus then
-        -- client.focus:raise()
-      -- end
-    -- end),
 
     -- Default client focus
     awful.key({ modkey, }, "j",
@@ -322,80 +297,70 @@ globalkeys = my_table.join(
         {description = "focus previous by index", group = "client"}
     ),
 
-    -- By direction client focus
-    --awful.key({ modkey, }, "j",
-        --function()
-            --awful.client.focus.global_bydirection("down")
-            --if client.focus then client.focus:raise() end
-        --end,
-        --{description = "focus down", group = "client"}),
-    --awful.key({ modkey, }, "k",
-        --function()
-            --awful.client.focus.global_bydirection("up")
-            --if client.focus then client.focus:raise() end
-        --end,
-        --{description = "focus up", group = "client"}),
-    --awful.key({ modkey, }, "h",
-        --function()
-            --awful.client.focus.global_bydirection("left")
-            --if client.focus then client.focus:raise() end
-        --end,
-        --{description = "focus left", group = "client"}),
-    --awful.key({ modkey, }, "l",
-        --function()
-            --awful.client.focus.global_bydirection("right")
-            --if client.focus then client.focus:raise() end
-        --end,
-        --{description = "focus right", group = "client"}),
-    --awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
-              --{description = "show main menu", group = "awesome"}),
+    -- -- By direction client focus
+    -- awful.key({ modkey, }, "j",
+    --     function()
+    --         awful.client.focus.global_bydirection("down")
+    --         if client.focus then client.focus:raise() end
+    --     end,
+    --     {description = "focus down", group = "client"}),
+    -- awful.key({ modkey, }, "k",
+    --     function()
+    --         awful.client.focus.global_bydirection("up")
+    --         if client.focus then client.focus:raise() end
+    --     end,
+    --     {description = "focus up", group = "client"}),
+    -- awful.key({ modkey, }, "h",
+    --     function()
+    --         awful.client.focus.global_bydirection("left")
+    --         if client.focus then client.focus:raise() end
+    --     end,
+    --     {description = "focus left", group = "client"}),
+    -- awful.key({ modkey, }, "l",
+    --     function()
+    --         awful.client.focus.global_bydirection("right")
+    --         if client.focus then client.focus:raise() end
+    --     end,
+    --     {description = "focus right", group = "client"}),
+    -- awful.key({ modkey,           }, "w", function ()
+    --     awful.util.mymainmenu:show() end,
+    --           {description = "show main menu", group = "awesome"}),
 
     -- Toggle window float
     awful.key({ modkey, }, "f", awful.client.floating.toggle),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(  1) end,
-              {description = "swap with next client by index", group = "client"}),
+      {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx( -1) end,
-              {description = "swap with previous client by index", group = "client"}),
-    --awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              --{description = "focus the next screen", group = "screen"}),
-    --awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              --{description = "focus the previous screen", group = "screen"}),
+      {description = "swap with previous client by index", group = "client"}),
+    -- awful.key({ modkey, "Control" }, "j", function ()
+    --     awful.screen.focus_relative( 1) end,
+    --   {description = "focus the next screen",
+    --    group = "screen"}),
+    -- awful.key({ modkey, "Control" }, "k", function ()
+    --     awful.screen.focus_relative(-1) end,
+    --   {description = "focus the previous screen",
+    --    group = "screen"}),
     awful.key({ modkey, }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    -- awful.key({ modkey, }, "Tab",
-        -- function ()
-            -- if cycle_prev then
-                -- awful.client.focus.history.previous()
-            -- else
-                -- awful.client.focus.byidx(-1)
-            -- end
-            -- if client.focus then
-                -- client.focus:raise()
-            -- end
-        -- end,
-        -- {description = "cycle with previous/go back", group = "client"}), awful.key({ modkey, "Shift" }, "Tab",
-        -- function ()
-            -- if cycle_prev then
-                -- awful.client.focus.byidx(1)
-                -- if client.focus then
-                    -- client.focus:raise()
-                -- end
-            -- end
-        -- end,
-        -- {description = "go forth", group = "client"}),
+    awful.key({ modkey, }, "Tab", function () awful.client.focus.byidx(1)
+        if client.focus then client.focus:raise() end end,
+      {description = "cycle clients forward", group = "client"}),
+    awful.key({ modkey, "Shift" }, "Tab", function () awful.client.focus.byidx(-1)
+        if client.focus then client.focus:raise() end end,
+      {description = "cycle clients backward", group = "client"}),
 
     -- Show/Hide Wibox
-    awful.key({ modkey, }, "b", function ()
-            for s in screen do
-                s.mywibox.visible = not s.mywibox.visible
-                if s.mybottomwibox then
-                    s.mybottomwibox.visible = not s.mybottomwibox.visible
-                end
-            end
-        end,
-        {description = "toggle wibox", group = "awesome"}),
+    awful.key({modkey, }, "b", function()
+        for s in screen do
+          s.mywibox.visible = not s.mywibox.visible
+          if s.mybottomwibox then
+            s.mybottomwibox.visible = not s.mybottomwibox.visible
+          end
+        end
+    end,
+      {description = "toggle wibox", group = "awesome"}),
 
     -- On the fly useless gaps change
     awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
