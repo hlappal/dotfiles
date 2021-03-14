@@ -11,31 +11,36 @@
 --             ░      ░    ░   ░        ░      ░ ░         ░   ░   ░
 --
 --  My Awesome config
---  Heikki Lappalainen ( github.com/hlappal )
+--  Heikki Lappalainen (github.com/hlappal)
 --
--------------------------------------------------------------------------------
-
-
+--  Thanks (https://github.com/lcpz/awesome-copycats)
+--     and (https://gitlab.com/dwt1/dotfiles/-/tree/master/.config/awesome)
+--
 -------------------------------------------------------------------------------
 -- Required libraries
 -------------------------------------------------------------------------------
+local awesome, client, mouse, screen, tag
+  = awesome, client, mouse, screen, tag
+local ipairs, string, os, table, tostring, tonumber, type
+  = ipairs, string, os, table, tostring, tonumber, type
 
-local gears         = require("gears")                      -- Utilities such as color parsing and objects
-local awful         = require("awful")                      -- Everything related to window managment
+local gears         = require("gears")
+local awful         = require("awful")
                       require("awful.autofocus")
-local wibox         = require("wibox")                      -- Awesome own generic widget framework
-local beautiful     = require("beautiful")                  -- Awesome theme module
-local naughty       = require("naughty")                    -- Notifications
--- local ruled         = require("ruled")                      -- Declarative object management
-local menubar       = require("menubar")                    -- Declarative object management
-local hotkeys_popup = require("awful.hotkeys_popup").widget -- Enable hotkeys help widget for VIM and other apps
-                      require("awful.hotkeys_popup.keys")   -- when client with a matching name is opened
-package.loaded["awful.hotkeys_popup.keys.tmux"] = {}        -- Hide tmux hotkeys from showing in the hotkeys popup
+local wibox         = require("wibox")
+local beautiful     = require("beautiful")
+local naughty       = require("naughty")
+naughty.config.defaults['icon_size'] = 100
+-- local ruled         = require("ruled")
+local menubar       = require("menubar")
 
+ -- Enable hotkeys help widget for VIM and other apps when client with a
+ -- matching name is opened
+local hotkeys_popup = require("awful.hotkeys_popup").widget
+                      require("awful.hotkeys_popup.keys")
 
-local awesome, client, mouse, screen, tag = awesome, client, mouse, screen, tag
-local ipairs, string, os, table, tostring, tonumber, type = ipairs, string, os, table, tostring, tonumber, type
-
+-- Hide tmux hotkeys from showing in the hotkeys popup
+package.loaded["awful.hotkeys_popup.keys.tmux"] = {}
 local lain          = require("lain")
 local freedesktop   = require("freedesktop")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
@@ -92,6 +97,7 @@ end
 run_once({
   "urxvtd",
   "unclutter -root",
+  "killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00",
   "earlyoom",
   "dunst",
   "emacs --daemon"
@@ -103,34 +109,49 @@ awful.spawn.with_shell(
   .. 'xrdb -merge <<< "awesome.started:true";' ..
   -- list each of your autostart commands, followed by ; inside single quotes,
   -- followed by ..
-  'killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00;' ..
   'dex --environment Awesome --autostart \
   --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"'
   -- https://github.com/jceb/dex
 )
 
 -------------------------------------------------------------------------------
+-- Theme
+-------------------------------------------------------------------------------
+
+-- List the available themes
+local themes = {
+  "powerarrow-darc", -- 1
+}
+
+-- Choose the theme here
+local chosen_theme = themes[1]
+local theme_path = string.format(
+  "%s/.config/awsome/themes/%s/theme.lua",
+  os.getenv("HOME"), chosen_theme
+)
+
+-------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
 
-local chosen_theme = "darcsome"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "alacritty"
-local vi_focus     = true -- vi-like client focus
+
+local vi_focus     = true  -- vi-like client focus
 local cycle_prev   = false -- cycle trough all previous clients or just the
                            -- first
+local terminal     = "alacritty"
 local editor       = os.getenv("EDITOR") or "nvim"
-local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
-local file_manager = os.getenv("FILE_MANAGER") or "nemo"
-local browser      = os.getenv("BROWSER") or "brave"
-local menu         = os.getenv("MENU") or "rofi -combi-modi window,drun,ssh \
-                                           -theme solarized -show combi \
-                                           -icon-theme \"Papirus\" -show-icons"
-local pass_menu    = os.getenv("PASS_MENU") or "dmenu-lpass-nu"
+local gui_editor   = "emacsclient -c -a 'emacs'"
+local file_manager = "nemo"
+local browser      = "brave"
+local menu         = "rofi -combi-modi window,drun,ssh \
+                       -theme solarized -show combi \
+                       -icon-theme \"Papirus\" -show-icons"
+local pass_menu    = "dmenu-lpass-nu"
 local scrlocker    = "slock"
 
--- Set terminal for applications that require it
+-- Set terminal for applications that require one
 awful.util.terminal = terminal
 menubar.utils.terminal = terminal
 
@@ -138,25 +159,86 @@ menubar.utils.terminal = terminal
 -- Tags and layouts
 -------------------------------------------------------------------------------
 
--- Tag names ( symbols from https://fontawesome.com/cheatsheet )
+-- Tag names (symbols from https://fontawesome.com/cheatsheet)
 awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: ",
                         "7: ", "8: ", "9: " }
 
 -- Selected default layouts
-tag.connect_signal(
-  "request::default_layouts", function()
-    awful.layout.append_default_layouts({
-        awful.layout.suit.tile, -- 1
-        awful.layout.suit.tile, -- 2
-        awful.layout.suit.tile, -- 3
-        awful.layout.suit.max,  -- 4
-        awful.layout.suit.max,  -- 5
-        awful.layout.suit.max,  -- 6
-        awful.layout.suit.tile, -- 7
-        awful.layout.suit.tile, -- 8
-        awful.layout.suit.tile, -- 9
-    })
-end)
+awful.layout.suit.tile.left.mirror = true
+awful.layout.layouts = {
+  awful.layout.suit.tile,
+  -- awful.layout.suit.floating,
+  -- awful.layout.suit.tile.left,
+  -- awful.layout.suit.tile.bottom,
+  -- awful.layout.suit.tile.top,
+  awful.layout.suit.fair,
+  -- awful.layout.suit.fair.horizontal,
+  -- awful.layout.suit.spiral,
+  -- awful.layout.suit.spiral.dwindle,
+  awful.layout.suit.max,
+  -- awful.layout.suit.max.fullscreen,
+  awful.layout.suit.magnifier,
+  awful.layout.suit.corner.nw,
+  -- awful.layout.suit.corner.ne,
+  -- awful.layout.suit.corner.sw,
+  -- awful.layout.suit.corner.se,
+  -- lain.layout.cascade,
+  -- lain.layout.cascade.tile,
+  -- lain.layout.centerwork,
+  -- lain.layout.centerwork.horizontal,
+  -- lain.layout.termfair,
+  -- lain.layout.termfair.center,
+}
+
+awful.util.taglist_buttons = my_table.join(
+  awful.button({ }, 1, function(t) t:view_only() end),
+  awful.button({ modkey }, 1, function(t)
+      if client.focus then
+        client.focus:move_to_tag(t)
+      end
+  end),
+  awful.button({ }, 3, awful.tag.viewtoggle),
+  awful.button({ modkey }, 3, function(t)
+      if client.focus then
+        client.focus:toggle_tag(t)
+        end
+  end),
+  awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+  awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+)
+
+awful.util.tasklist_buttons = my_table.join(
+  awful.button({ }, 1, function(c)
+      if c == client.focus then
+        c.minimized = true
+      else
+        c:emit_signal("request::activate", "tasklist", {raise = true})
+      end
+  end),
+  awful.button({ }, 3, function()
+      local instance = nil
+      return function()
+        if instance and instance.wibox.visible then
+          instance:hide()
+          instance = nil
+        else
+          instance = awful.menu.clients({theme = {width = 250}})
+        end
+      end
+  end),
+  awful.button({ }, 4, function() awful.client.focus.byidx(1) end),
+  awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
+)
+
+lain.layout.termfair.nmaster           = 3
+lain.layout.termfair.ncol              = 1
+lain.layout.termfair.center.nmaster    = 3
+lain.layout.termfair.center.ncol       = 1
+lain.layout.cascade.tile.offset_x      = 2
+lain.layout.cascade.tile.offset_y      = 32
+lain.layout.cascade.tile.extra_padding = 5
+lain.layout.cascade.tile.nmaster       = 5
+lain.layout.cascade.tile.ncol          = 2
 
 -- -- Pop-up for layout selection
 -- awful.popup {
@@ -173,19 +255,19 @@ beautiful.init(
   string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"),
                 chosen_theme))
 
-
 -------------------------------------------------------------------------------
 -- Menu
 -------------------------------------------------------------------------------
 
 local myawesomemenu = {
     { "hotkeys", function() return false, hotkeys_popup.show_help end },
-    { "manual", terminal .. " -e man awesome" },
+    { "manual", terminal .. " -e 'man awesome'" },
     { "edit config", string.format("%s -e %s %s",
                                    terminal, editor, awesome.conffile) },
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end }
 }
+
 awful.util.mymainmenu = freedesktop.menu.build({
     icon_size = beautiful.menu_height or dpi(16),
     before = {
@@ -194,16 +276,21 @@ awful.util.mymainmenu = freedesktop.menu.build({
     },
     after = {
         { "Open terminal", terminal },
+        { "Log out", function() awesome.quit() end },
+        { "Sleep", "systemctl suspend" },
+        { "Restart", "systemctl reboot" },
+        { "Exit", "systemctl poweroff" },
         -- other triads can be put here
     }
 })
--- hide menu when mouse leaves it
--- awful.util.mymainmenu.wibox:connect_signal(
---   "mouse::leave", function() awful.util.mymainmenu:hide()
--- end)
 
--- menubar.utils.terminal = terminal -- Set the Menubar terminal for
---                                   -- applications that require it
+-- Hide menu when mouse leaves it
+awful.util.mymainmenu.wibox:connect_signal(
+  "mouse::leave", function() awful.util.mymainmenu:hide()
+end)
+
+ -- Set the Menubar terminal for applications that require it
+menubar.utils.terminal = terminal
 
 -------------------------------------------------------------------------------
 -- Screen
@@ -223,16 +310,17 @@ screen.connect_signal("property::geometry", function(s)
 end)
 
 -- No borders when rearranging only 1 non-floating or maximized client
-screen.connect_signal("arrange", function (s)
-    local only_one = #s.tiled_clients == 1
-    for _, c in pairs(s.clients) do
-        if only_one and not c.floating or c.maximized then
-            c.border_width = 0
-        else
-            c.border_width = beautiful.border_width
-        end
-    end
-end)
+-- screen.connect_signal("arrange", function (s)
+--     local only_one = #s.tiled_clients == 1
+--     for _, c in pairs(s.clients) do
+--         if only_one and not c.floating or c.maximized then
+--             c.border_width = 0
+--         else
+--             c.border_width = beautiful.border_width
+--         end
+--     end
+-- end)
+
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(
   function(s) beautiful.at_screen_connect(s)
@@ -672,9 +760,11 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
 
--- {{{ Rules
+-------------------------------------------------------------------------------
+-- Rules
+-------------------------------------------------------------------------------
+
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -714,9 +804,11 @@ awful.rules.rules = {
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
 }
--- }}}
 
--- {{{ Signals
+-------------------------------------------------------------------------------
+-- Signals
+-------------------------------------------------------------------------------
+
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
@@ -779,14 +871,22 @@ client.connect_signal("request::titlebars", function(c)
     }
 end)
 
+-------------------------------------------------------------------------------
+-- Other
+-------------------------------------------------------------------------------
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
+    c:emit_signal("request::activate", "mouse_enter", {raise = true})
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal(
+  "focus", function(c) c.border_color = beautiful.border_focus end
+)
+client.connect_signal(
+  "unfocus", function(c) c.border_color = beautiful.border_normal end
+)
 
--- possible workaround for tag preservation when switching back to default screen:
--- https://github.com/lcpz/awesome-copycats/issues/251
--- }}}
+-------------------------------------------------------------------------------
+-- End of config
+-------------------------------------------------------------------------------
