@@ -11,31 +11,35 @@
 --    █████████████████████████████████████████████████████████████████████
 --
 --    Heikki Lappalainen ( https://github.com/hlappal )
+--    (thanks to https://gitlab.com/dwt1/dotfiles/-/tree/master/.xmonad)
 --
---------------------------------------------------------------------------------
-
 --------------------------------------------------------------------------------
 -- IMPORTS
 --------------------------------------------------------------------------------
 
 -- Base
 import XMonad
+import System.Directory
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 
 -- Actions
-import XMonad.Actions.CopyWindow (killAllOtherCopies)
-import XMonad.Actions.CycleWS -- (moveTo, shiftTo, WSType(NonEmptyWS, WSIs))
+import XMonad.Actions.CopyWindow (kill1)
+import XMonad.Actions.CycleWS (moveTo, shiftTo, shiftToPrev, shiftToNext, WSType(..), nextScreen, prevScreen, prevWS, nextWS)
+import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
+-- import XMonad.Actions.FlexibleManipulate as Flex
 import XMonad.Actions.Promote
 import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
-import XMonad.Actions.WithAll (sinkAll)
 import qualified XMonad.Actions.TreeSelect as TS
-import qualified XMonad.Actions.FlexibleResize as Flex
+import XMonad.Actions.WindowGo (runOrRaise)
+import XMonad.Actions.WithAll (sinkAll, killAll)
+import qualified XMonad.Actions.Search as S
 
 -- Data
-import Data.List
+import Data.Char (isSpace, toUpper)
+import Data.Maybe (fromJust)
 import Data.Monoid
 import Data.Maybe (isJust)
 import Data.Tree
@@ -43,60 +47,80 @@ import qualified Data.Map as M
 
 -- Hooks
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageDocks -- (avoidStruts, manageDocks, toggleStruts)
+import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
+import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.WorkspaceHistory
 
 -- Layouts
 import XMonad.Layout.GridVariants (Grid(Grid))
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Spiral
-import XMonad.Layout.OneBig
+import XMonad.Layout.Reflect
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
-import XMonad.Layout.LimitWindows (limitWindows)
+import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
 import XMonad.Layout.Magnifier
 import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
 import XMonad.Layout.NoBorders
-import XMonad.Layout.Renamed (renamed, Rename(Replace))
+import XMonad.Layout.Renamed
+import XMonad.Layout.ShowWName
+import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing
-import XMonad.Layout.WindowArranger -- (windowArrange)
-import XMonad.Layout.Reflect (REFLECTX(..), REFLECTY(..))
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
 import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
 import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
 -- Prompt
 import XMonad.Prompt
-import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.Input
+import XMonad.Prompt.FuzzyMatch
+import XMonad.Prompt.Man
+import XMonad.Prompt.Pass
+import XMonad.Prompt.Shell
+import XMonad.Prompt.Ssh
+import XMonad.Prompt.Unicode
+import XMonad.Prompt.XMonad
 import Control.Arrow (first)
 
 -- Utilities
-import XMonad.Util.EZConfig
-import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
-import XMonad.Util.Cursor
-import Control.Applicative
-import Control.Concurrent
-import XMonad.Actions.FloatKeys
-
 
 ------------------------------------------------------------------------------
 -- VARIABLES
 ------------------------------------------------------------------------------
+
 myFont :: String
-myFont = "xft:Mononoki Nerd Font:regular:pixelsize=9"
+myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialiasing=true:hinting=true"
+-- myFont = "xft:Mononoki Nerd Font:regular:pixelsize=9"
+
+myEmojiFont :: String
+myEmojiFont = "xft:JoyPixels:regular:size=9:antialiasing=true:hinting=true"
 
 myModMask :: KeyMask
 myModMask = mod4Mask -- Sets modkey to super/windows key
 
 myTerminal :: String
 myTerminal = "alacritty" -- Sets default terminal
+
+myBrowser :: String
+myBrowser = "brave"
+
+myEditor :: String
+myEditor = "emacsclient -c -a emacs"
 
 myBorderWidth :: Dimension
 myBorderWidth = 2 -- Sets border width for windows
@@ -125,7 +149,6 @@ altMask = mod1Mask -- Setting this for use in xprompts
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
-
 
 ------------------------------------------------------------------------------
 -- AUTOSTART
@@ -160,7 +183,7 @@ myXPConfig = def
   , historyFilter       = id
   , defaultText         = []
   , showCompletionOnTab = False
-  , searchPredicate     = isPrefixOf
+  -- , searchPredicate     = isPrefixOf
   , alwaysHighlight     = True
   , maxComplRows        = Nothing -- set to 5 for 5 rows
   }
@@ -208,82 +231,107 @@ myXPKeymap  = M.fromList $
   , (xK_Escape, quit)
   ]
 
+-------------------------------------------------------------------------------
+-- SCRATCHPADS
+-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+myScratchPads :: [NamedScratchpad]
+myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
+                -- , NS "mocp" spawnMocp findMocp manageMocp
+                ]
+  where
+    spawnTerm  = myTerminal ++ " - scratchpad 'fish'"
+    findTerm   = resource =? "cratchpad"
+    manageTerm = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.9
+                 w = 0.9
+                 t = 0.95 -h
+                 l = 0.95 -w
+    -- spawnMocp  = myTerminal ++ " - mocp 'mocp'"
+    -- findMocp   = resource =? "mocp"
+    -- manageMocp = customFloating $ W.RationalRect l t w h
+    --            where
+    --              h = 0.9
+    --              w = 0.9
+    --              t = 0.95 -h
+    --              l = 0.95 -w
+
+-------------------------------------------------------------------------------
 -- TREE SELECT
-------------------------------------------------------------------------------
-treeselectAction :: TS.TSConfig (X ()) -> X ()
-treeselectAction a = TS.treeselectAction a
-  [ Node (TS.TSNode "programs" "most used programs" (return ()))
-    [ Node (TS.TSNode "firefox" "default browser" (spawn "firefox")) []
-    , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome-stable")) []
-    , Node (TS.TSNode "nemo" "file manager" (spawn "nemo")) []
-    , Node (TS.TSNode "ranger" "text based file manager" (spawn "urxvt -e ranger")) []
-    , Node (TS.TSNode "mailspring" "Gmail / Aalto-mail" (spawn "mailspring")) []
-    , Node (TS.TSNode "electron-mail" "protonmail" (spawn "electron-mail")) []
-    , Node (TS.TSNode "spotify" "music player" (spawn "spotify")) []
-    , Node (TS.TSNode "discord" "open chat" (spawn "discord")) []
-    , Node (TS.TSNode "slack" "open another chat" (spawn "slack")) []
-    , Node (TS.TSNode "zoom" "open video chat" (spawn "zoom")) []
-    ]
-  , Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
-    [ Node (TS.TSNode "shutdown" "poweroff system" (spawn "shutdown now")) []
-    , Node (TS.TSNode "reboot" "reboot system" (spawn "reboot")) []
-    , Node (TS.TSNode "suspend" "suspend system" (spawn "systemctl suspend")) []
-    ]
-  , Node (TS.TSNode "brightness" "Sets screen brightness using xbacklight" (return ()))
-    [ Node (TS.TSNode "bright" "full power" (spawn "xbacklight -set 100")) []
-    , Node (TS.TSNode "normal" "normal brightness (50%)" (spawn "xbacklight -set 50")) []
-    , Node (TS.TSNode "dim" "quite dark" (spawn "xbacklight -set 10")) []
-    , Node (TS.TSNode "very dim" "very dark" (spawn "xbacklight -set 0")) []
-    ]
-  , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
-    [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn ("emacsclient -c -a 'emacs' --eval '(find-file \"~/.xmonad/xmonad.hs\")'"))) []
-    , Node (TS.TSNode "recompile xmonad" "recompile xmonad" (spawn "xmonad --recompile")) []
-    , Node (TS.TSNode "restart xmonad" "restart xmonad" (spawn "xmonad --restart")) []
-    ]
-  , Node (TS.TSNode "system monitors" "system monitoring applications" (return ()))
-    [ Node (TS.TSNode "htop" "a much better top" (spawn (myTerminal ++ " -e htop"))) []
-    , Node (TS.TSNode "glances" "an eye on your system" (spawn (myTerminal ++ " -e glances"))) []
-    ]
-  ]
-
-tsDefaultConfig :: TS.TSConfig a
-tsDefaultConfig = TS.TSConfig { TS.ts_hidechildren = True
-                              , TS.ts_background   = 0xdd2e3440
-                              , TS.ts_font         = "xft:Mononoki Nerd Font:bold:pixelsize=13"
-                              , TS.ts_node         = (0xfff0f0f0, 0xff4c566a)
-                              , TS.ts_nodealt      = (0xfff0f0f0, 0xff2b4252)
-                              , TS.ts_highlight    = (0xff2e3440, 0xff8fbcbb)
-                              , TS.ts_extra        = 0xffd0d0d0
-                              , TS.ts_node_width   = 200
-                              , TS.ts_node_height  = 20
-                              , TS.ts_originX      = 0
-                              , TS.ts_originY      = 0
-                              , TS.ts_indent       = 80
-                              , TS.ts_navigate     = myTreeNavigation
-                              }
-
-myTreeNavigation = M.fromList
-  [ ((0, xK_Escape), TS.cancel)
-  , ((0, xK_Return), TS.select)
-  , ((0, xK_space),  TS.select)
-  , ((0, xK_Up),     TS.movePrev)
-  , ((0, xK_Down),   TS.moveNext)
-  , ((0, xK_Left),   TS.moveParent)
-  , ((0, xK_Right),  TS.moveChild)
-  , ((0, xK_k),      TS.movePrev)
-  , ((0, xK_j),      TS.moveNext)
-  , ((0, xK_h),      TS.moveParent)
-  , ((0, xK_l),      TS.moveChild)
-  , ((0, xK_o),      TS.moveHistBack)
-  , ((0, xK_i),      TS.moveHistForward)
-  ]
-
+-------------------------------------------------------------------------------
+-- treeselectAction :: TS.TSConfig (X ()) -> X ()
+-- treeselectAction a = TS.treeselectAction a
+--   [ Node (TS.TSNode "programs" "most used programs" (return ()))
+--     [ Node (TS.TSNode "firefox" "default browser" (spawn "firefox")) []
+--     , Node (TS.TSNode "chrome" "play Torn" (spawn "google-chrome-stable")) []
+--     , Node (TS.TSNode "nemo" "file manager" (spawn "nemo")) []
+--     , Node (TS.TSNode "ranger" "text based file manager" (spawn "urxvt -e ranger")) []
+--     , Node (TS.TSNode "mailspring" "Gmail / Aalto-mail" (spawn "mailspring")) []
+--     , Node (TS.TSNode "electron-mail" "protonmail" (spawn "electron-mail")) []
+--     , Node (TS.TSNode "spotify" "music player" (spawn "spotify")) []
+--     , Node (TS.TSNode "discord" "open chat" (spawn "discord")) []
+--     , Node (TS.TSNode "slack" "open another chat" (spawn "slack")) []
+--     , Node (TS.TSNode "zoom" "open video chat" (spawn "zoom")) []
+--     ]
+--   , Node (TS.TSNode "power" "shutdown / reboot / suspend" (return ()))
+--     [ Node (TS.TSNode "shutdown" "poweroff system" (spawn "shutdown now")) []
+--     , Node (TS.TSNode "reboot" "reboot system" (spawn "reboot")) []
+--     , Node (TS.TSNode "suspend" "suspend system" (spawn "systemctl suspend")) []
+--     ]
+--   , Node (TS.TSNode "brightness" "Sets screen brightness using xbacklight" (return ()))
+--     [ Node (TS.TSNode "bright" "full power" (spawn "xbacklight -set 100")) []
+--     , Node (TS.TSNode "normal" "normal brightness (50%)" (spawn "xbacklight -set 50")) []
+--     , Node (TS.TSNode "dim" "quite dark" (spawn "xbacklight -set 10")) []
+--     , Node (TS.TSNode "very dim" "very dark" (spawn "xbacklight -set 0")) []
+--     ]
+--   , Node (TS.TSNode "xmonad" "working with xmonad" (return ()))
+--     [ Node (TS.TSNode "edit xmonad" "edit xmonad" (spawn ("emacsclient -c -a 'emacs' --eval '(find-file \"~/.xmonad/xmonad.hs\")'"))) []
+--     , Node (TS.TSNode "recompile xmonad" "recompile xmonad" (spawn "xmonad --recompile")) []
+--     , Node (TS.TSNode "restart xmonad" "restart xmonad" (spawn "xmonad --restart")) []
+--     ]
+--   , Node (TS.TSNode "system monitors" "system monitoring applications" (return ()))
+--     [ Node (TS.TSNode "htop" "a much better top" (spawn (myTerminal ++ " -e htop"))) []
+--     , Node (TS.TSNode "glances" "an eye on your system" (spawn (myTerminal ++ " -e glances"))) []
+--     ]
+--   ]
+--
+-- tsDefaultConfig :: TS.TSConfig a
+-- tsDefaultConfig = TS.TSConfig { TS.ts_hidechildren = True
+--                               , TS.ts_background   = 0xdd2e3440
+--                               , TS.ts_font         = "xft:Mononoki Nerd Font:bold:pixelsize=13"
+--                               , TS.ts_node         = (0xfff0f0f0, 0xff4c566a)
+--                               , TS.ts_nodealt      = (0xfff0f0f0, 0xff2b4252)
+--                               , TS.ts_highlight    = (0xff2e3440, 0xff8fbcbb)
+--                               , TS.ts_extra        = 0xffd0d0d0
+--                               , TS.ts_node_width   = 200
+--                               , TS.ts_node_height  = 20
+--                               , TS.ts_originX      = 0
+--                               , TS.ts_originY      = 0
+--                               , TS.ts_indent       = 80
+--                               , TS.ts_navigate     = myTreeNavigation
+--                               }
+--
+-- myTreeNavigation = M.fromList
+--   [ ((0, xK_Escape), TS.cancel)
+--   , ((0, xK_Return), TS.select)
+--   , ((0, xK_space),  TS.select)
+--   , ((0, xK_Up),     TS.movePrev)
+--   , ((0, xK_Down),   TS.moveNext)
+--   , ((0, xK_Left),   TS.moveParent)
+--   , ((0, xK_Right),  TS.moveChild)
+--   , ((0, xK_k),      TS.movePrev)
+--   , ((0, xK_j),      TS.moveNext)
+--   , ((0, xK_h),      TS.moveParent)
+--   , ((0, xK_l),      TS.moveChild)
+--   , ((0, xK_o),      TS.moveHistBack)
+--   , ((0, xK_i),      TS.moveHistForward)
+--   ]
 
 ------------------------------------------------------------------------------
 -- KEYBINDINGS
 ------------------------------------------------------------------------------
+
 myKeys :: [(String, X ())]
 myKeys =
     -- Xmonad
@@ -297,6 +345,9 @@ myKeys =
     -- Run Prompt
     , ("M-<F2>", shellPrompt myXPConfig)
     , ("M-S-<Return>", spawn "rofi -combi-modi window,drun,ssh -theme solarized -show combi -icon-theme \"Papirus\" -show-icons")
+
+    -- Scratchpad
+    , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
     
     -- Windows
     , ("M-f", sendMessage (T.Toggle "floats"))
@@ -314,10 +365,10 @@ myKeys =
     , ("M-<Backspace>", promote)
     , ("M1-S-<Tab>", rotSlavesDown)
     , ("M1-C-<Tab>", rotAllDown)
-    , ("M-C-s", killAllOtherCopies)
+    -- , ("M-C-s", killAllOtherCopies)
 
     -- Tree Select
-    , ("M-S-m", treeselectAction tsDefaultConfig)
+    -- , ("M-S-m", treeselectAction tsDefaultConfig)
 
     -- Layouts
     , ("M-<Tab>", sendMessage NextLayout)
@@ -363,7 +414,7 @@ myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)) --Set the window to floating mode and move by dragging
   , ((modMask, button2), (\w -> focus w >> windows W.shiftMaster))                      --Raise the window to the top of the stack
-  , ((modMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))                   --Set the window to floating mode and resize by dragging
+  , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w))                   --Set the window to floating mode and resize by dragging
   , ((modMask, button4), (\_ -> prevWS))                                                --Switch to previous workspace
   , ((modMask, button5), (\_ -> nextWS))                                                --Switch to next workspace
   , (((modMask .|. shiftMask), button4), (\_ -> shiftToPrev))                           --Send client to previous workspace
@@ -403,18 +454,18 @@ myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
     [ className =? "firefox"        --> doShift "1:Web"
     , className =? "code-oss"       --> doShift "3:Dev"
-    , className =? "Mailspring"     --> doShift "5:Mail"
-    , className =? "electron-mail"  --> doShift "5:Mail"
+    -- , className =? "Mailspring"     --> doShift "5:Mail"
+    -- , className =? "electron-mail"  --> doShift "5:Mail"
     , className =? "Slack"          --> doShift "6:Chat"
     , className =? "discord"        --> doShift "6:Chat"
     , className =? "zoom"           --> doShift "6:Chat"
-    , className =? "Google-chrome"  --> doShift "7:Torn"
+    -- , className =? "Google-chrome"  --> doShift "7:Torn"
     , className =? "vlc"            --> doShift "8:Media"
     , className =? "spotify"        --> doShift "8:Media" --FIXME
     , className =? "Gimp"           --> doShift "9:Other"
     , className =? "Tk"             --> doFloat
     , className =? "Toplevel"       --> doFloat
-    ] -- <+> namedScratchpadManageHook myScratchPads
+    ] <+> namedScratchpadManageHook myScratchPads
 
 
 ------------------------------------------------------------------------------
@@ -439,14 +490,14 @@ magnify  = renamed [Replace "magnify"]
            $ limitWindows 12
            $ mySpacing 3
            $ ResizableTall 1 (3/00) (1/2) []
-oneBig   = renamed [Replace "oneBig"]
-           $ limitWindows 6
-           $ Mirror
-           $ mkToggle (single MIRROR)
-           $ mkToggle (single REFLECTX)
-           $ mkToggle (single REFLECTY)
-           $ mySpacing' 3
-           $ OneBig (5/9) (8/12)
+-- oneBig   = renamed [Replace "oneBig"]
+--            $ limitWindows 6
+--            $ Mirror
+--            $ mkToggle (single MIRROR)
+--            $ mkToggle (single REFLECTX)
+--            $ mkToggle (single REFLECTY)
+--            $ mySpacing' 3
+--            $ oneBig (5/9) (8/12)
 monocle  = renamed [Replace "monocle"]
            $ limitWindows 20
            $ mySpacing' 3
