@@ -107,13 +107,14 @@
 ;; primary selection
 (setq mouse-drag-copy-region t)
 (setq select-enable-primary t)
-;; (setq select-enable-clipboard nil)
+(setq select-enable-clipboard nil)
 (setq select-active-regions t)
 
-;; Tabnine config
-;; (add-to-list 'company-backends #'company-tabnine)
-;; (setq company-idle-delay 0)
-;; (setq company-show-numbers t)
+;; Spell-fu config
+(setq ispell-program-name "aspell")
+(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
+(setq spell-fu-directory "~/.doom.d/dictionary")
+(setq ispell-personal-dictionary "~/.doom.d/dictionary/.pws")
 
 ;; Set path for project search
 (setq projectile-project-search-path '("~/projects/"))
