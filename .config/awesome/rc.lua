@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 --
---        ▄▄▄      █     █░ ▓█████  ██████  ▒█████   ███▄ ▄███▓ ▓█████
---       ▒████▄   ▓█░ █ ░█░ ▓█   ▀▒██    ▒ ▒██▒  ██▒▓██▒▀█▀ ██▒ ▓█   ▀
---       ▒██  ▀█▄ ▒█░ █ ░█  ▒███  ░ ▓██▄   ▒██░  ██▒▓██    ▓██░ ▒███
---       ░██▄▄▄▄██░█░ █ ░█  ▒▓█  ▄  ▒   ██▒▒██   ██░▒██    ▒██  ▒▓█  ▄
---        ▓█   ▓██░░██▒██▓ ▒░▒████▒██████▒▒░ ████▓▒░▒██▒   ░██▒▒░▒████
---        ▒▒   ▓▒█░ ▓░▒ ▒  ░░░ ▒░ ▒ ▒▓▒ ▒ ░░ ▒░▒░▒░ ░ ▒░   ░  ░░░░ ▒░
---         ░   ▒▒   ▒ ░ ░  ░ ░ ░  ░ ░▒  ░ ░  ░ ▒ ▒░ ░  ░      ░░ ░ ░
---         ░   ▒    ░   ░      ░  ░  ░  ░  ░ ░ ░ ▒  ░      ░       ░
---             ░      ░    ░   ░        ░      ░ ░         ░   ░   ░
+--       ▄▄▄      █     █░ ▓█████  ██████  ▒█████   ███▄ ▄███▓ ▓█████
+--      ▒████▄   ▓█░ █ ░█░ ▓█   ▀▒██    ▒ ▒██▒  ██▒▓██▒▀█▀ ██▒ ▓█   ▀
+--      ▒██  ▀█▄ ▒█░ █ ░█  ▒███  ░ ▓██▄   ▒██░  ██▒▓██    ▓██░ ▒███
+--      ░██▄▄▄▄██░█░ █ ░█  ▒▓█  ▄  ▒   ██▒▒██   ██░▒██    ▒██  ▒▓█  ▄
+--       ▓█   ▓██░░██▒██▓ ▒░▒████▒██████▒▒░ ████▓▒░▒██▒   ░██▒▒░▒████
+--       ▒▒   ▓▒█░ ▓░▒ ▒  ░░░ ▒░ ▒ ▒▓▒ ▒ ░░ ▒░▒░▒░ ░ ▒░   ░  ░░░░ ▒░
+--        ░   ▒▒   ▒ ░ ░  ░ ░ ░  ░ ░▒  ░ ░  ░ ▒ ▒░ ░  ░      ░░ ░ ░
+--        ░   ▒    ░   ░      ░  ░  ░  ░  ░ ░ ░ ▒  ░      ░       ░
+--            ░      ░    ░   ░        ░      ░ ░         ░   ░   ░
 --
 --  My Awesome config
 --  Heikki Lappalainen (github.com/hlappal)
@@ -120,11 +120,21 @@ awful.spawn.with_shell(
 
 -- List the available themes
 local themes = {
-  "powerarrow-darc", -- 1
+  "blackburn",       -- 1
+  "copland",         -- 2
+  "dremora",         -- 3
+  "holo",            -- 4
+  "multicolor",      -- 5
+  "powerarrow",      -- 6
+  "powerarrow-darc", -- 7
+  "powerarrow-dark", -- 8
+  "rainbow",         -- 9
+  "steamburn",       -- 10
+  "vertex",          -- 11
 }
 
 -- Choose the theme here
-local chosen_theme = themes[1]
+local chosen_theme = themes[7]
 local theme_path = string.format(
   "%s/.config/awsome/themes/%s/theme.lua",
   os.getenv("HOME"), chosen_theme
@@ -171,7 +181,7 @@ awful.layout.layouts = {
   -- awful.layout.suit.tile.left,
   -- awful.layout.suit.tile.bottom,
   -- awful.layout.suit.tile.top,
-  awful.layout.suit.fair,
+  -- awful.layout.suit.fair,
   -- awful.layout.suit.fair.horizontal,
   -- awful.layout.suit.spiral,
   -- awful.layout.suit.spiral.dwindle,
