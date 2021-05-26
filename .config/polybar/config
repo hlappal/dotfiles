@@ -24,29 +24,28 @@ notify = #EBCB8B
 success = #A3BE8C
 function = #B48EAD
 
+ob-bg = #fffcfd
+ob-fg = #250e07
+ob-cpu = #e7a09e
+ob-ram = #92aed7
+ob-time = #f2d06d
 
 [global/wm]
 ;https://github.com/jaagr/polybar/wiki/Configuration#global-wm-settings
 margin-top = 0
 margin-bottom = 0
 
-
 [settings]
 ;https://github.com/jaagr/polybar/wiki/Configuration#application-settings
 throttle-output = 5
 throttle-output-for = 10
-throttle-input-for = 30
+; throttle-input-for = 30
 screenchange-reload = true
 compositing-background = over
 compositing-foreground = over
 compositing-overline = over
 compositing-underline = over
 compositing-border = over
-
-
-;=======================================
-; MODULES
-;=======================================
 
 [module/i3]
 ;https://github.com/jaagr/polybar/wiki/Module:-i3
@@ -126,12 +125,17 @@ label-urgent-padding = 2
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
-
 [module/xmonad]
 type = custom/script
 exec = xmonad-log
 tail = true
 
+[module/desktops]
+type =custom/script
+exec = ~/.config/polybar/scripts/desktops.sh
+format = <label>
+label-font = 2
+interval =.2
 
 [module/backlight]
 ;https://github.com/jaagr/polybar/wiki/Module:-backlight
@@ -166,7 +170,6 @@ bar-width = 10
 bar-indicator = |
 bar-fill = ─
 bar-empty = ─
-
 
 [module/battery]
 ;https://github.com/jaagr/polybar/wiki/Module:-battery
@@ -208,7 +211,6 @@ animation-charging-3 = 
 animation-charging-4 = 
 animation-charging-foreground = ${colors.success}
 animation-charging-framerate = 750
-
 
 [module/cpu]
 ;https://github.com/jaagr/polybar/wiki/Module:-cpu
@@ -254,7 +256,6 @@ ramp-coreload-6-foreground = ${colors.urgent}
 ramp-coreload-7 = █
 ramp-coreload-7-foreground = ${colors.urgent}
 
-
 [module/memory]
 ;https://github.com/jaagr/polybar/wiki/Module:-memory
 type = internal/memory
@@ -276,7 +277,6 @@ format-prefix-foreground = ${colors.nord9}
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
-
 [module/date]
 ;https://github.com/jaagr/polybar/wiki/Module:-date
 type = internal/date
@@ -294,7 +294,6 @@ format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 label = "%date% %time% "
 
-
 [module/arch-aur-updates]
 type = custom/script
 exec = ~/.config/polybar/scripts/check-all-updates.sh
@@ -304,7 +303,6 @@ format-foreground = ${colors.notify}
 format-background = ${colors.background}
 format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
-
 
 [module/pacman-updates]
 type = custom/script
@@ -316,7 +314,6 @@ format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
-
 
 [module/filesystem]
 ;https://github.com/jaagr/polybar/wiki/Module:-filesystem
@@ -368,7 +365,6 @@ format-unmounted-foreground = ${colors.foreground}
 format-unmounted-background = ${colors.background}
 ;format-unmounted-underline = ${colors.alert}
 
-
 [module/mpd]
 ;https://github.com/jaagr/polybar/wiki/Module:-mpd
 type = internal/mpd
@@ -392,7 +388,6 @@ bar-progress-indicator-foreground = ${colors.foreground}
 format-online-foreground = ${colors.foreground}
 format-online-background = ${colors.background}
 
-
 [module/networkspeedup]
 ;https://github.com/jaagr/polybar/wiki/Module:-network
 type = internal/network
@@ -407,7 +402,6 @@ format-connected-prefix-foreground = ${colors.nord9}
 format-connected-foreground = ${colors.foreground}
 format-connected-background = ${colors.background}
 
-
 [module/networkspeeddown]
 ;https://github.com/jaagr/polybar/wiki/Module:-network
 type = internal/network
@@ -421,7 +415,6 @@ format-connected-prefix = "  "
 format-connected-prefix-foreground = ${colors.nord9}
 format-connected-foreground = ${colors.foreground}
 format-connected-background = ${colors.background}
-
 
 [module/volume]
 ;https://github.com/jaagr/polybar/wiki/Module:-volume
@@ -455,7 +448,6 @@ format-muted-prefix-foreground = ${colors.nord9}
 format-muted-foreground = ${colors.foreground}
 format-muted-background = ${colors.background}
 
-
 [module/spotify1]
 ;https://github.com/NicholasFeldman/dotfiles/blob/master/polybar/.config/polybar/spotify.sh
 type = custom/script
@@ -469,7 +461,6 @@ format-padding = 2
 format-prefix = "  "
 format-prefix-foreground = ${colors.nord9}
 label = %output:0:150%
-
 
 [module/temperature1]
 ;https://github.com/jaagr/polybar/wiki/Module:-temperature
@@ -503,7 +494,6 @@ ramp-3 = 
 ramp-4 = 
 ramp-foreground =${colors.nord9}
 
-
 [module/wired-network]
 ;https://github.com/jaagr/polybar/wiki/Module:-network
 type = internal/network
@@ -533,7 +523,6 @@ format-disconnected = <label-disconnected>
 format-disconnected-underline = ${colors.alert}
 label-disconnected-foreground = ${colors.foreground}
 
-
 [module/xbacklight]
 ;https://github.com/jaagr/polybar/wiki/Module:-xbacklight
 type = internal/xbacklight
@@ -555,7 +544,6 @@ bar-empty-foreground = ${colors.foreground}
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
-
 [module/xkeyboard]
 ;https://github.com/jaagr/polybar/wiki/Module:-xkeyboard
 type = internal/xkeyboard
@@ -575,7 +563,6 @@ label-indicator-background = ${colors.background}
 label-indicator-foreground = ${colors.urgent}
 ;label-indicator-underline = ${colors.red_fg}
 
-
 [module/xwindow]
 ;https://github.com/jaagr/polybar/wiki/Module:-xwindow
 type = internal/xwindow
@@ -590,14 +577,7 @@ format-prefix = "  "
 format-foreground = ${colors.foreground}
 format-background = ${colors.background}
 
-
-;=======================================
-;
-; MAINBAR-I3
-;
-;=======================================
-
-[bar/mainbar-i3]
+[bar/i3]
 ;https://github.com/jaagr/polybar/wiki/Configuration
 
 monitor = ${env:MONITOR}
@@ -681,14 +661,7 @@ double-click-right =
 cursor-click =
 cursor-scroll =
 
-
-;=======================================
-;
-; MAINBAR-XMONAD
-;
-;=======================================
-
-[bar/mainbar-xmonad]
+[bar/xmonad]
 ;https://github.com/jaagr/polybar/wiki/Configuration
 
 ;monitor = ${env:MONITOR}
@@ -777,18 +750,11 @@ double-click-right =
 cursor-click =
 cursor-scroll =
 
-
-;=======================================
-;
-; MAINBAR-OPENBOX
-;
-;=======================================
-
-[bar/mainbar-openbox]
+[bar/openbox]
 monitor = ${env:MONITOR}
 ;monitor-fallback = HDMI1
-width = 100%
-height = 30
+width = 99%
+height = 17
 ;offset-x = 1%
 ;offset-y = 1%
 radius = 0.0
@@ -796,11 +762,11 @@ fixed-center = true
 bottom = false
 separator = |
 
-background = ${colors.background}
-foreground = ${colors.foreground}
+background = ${colors.ob-bg}
+foreground = ${colors.ob-fg}
 
 line-size = 2
-line-color = ${colors.buffer}
+line-color = #f00
 
 ;border-size = 2
 ;border-left-size = 25
@@ -820,12 +786,13 @@ module-margin-right = 3
 enable-ipc = true
 
 ;https://github.com/jaagr/polybar/wiki/Fonts
-font-0 = "Noto Sans:size=10;0"
-font-1 = "Font Awesome 5 Free:size=10;0"
-font-2 = "Font Awesome 5 Free Solid:size=10;0"
-font-3 = "Font Awesome 5 Brands:size=10;0"
+; font-0 = "Noto Sans:size=10;0"
+font-0 = "SourcecodePro:size=9"
+; font-1 = "Font Awesome 5 Free:size=10;0"
+; font-2 = "Font Awesome 5 Free Solid:size=10;0"
+; font-3 = "Font Awesome 5 Brands:size=10;0"
 
-modules-left = ewmh xwindow
+modules-left = desktops polynotifs
 modules-center = release kernel
 modules-right =  memory cpu date
 
@@ -838,14 +805,7 @@ tray-maxsize = 20
 tray-scale = 1.0
 tray-background = ${colors.background}
 
-
-;=======================================
-;
-; MAINBAR-OPENBOX-EXTRA
-;
-;=======================================
-
-[bar/mainbar-openbox-extra]
+[bar/openbox-extra]
 monitor = ${env:MONITOR}
 ;monitor-fallback = HDMI1
 width = 100%
@@ -898,6 +858,5 @@ tray-padding = 2
 tray-maxsize = 20
 tray-scale = 1.0
 tray-background = ${colors.background}
-
 
 # vim:ft=dosini
