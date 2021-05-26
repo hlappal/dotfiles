@@ -173,32 +173,32 @@ draw_bold_text_with_bright_colors: true
 
 # Colors (Tomorrow Night Bright)
 colors:
-  name: Monokai (dark)
-  author: Chris Kempson
+  # Default colors
   primary:
-    background: "#272822"
-    foreground: "#f8f8f2"
-  cursor:
-    text: "#272822"
-    cursor: "#f8f8f2"
+    background: '0x1b182c'
+    foreground: '0xcbe3e7'
+
+  # Normal colors
   normal:
-    black: "#272822"
-    red: "#f92672"
-    green: "#a6e22e"
-    yellow: "#f4bf75"
-    blue: "#66d9ef"
-    magenta: "#ae81ff"
-    cyan: "#a1efe4"
-    white: "#f8f8f2"
+    black: '0x100e23'
+    red: '0xff8080'
+    green: '0x95ffa4'
+    yellow: '0xffe9aa'
+    blue: '0x91ddff'
+    magenta: '0xc991e1'
+    cyan: '0xaaffe4'
+    white: '0xcbe3e7'
+
+  # Bright colors
   bright:
-    black: "#75715e"
-    red: "#f92672"
-    green: "#a6e22e"
-    yellow: "#f4bf75"
-    blue: "#66d9ef"
-    magenta: "#ae81ff"
-    cyan: "#a1efe4"
-    white: "#f9f8f5"
+    black: '0x565575'
+    red: '0xff5458'
+    green: '0x62d196'
+    yellow: '0xffb378'
+    blue: '0x65b2ff'
+    magenta: '0x906cff'
+    cyan: '0x63f2f1'
+    white: '0xa6b3cc'
 
 # # Colors (Gruvbox dark)
 # colors:
