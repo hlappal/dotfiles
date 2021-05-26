@@ -1,24 +1,16 @@
--------------------------------------------------------------------------------
---
---       ▄▄▄      █     █░ ▓█████  ██████  ▒█████   ███▄ ▄███▓ ▓█████
---      ▒████▄   ▓█░ █ ░█░ ▓█   ▀▒██    ▒ ▒██▒  ██▒▓██▒▀█▀ ██▒ ▓█   ▀
---      ▒██  ▀█▄ ▒█░ █ ░█  ▒███  ░ ▓██▄   ▒██░  ██▒▓██    ▓██░ ▒███
---      ░██▄▄▄▄██░█░ █ ░█  ▒▓█  ▄  ▒   ██▒▒██   ██░▒██    ▒██  ▒▓█  ▄
---       ▓█   ▓██░░██▒██▓ ▒░▒████▒██████▒▒░ ████▓▒░▒██▒   ░██▒▒░▒████
---       ▒▒   ▓▒█░ ▓░▒ ▒  ░░░ ▒░ ▒ ▒▓▒ ▒ ░░ ▒░▒░▒░ ░ ▒░   ░  ░░░░ ▒░
---        ░   ▒▒   ▒ ░ ░  ░ ░ ░  ░ ░▒  ░ ░  ░ ▒ ▒░ ░  ░      ░░ ░ ░
---        ░   ▒    ░   ░      ░  ░  ░  ░  ░ ░ ░ ▒  ░      ░       ░
---            ░      ░    ░   ░        ░      ░ ░         ░   ░   ░
---
---  My Awesome config
---  Heikki Lappalainen (github.com/hlappal)
---
---  Thanks (https://github.com/lcpz/awesome-copycats)
---     and (https://gitlab.com/dwt1/dotfiles/-/tree/master/.config/awesome)
---
--------------------------------------------------------------------------------
+--[[
+
+  ██████╗  ██████╗   ██╗     ██╗   ██╗ █████╗ 
+  ██╔══██╗██╔════╝   ██║     ██║   ██║██╔══██╗
+  ██████╔╝██║        ██║     ██║   ██║███████║
+  ██╔══██╗██║        ██║     ██║   ██║██╔══██║
+  ██║  ██║╚██████╗██╗███████╗╚██████╔╝██║  ██║
+  ╚═╝  ╚═╝ ╚═════╝╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝
+
+https://github.com/hlappal/dotfiles/awesome
+--]]
+
 -- Required libraries
--------------------------------------------------------------------------------
 local awesome, client, mouse, screen, tag
   = awesome, client, mouse, screen, tag
 local ipairs, string, os, table, tostring, tonumber, type
@@ -95,11 +87,11 @@ end
 
 -- Programs to run in autostart
 run_once({
-  "urxvtd",
-  "unclutter -root",
-  "killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00",
+  -- "urxvtd",
+  -- "unclutter -root",
+  -- "killall xcompmgr && xcompmgr -c -l0 -t0 -r0 -o.00",
   "earlyoom",
-  "dunst",
+  -- "dunst",
   "emacs --daemon"
 })
 
@@ -114,31 +106,8 @@ awful.spawn.with_shell(
   -- https://github.com/jceb/dex
 )
 
--------------------------------------------------------------------------------
--- Theme
--------------------------------------------------------------------------------
-
--- List the available themes
-local themes = {
-  "blackburn",       -- 1
-  "copland",         -- 2
-  "dremora",         -- 3
-  "holo",            -- 4
-  "multicolor",      -- 5
-  "powerarrow",      -- 6
-  "powerarrow-darc", -- 7
-  "powerarrow-dark", -- 8
-  "rainbow",         -- 9
-  "steamburn",       -- 10
-  "vertex",          -- 11
-}
-
 -- Choose the theme here
-local chosen_theme = themes[7]
-local theme_path = string.format(
-  "%s/.config/awsome/themes/%s/theme.lua",
-  os.getenv("HOME"), chosen_theme
-)
+local theme_path = "~/.config/awesome/theme/theme.lua"
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -148,16 +117,13 @@ local modkey       = "Mod4"
 local altkey       = "Mod1"
 
 local vi_focus     = true  -- vi-like client focus
-local cycle_prev   = false -- cycle trough all previous clients or just the
-                           -- first
-local terminal     = "alacritty"
+local cycle_prev   = false -- cycle trough all previous clients or just the first
+local terminal     = "kitty"
 local editor       = os.getenv("EDITOR") or "nvim"
 local gui_editor   = "emacsclient -c -a 'emacs'"
 local file_manager = "nemo"
 local browser      = "brave"
-local menu         = "rofi -combi-modi window,drun,ssh \
-                       -theme solarized -show combi \
-                       -icon-theme \"Papirus\" -show-icons"
+local menu         = "rofi -show combi -show-icons"
 local pass_menu    = "dmenu-lpass-nu"
 local scrlocker    = "slock"
 
@@ -176,8 +142,8 @@ awful.util.tagnames = { "1: ", "2: ", "3: ", "4: ", "5: ", "6: �
 -- Selected default layouts
 awful.layout.suit.tile.left.mirror = true
 awful.layout.layouts = {
+  awful.layout.suit.floating,
   awful.layout.suit.tile,
-  -- awful.layout.suit.floating,
   -- awful.layout.suit.tile.left,
   -- awful.layout.suit.tile.bottom,
   -- awful.layout.suit.tile.top,
@@ -218,13 +184,20 @@ awful.util.taglist_buttons = my_table.join(
 )
 
 awful.util.tasklist_buttons = my_table.join(
-  awful.button({ }, 1, function(c)
-      if c == client.focus then
-        c.minimized = true
-      else
-        c:emit_signal("request::activate", "tasklist", {raise = true})
-      end
-  end),
+  -- awful.button({ }, 1, function(c)
+  --     if c == client.focus then
+  --       c.minimized = true
+  --     else
+  --       c:emit_signal("request::activate", "tasklist", {raise = true})
+  --     end
+  -- end),
+  -- awful.button({ modkey, }, 1, function(c)
+  --   c.maximized_horizontal = false
+  --   c.maximized_vertical = false
+  --   c.maximized = false
+  --   c.fullscreen = false
+  --   awful.mouse.client.move(c)
+  -- end),
   awful.button({ }, 3, function()
       local instance = nil
       return function()
@@ -261,9 +234,7 @@ lain.layout.cascade.tile.ncol          = 2
 --     placement      = awful.placement.centered,
 -- }
 
-beautiful.init(
-  string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"),
-                chosen_theme))
+beautiful.init("~/.config/awesome/theme/theme.lua")
 
 -------------------------------------------------------------------------------
 -- Menu
@@ -306,18 +277,18 @@ menubar.utils.terminal = terminal
 -- Screen
 -------------------------------------------------------------------------------
 
--- Re-set wallpaper when a screen's geometry changes
-screen.connect_signal("property::geometry", function(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, true)
-    end
-end)
+-- -- Re-set wallpaper when a screen's geometry changes
+-- screen.connect_signal("property::geometry", function(s)
+--     -- Wallpaper
+--     if beautiful.wallpaper then
+--         local wallpaper = beautiful.wallpaper
+--         -- If wallpaper is a function, call it with the screen
+--         if type(wallpaper) == "function" then
+--             wallpaper = wallpaper(s)
+--         end
+--         gears.wallpaper.maximized(wallpaper, s, true)
+--     end
+-- end)
 
 -- No borders when rearranging only 1 non-floating or maximized client
 -- screen.connect_signal("arrange", function (s)
