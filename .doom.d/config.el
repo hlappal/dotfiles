@@ -77,15 +77,18 @@
 ;;   (unavailable) doom-mono-dark
 ;;   (unavailable) doom-mono-light
 ;;   (unavailable) doom-tron
-(setq doom-theme 'doom-zenburn)
+(setq doom-theme 'doom-oceanic-next)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 ;; NOTE: DROPBOX POISSA KÄYTÖSTÄ
-;; (setq org-directory "~/Dropbox/org/")
+(setq org-directory "~/RoamNotes/")
 
 ;; Open Org Agenda at startup
 ;;(add-hook 'after-init-hook 'org-agenda-list)
+
+;; Org Roam
+(setq org-roam-directory "~/RoamNotes")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -110,6 +113,10 @@
 (setq select-enable-clipboard nil)
 (setq select-active-regions t)
 
+;; Set Emacs commands C-w and C-y to use the clipboard selection
+(setq x-select-enable-primary nil)
+(setq x-select-enable-clipboard t)
+
 ;; Spell-fu config
 (setq ispell-program-name "aspell")
 (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
@@ -119,7 +126,7 @@
 ;; Set path for project search
 (setq projectile-project-search-path '("~/projects/"))
 
-;; ;; Config Emacs as X window manager
+;; Config Emacs as X window manager
 ;; (require 'exwm)
 ;; (require 'exwm-config)
 ;; (exwm-config-default)
