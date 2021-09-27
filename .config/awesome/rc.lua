@@ -191,13 +191,15 @@ awful.util.tasklist_buttons = my_table.join(
   --       c:emit_signal("request::activate", "tasklist", {raise = true})
   --     end
   -- end),
-  -- awful.button({ modkey, }, 1, function(c)
-  --   c.maximized_horizontal = false
-  --   c.maximized_vertical = false
-  --   c.maximized = false
-  --   c.fullscreen = false
-  --   awful.mouse.client.move(c)
-  -- end),
+
+  awful.button({ modkey, }, 1, function(c)
+    c.maximized_horizontal = false
+    c.maximized_vertical = false
+    c.maximized = false
+    c.fullscreen = false
+    awful.mouse.client.move(c)
+  end),
+
   awful.button({ }, 3, function()
       local instance = nil
       return function()
@@ -510,12 +512,12 @@ globalkeys = my_table.join(
     -- ALSA volume control
     awful.key({ }, "XF86AudioRaiseVolume",
         function ()
-            os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
+            os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
             beautiful.volume.update()
         end),
     awful.key({ }, "XF86AudioLowerVolume",
         function ()
-            os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
+            os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
             beautiful.volume.update()
         end),
     awful.key({ }, "XF86AudioMute",
@@ -781,9 +783,6 @@ awful.rules.rules = {
 
     { rule = { class = "Spotify" },
       properties = { screen = 1, tag = awful.util.tagnames[8] } },
-
-    { rule = { class = "Gimp", role = "gimp-image-window" },
-          properties = { maximized = true } },
 }
 
 -------------------------------------------------------------------------------
